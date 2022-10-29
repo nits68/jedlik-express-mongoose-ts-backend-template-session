@@ -1,3 +1,4 @@
+import cors from "cors";
 import bcrypt from "bcrypt";
 import { Router, Request, Response, NextFunction } from "express";
 import UserWithThatEmailAlreadyExistsException from "../exceptions/UserWithThatEmailAlreadyExistsException";
@@ -24,6 +25,7 @@ export default class AuthenticationController implements IController {
     }
 
     private initializeRoutes() {
+        this.router.all("*", cors());
         this.router.post(`${this.path}/register`, validationMiddleware(CreateUserDto), this.registration);
         this.router.post(`${this.path}/login`, validationMiddleware(LogInDto), this.login);
         this.router.post(`${this.path}/autologin`, this.autoLogin);

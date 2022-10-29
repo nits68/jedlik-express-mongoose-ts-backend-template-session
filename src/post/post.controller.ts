@@ -1,3 +1,4 @@
+import cors from "cors";
 import { Router, Request, Response, NextFunction } from "express";
 import { Types } from "mongoose";
 import PostNotFoundException from "../exceptions/PostNotFoundException";
@@ -22,6 +23,7 @@ export default class PostController implements IController {
     }
 
     private initializeRoutes() {
+        this.router.all("*", cors());
         this.router.get(this.path, authMiddleware, this.getAllPosts);
         this.router.get(`${this.path}/:id`, authMiddleware, this.getPostById);
         this.router.get(`${this.path}/:offset/:limit/:order/:sort/:keyword?`, [authMiddleware, roleCheckMiddleware(0b0100 << 4)], this.getPaginatedPosts);

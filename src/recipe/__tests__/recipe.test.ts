@@ -2,10 +2,7 @@ import "dotenv/config";
 import App from "../../app";
 import AuthenticationController from "../../authentication/authentication.controller";
 import RecipeController from "../../recipe/recipe.controller";
-import validateEnv from "../../utils/validateEnv";
 import request from "supertest";
-
-validateEnv();
 
 let server: Express.Application;
 // eslint-disable-next-line @typescript-eslint/no-explicit-any

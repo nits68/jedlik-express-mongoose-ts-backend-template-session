@@ -4,10 +4,7 @@ import AuthenticationController from "../../authentication/authentication.contro
 // import PostController from "../../post/post.controller";
 // import ReportController from "../../report/report.controller";
 // import UserController from "../../user/user.controller";
-import validateEnv from "../../utils/validateEnv";
 import request from "supertest";
-
-validateEnv();
 
 let server: Express.Application;
 

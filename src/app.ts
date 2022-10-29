@@ -54,7 +54,7 @@ export default class App {
                 rolling: true,
                 resave: true,
                 saveUninitialized: false,
-                cookie: { maxAge: 1000 * 60 * 60 * 24, httpOnly: true, secure: true, sameSite: "none", path: "/" },
+                cookie: { secure: true, httpOnly: true, sameSite: "none", maxAge: 1000 * 60 * 60 * 24 },
                 // cookie: { maxAge: 320, httpOnly: true },
                 store: MongoStore.create({
                     mongoUrl: process.env.MONGO_URI,

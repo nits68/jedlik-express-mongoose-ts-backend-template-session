@@ -37,7 +37,7 @@ export default class App {
         this.app.use(
             cors({
                 origin: ["https://minimal-dialogs.netlify.app", "https://jedlik-vite-quasar-template.netlify.app", "https://jedlik-vite-ts-template.netlify.app", "http://localhost:8080", "http://127.0.0.1:8080"],
-                allowedHeaders: ["Origin", "Accept", "X-Requested-With", "Content-Type", "Authorization", "Cache-Control", "Content-Language", "Expires", "Last-Modified", "Pragma"],
+                allowedHeaders: ["Content-Type", "Authorization", "Cache-Control", "Content-Language", "Expires", "Last-Modified", "Pragma"],
                 credentials: true,
                 exposedHeaders: ["Set-Cookie"],
             }),
@@ -54,7 +54,7 @@ export default class App {
                 rolling: true,
                 resave: true,
                 saveUninitialized: false,
-                cookie: { maxAge: 1000 * 60 * 60 * 24, httpOnly: true, signed: true, sameSite: false, path: "/" },
+                cookie: { maxAge: 1000 * 60 * 60 * 24, httpOnly: true, secure: true, sameSite: "none", path: "/" },
                 // cookie: { maxAge: 320, httpOnly: true },
                 store: MongoStore.create({
                     mongoUrl: process.env.MONGO_URI,

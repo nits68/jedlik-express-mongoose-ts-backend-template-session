@@ -1,4 +1,3 @@
-import cors from "cors";
 import { Router, Request, Response, NextFunction } from "express";
 import { Types } from "mongoose";
 import IController from "../interfaces/controller.interface";
@@ -24,7 +23,6 @@ export default class UserController implements IController {
     }
 
     private initializeRoutes() {
-        this.router.all("*", cors());
         this.router.get(`${this.path}/posts/:id`, authMiddleware, this.getAllPostsOfUserByID);
         this.router.get(`${this.path}/posts/`, authMiddleware, this.getAllPostsOfLoggedUser);
         this.router.get(`${this.path}/:id`, authMiddleware, this.getUserById);

@@ -117,6 +117,8 @@ export default class AuthenticationController implements IController {
                 res.cookie("connect.sid", null, {
                     expires: new Date("Thu, 01 Jan 1970 00:00:00 UTC"),
                     httpOnly: true,
+                    secure: true,
+                    sameSite: "none",
                 });
                 // Delete session document from MongoDB:
                 req.session.destroy(err => {

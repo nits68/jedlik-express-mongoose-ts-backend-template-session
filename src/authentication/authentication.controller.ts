@@ -109,25 +109,21 @@ export default class AuthenticationController implements IController {
     };
 
     private logout = (req: Request, res: Response) => {
-        if ((req.session as ISession).isAutoLogin) {
-            (req.session as ISession).isLoggedIn = false;
-        } else {
-            if (req.session.cookie) {
-                // Clear session cookie on client:
-                res.cookie("connect.sid", null, {
-                    expires: new Date("Thu, 01 Jan 1970 00:00:00 UTC"),
-                    httpOnly: true,
-                    secure: true,
-                    sameSite: "none",
-                });
-                // Delete session document from MongoDB:
-                req.session.destroy(err => {
-                    if (err) {
-                        console.log("Error at destroyed session");
-                    }
-                    // console.log("Session is destroyed!");
-                });
-            }
+        if (req.session.cookie) {
+            // Clear session cookie on client:
+            res.cookie("connect.sid", null, {
+                httpOnly: true,
+                secure: true,
+                sameSite: "none",
+                maxAge: 1,
+            });
+            // Delete session document from MongoDB:
+            req.session.destroy(err => {
+                if (err) {
+                    console.log("Error at destroyed session");
+                }
+                console.log("Session is destroyed!");
+            });
         }
         res.sendStatus(200);
     };
@@ -148,8 +144,6 @@ export default class AuthenticationController implements IController {
                     const googleUser = userInfo as IGoogleUserInfo;
                     this.user.findOne({ email: googleUser.email }).then(user => {
                         if (user) {
-                            // const tokenData = this.createToken(user);
-                            // res.setHeader("Set-Cookie", [this.createCookie(tokenData)]);
                             req.session.regenerate(error => {
                                 if (error) {
                                     next(new HttpException(400, error.message)); // to do
@@ -176,7 +170,6 @@ export default class AuthenticationController implements IController {
                                         if (error) {
                                             next(new HttpException(400, error.message)); // to do
                                         }
-                                        // console.log("regenerate ok");
                                         (req.session as ISession).user_id = user._id as string;
                                         (req.session as ISession).user_email = user.email as string;
                                         (req.session as ISession).isLoggedIn = true;

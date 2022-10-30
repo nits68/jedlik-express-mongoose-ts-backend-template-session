@@ -43,8 +43,7 @@ export default class App {
             }),
         );
 
-        // Logger:
-        if (process.env.NODE_ENV === "development") this.app.use(morgan(":method :url status=:status :date[iso] rt=:response-time ms"));
+        this.app.set("trust proxy", 1); // trust first proxy
 
         // Session management:
         // https://javascript.plainenglish.io/session-management-in-a-nodejs-express-app-with-mongodb-19f52c392dad
@@ -55,7 +54,7 @@ export default class App {
                 resave: true,
                 saveUninitialized: false,
                 // eslint-disable-next-line prettier/prettier
-                cookie: { secure: true, httpOnly: true, sameSite: 'none', maxAge: 1000 * 60 * 60 * 24 },
+                cookie: { secure: true, httpOnly: true, sameSite: "none", maxAge: 1000 * 60 * 60 * 24 },
                 // cookie: { maxAge: 320, httpOnly: true },
                 store: MongoStore.create({
                     mongoUrl: process.env.MONGO_URI,
@@ -64,6 +63,9 @@ export default class App {
                 }),
             }),
         );
+
+        // Logger:
+        if (process.env.NODE_ENV === "development") this.app.use(morgan(":method :url status=:status :date[iso] rt=:response-time ms"));
     }
 
     private initializeErrorHandling() {

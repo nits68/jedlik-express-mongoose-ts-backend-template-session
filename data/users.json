@@ -22,6 +22,48 @@
     },
     {
         "_id": {
+            "$oid": "61b5e9c0f39e4edcf5b8a3b9"
+        },
+        "address": {
+            "city": "Győr",
+            "country": "Hungary",
+            "street": "Szent István út 7.",
+            "_id": {
+                "$oid": "61b5e9c0f39e4edcf5b8a3ba"
+            }
+        },
+        "email": "student001@jedlik.eu",
+        "email_address_confirm": "student001@jedlik.eu",
+        "email_verified": true,
+        "auto_login": true,
+        "name": "student001",
+        "picture": "https://lh3.googleusercontent.com/a/ALm5wu1tqlumAaDE2djCuUE2s4ubsOs6HOkdwfU6ftci=s96-c",
+        "password": "$2b$10$9Czj8XCCZ6Wg5h9HSngl2eMqAO0Pk/LFmf.LrfeLKDXsBQaI07Pv.",
+        "role_bits": 65535
+    },
+    {
+        "_id": {
+            "$oid": "61b5f09cf39e4edcf5b8a3d4"
+        },
+        "address": {
+            "city": "Tét",
+            "country": "Hungary",
+            "street": "Kossuth Lajos út 56.",
+            "_id": {
+                "$oid": "61b5f09cf39e4edcf5b8a3d5"
+            }
+        },
+        "email": "student004@jedlik.eu",
+        "email_address_confirm": "student004@jedlik.eu",
+        "email_verified": true,
+        "auto_login": true,
+        "name": "student004",
+        "picture": "https://lh3.googleusercontent.com/a/ALm5wu1tqlumAaDE2djCuUE2s4ubsOs6HOkdwfU6ftci=s96-c",
+        "password": "$2b$10$saCo0rqdGbIiacjcZ60CGuGw8QhA8tgh3gfn0w.LFaVlyPJzd9zA6",
+        "role_bits": 0
+    },
+    {
+        "_id": {
             "$oid": "61b5f048f39e4edcf5b8a3ca"
         },
         "address": {
@@ -64,44 +106,28 @@
     },
     {
         "_id": {
-            "$oid": "61b5e9c0f39e4edcf5b8a3b9"
+            "$oid": "635ff64f72eb7a4370228a20"
         },
-        "address": {
-            "city": "Győr",
-            "country": "Hungary",
-            "street": "Szent István út 7.",
-            "_id": {
-                "$oid": "61b5e9c0f39e4edcf5b8a3ba"
-            }
-        },
-        "email": "student001@jedlik.eu",
-        "email_address_confirm": "student001@jedlik.eu",
+        "email": "nits.laszlo@jedlik.eu",
+        "email_address_confirm": "nits.laszlo@jedlik.eu",
         "email_verified": true,
         "auto_login": true,
-        "name": "student001",
+        "name": "László Nits",
         "picture": "https://lh3.googleusercontent.com/a/ALm5wu1tqlumAaDE2djCuUE2s4ubsOs6HOkdwfU6ftci=s96-c",
-        "password": "$2b$10$9Czj8XCCZ6Wg5h9HSngl2eMqAO0Pk/LFmf.LrfeLKDXsBQaI07Pv.",
-        "role_bits": 0
+        "password": "stored at Google",
+        "role_bits": 65535
     },
     {
         "_id": {
-            "$oid": "61b5f09cf39e4edcf5b8a3d4"
+            "$oid": "635ffcff327152b1e52d0380"
         },
-        "address": {
-            "city": "Tét",
-            "country": "Hungary",
-            "street": "Kossuth Lajos út 56.",
-            "_id": {
-                "$oid": "61b5f09cf39e4edcf5b8a3d5"
-            }
-        },
-        "email": "student004@jedlik.eu",
-        "email_address_confirm": "student004@jedlik.eu",
+        "email": "nitslaszlo@gmail.com",
+        "email_address_confirm": "nitslaszlo@gmail.com",
         "email_verified": true,
-        "auto_login": true,
-        "name": "student004",
-        "picture": "https://lh3.googleusercontent.com/a/ALm5wu1tqlumAaDE2djCuUE2s4ubsOs6HOkdwfU6ftci=s96-c",
-        "password": "$2b$10$saCo0rqdGbIiacjcZ60CGuGw8QhA8tgh3gfn0w.LFaVlyPJzd9zA6",
+        "auto_login": false,
+        "name": "László Nits",
+        "picture": "https://lh3.googleusercontent.com/a/ALm5wu2jmh9fOUPPn5aOKfXmqhbhvS0kCgdMc-fbMWcm0g=s96-c",
+        "password": "stored at Google",
         "role_bits": 0
     }
 ]

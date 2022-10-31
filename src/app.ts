@@ -54,6 +54,7 @@ export default class App {
                 resave: true,
                 saveUninitialized: false,
                 // eslint-disable-next-line prettier/prettier
+                // cookie: { secure: false, httpOnly: true, sameSite: "lax", maxAge: 1000 * 60 * 60 * 24 },
                 cookie: { secure: true, httpOnly: true, sameSite: "none", maxAge: 1000 * 60 * 60 * 24 },
                 // cookie: { maxAge: 320, httpOnly: true },
                 store: MongoStore.create({

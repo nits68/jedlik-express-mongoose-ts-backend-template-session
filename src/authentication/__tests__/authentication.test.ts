@@ -18,6 +18,11 @@ describe("test API endpoints", () => {
         const response = await request(server).post("/auth/register").send({
             name: "student001",
             email: "student001@jedlik.eu",
+            email_address_confirm: "student001@jedlik.eu",
+            email_verifed: true,
+            auto_login: true,
+            picture: "none",
+            role_bits: 255,
             password: "student001",
         });
         expect(response.statusCode).toEqual(400);

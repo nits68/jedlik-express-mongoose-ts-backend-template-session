@@ -5,7 +5,6 @@ import RecipeController from "../../recipe/recipe.controller";
 import request from "supertest";
 
 let server: Express.Application;
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 let cookie: string | any;
 
 beforeAll(async () => {

@@ -30,20 +30,20 @@ export default class App {
     }
 
     private initializeMiddlewares() {
-        this.app.use(express.json());
-        this.app.use(cookieParser());
+        this.app.use(express.json()); // body-parser middleware
+        this.app.use(cookieParser()); // cookie-parser middleware
 
         // Enabled CORS:
         this.app.use(
             cors({
                 origin: ["https://minimal-dialogs.netlify.app", "https://jedlik-vite-quasar-template.netlify.app", "https://jedlik-vite-ts-template.netlify.app", "http://localhost:8080", "http://127.0.0.1:8080"],
-                allowedHeaders: ["Content-Type", "Authorization", "Set-Cookie", "Cache-Control", "Content-Language", "Expires", "Last-Modified", "Pragma"],
+                allowedHeaders: ["Content-Type", "Authorization", "Set-Cookie", "Cache-Control", "Content-Language", "Expires", "Last-Modified", "Pragma", "Options"],
                 credentials: true,
                 exposedHeaders: ["Set-Cookie"],
             }),
         );
 
-        this.app.set("trust proxy", 1); // trust first proxy
+        this.app.set("trust proxy", 1); // trust first proxy (If you have your node.js behind a proxy and are using secure: true, you need to set "trust proxy" in express)
 
         // Session management:
         // https://javascript.plainenglish.io/session-management-in-a-nodejs-express-app-with-mongodb-19f52c392dad
@@ -55,7 +55,7 @@ export default class App {
                 saveUninitialized: false,
                 // eslint-disable-next-line prettier/prettier
                 // cookie: { secure: false, httpOnly: true, sameSite: "lax", maxAge: 1000 * 60 * 60 * 24 },
-                cookie: { secure: true, httpOnly: true, sameSite: "none", maxAge: 1000 * 60 * 60 * 24 },
+                cookie: process.env.NODE_ENV === "deployment" ? { secure: true, httpOnly: true, sameSite: "none", maxAge: 1000 * 60 * 60 * 24 } : { secure: false, httpOnly: true, sameSite: "lax", maxAge: 1000 * 60 * +process.env.MAX_AGE_MIN },
                 // cookie: { maxAge: 320, httpOnly: true },
                 store: MongoStore.create({
                     mongoUrl: process.env.MONGO_URI,
@@ -67,6 +67,7 @@ export default class App {
 
         // Logger:
         if (process.env.NODE_ENV === "development") this.app.use(morgan(":method :url status=:status :date[iso] rt=:response-time ms"));
+        if (process.env.NODE_ENV === "deployment") this.app.use(morgan("tiny"));
     }
 
     private initializeErrorHandling() {
@@ -80,9 +81,9 @@ export default class App {
     }
 
     private connectToTheDatabase() {
-        const { MONGO_USER, MONGO_PASSWORD, MONGO_PATH, MONGO_DB } = process.env;
+        const { MONGO_URI, MONGO_DB } = process.env;
         // Connect to MongoDB Atlas, create database if not exist::
-        mongoose.connect(`mongodb+srv://${MONGO_USER}:${MONGO_PASSWORD}${MONGO_PATH}${MONGO_DB}?retryWrites=true&w=majority`, err => {
+        mongoose.connect(MONGO_URI, { dbName: MONGO_DB }, err => {
             if (err) {
                 console.log("Unable to connect to the server. Please start MongoDB.");
             }

@@ -37,7 +37,7 @@ export default class App {
         this.app.use(
             cors({
                 origin: ["https://minimal-dialogs.netlify.app", "https://jedlik-vite-quasar-template.netlify.app", "https://jedlik-vite-ts-template.netlify.app", "http://localhost:8080", "http://127.0.0.1:8080"],
-                allowedHeaders: ["Content-Type", "Authorization", "Set-Cookie", "Cache-Control", "Content-Language", "Expires", "Last-Modified", "Pragma", "Options"],
+                allowedHeaders: ["Content-Type", "Authorization", "Set-Cookie", "Cache-Control", "Content-Language", "Expires", "Last-Modified", "Pragma"],
                 credentials: true,
                 exposedHeaders: ["Set-Cookie"],
             }),
@@ -54,9 +54,8 @@ export default class App {
                 resave: true,
                 saveUninitialized: false,
                 // eslint-disable-next-line prettier/prettier
-                // cookie: { secure: false, httpOnly: true, sameSite: "lax", maxAge: 1000 * 60 * 60 * 24 },
-                cookie: process.env.NODE_ENV === "deployment" ? { secure: true, httpOnly: true, sameSite: "none", maxAge: 1000 * 60 * 60 * 24 } : { secure: false, httpOnly: true, sameSite: "lax", maxAge: 1000 * 60 * +process.env.MAX_AGE_MIN },
-                // cookie: { maxAge: 320, httpOnly: true },
+                cookie: { secure: true, httpOnly: true, sameSite: "none", maxAge: 1000 * 60 * +process.env.MAX_AGE_MIN },
+                // cookie: process.env.NODE_ENV === "deployment" ? { secure: true, httpOnly: true, sameSite: "none", maxAge: 1000 * 60 * 60 * 24 } : { secure: false, httpOnly: true, sameSite: "lax", maxAge: 1000 * 60 * +process.env.MAX_AGE_MIN },
                 store: MongoStore.create({
                     mongoUrl: process.env.MONGO_URI,
                     dbName: "BackendTemplateDB",

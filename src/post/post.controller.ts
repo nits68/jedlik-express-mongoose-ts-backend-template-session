@@ -50,6 +50,7 @@ export default class PostController implements IController {
             let posts = [];
             let count = 0;
             if (req.params.keyword && req.params.keyword != "") {
+                console.log(req.params);
                 const myRegex = new RegExp(req.params.keyword, "i"); // i for case insensitive
                 count = await this.post.find({ $or: [{ title: myRegex }, { content: myRegex }] }).count();
                 posts = await this.post

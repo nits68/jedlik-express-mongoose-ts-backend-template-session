@@ -122,7 +122,7 @@ export default class AuthenticationController implements IController {
                 if (err) {
                     console.log("Error at destroyed session");
                 }
-                console.log("Session is destroyed!");
+                // console.log("Session is destroyed!");
             });
         }
         res.sendStatus(200);

@@ -78,6 +78,7 @@
             "node"
         ],
         "collectCoverage": true,
+        "detectOpenHandles": true,
         "coverageDirectory": "coverage",
         "collectCoverageFrom": [
             "src/**/*.{ts,js}",

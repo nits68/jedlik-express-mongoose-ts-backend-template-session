@@ -61,7 +61,7 @@ describe("test recipes endpoints", () => {
         expect(response.body.recipeName).toEqual("KELKÁPOSZTA FŐZELÉK");
     });
 
-    it("GET /recipes/:id  (missing, but valis id)", async () => {
+    it("GET /recipes/:id  (missing, but valid id)", async () => {
         id = "6367f3038ae13010a4c9ab49";
         const response = await request(server).get(`/recipes/${id}`).set("Cookie", cookie);
         expect(response.statusCode).toEqual(404);

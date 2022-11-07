@@ -7,11 +7,13 @@ import errorMiddleware from "./middleware/error.middleware";
 import session from "express-session";
 import MongoStore from "connect-mongo";
 import morgan from "morgan";
+import { config } from "dotenv";
 
 export default class App {
     public app: express.Application;
 
     constructor(controllers: IController[]) {
+        config(); // Read and set variables from .env file.
         this.app = express();
         this.connectToTheDatabase();
         this.initializeMiddlewares();
@@ -47,45 +49,29 @@ export default class App {
 
         // Session management:
         // https://javascript.plainenglish.io/session-management-in-a-nodejs-express-app-with-mongodb-19f52c392dad
-        if (process.env.NODE_ENV === "deployment") {
-            this.app.use(
-                session({
-                    secret: process.env.SESSION_SECRET,
-                    rolling: true,
-                    resave: true,
-                    saveUninitialized: false,
-                    // eslint-disable-next-line prettier/prettier
-                    cookie: { secure: true, httpOnly: true, sameSite: "none", maxAge: 1000 * 60 * +process.env.MAX_AGE_MIN },
-                    // cookie: process.env.NODE_ENV === "deployment" ? { secure: true, httpOnly: true, sameSite: "none", maxAge: 1000 * 60 * 60 * 24 } : { secure: false, httpOnly: true, sameSite: "lax", maxAge: 1000 * 60 * +process.env.MAX_AGE_MIN },
-                    store: MongoStore.create({
-                        mongoUrl: process.env.MONGO_URI,
-                        dbName: "BackendTemplateDB",
-                        stringify: false,
-                    }),
-                }),
-            );
-        } else {
-            this.app.use(
-                session({
-                    secret: process.env.SESSION_SECRET,
-                    rolling: true,
-                    resave: true,
-                    saveUninitialized: false,
-                    // eslint-disable-next-line prettier/prettier
-                    cookie: { secure: false, httpOnly: true, sameSite: "lax", maxAge: 1000 * 60 * +process.env.MAX_AGE_MIN },
-                    // cookie: process.env.NODE_ENV === "deployment" ? { secure: true, httpOnly: true, sameSite: "none", maxAge: 1000 * 60 * 60 * 24 } : { secure: false, httpOnly: true, sameSite: "lax", maxAge: 1000 * 60 * +process.env.MAX_AGE_MIN },
-                    store: MongoStore.create({
-                        mongoUrl: process.env.MONGO_URI,
-                        dbName: "BackendTemplateDB",
-                        stringify: false,
-                    }),
-                }),
-            );
+
+        // session options for deployment:
+        const mySessionOptions: session.SessionOptions = {
+            secret: process.env.SESSION_SECRET,
+            rolling: true,
+            resave: true,
+            saveUninitialized: false,
+            cookie: { secure: true, httpOnly: true, sameSite: "none", maxAge: 1000 * 60 * +process.env.MAX_AGE_MIN },
+            store: MongoStore.create({
+                mongoUrl: process.env.MONGO_URI,
+                dbName: "BackendTemplateDB",
+                stringify: false,
+            }),
+        };
+        if (["development", "test"].includes(process.env.NODE_ENV)) {
+            mySessionOptions.cookie.secure = false;
+            mySessionOptions.cookie.sameSite = "lax";
         }
+        this.app.use(session(mySessionOptions));
 
         // Logger:
-        if (process.env.NODE_ENV === "development") this.app.use(morgan(":method :url status=:status :date[iso] rt=:response-time ms"));
-        if (process.env.NODE_ENV === "deployment") this.app.use(morgan("tiny"));
+        if (["development", "test"].includes(process.env.NODE_ENV)) this.app.use(morgan(":method :url status=:status :date[iso] rt=:response-time ms"));
+        if (process.env.NODE_ENV == "deployment") this.app.use(morgan("tiny"));
     }
 
     private initializeErrorHandling() {

@@ -3,16 +3,17 @@ import { Router, Request, Response, NextFunction } from "express";
 import UserWithThatEmailAlreadyExistsException from "../exceptions/UserWithThatEmailAlreadyExistsException";
 import WrongCredentialsException from "../exceptions/WrongCredentialsException";
 import HttpException from "../exceptions/HttpException";
-import IController from "../interfaces/controller.interface";
 import validationMiddleware from "../middleware/validation.middleware";
-import IUser from "../user/user.interface";
 import userModel from "./../user/user.model";
 import CreateUserDto from "../user/user.dto";
 import LogInDto from "./logIn.dto";
 import { OAuth2Client } from "google-auth-library";
-import IGoogleUserInfo from "interfaces/googleUserInfo.interface";
-import IRequestWithUser from "interfaces/requestWithUser.interface";
-import ISession from "./../interfaces/session.interface";
+
+import IController from "../interfaces/controller.interface";
+import IGoogleUserInfo from "../interfaces/googleUserInfo.interface";
+import IRequestWithUser from "../interfaces/requestWithUser.interface";
+import ISession from "../interfaces/session.interface";
+import IUser from "../user/user.interface";
 
 export default class AuthenticationController implements IController {
     public path = "/auth";
@@ -161,9 +162,8 @@ export default class AuthenticationController implements IController {
                                 .create({
                                     ...googleUser,
                                     password: "stored at Google",
-                                    email_address_confirm: googleUser.email,
                                     auto_login: true,
-                                    role_bits: 0,
+                                    roles: ["admin"],
                                 })
                                 .then(user => {
                                     req.session.regenerate(error => {

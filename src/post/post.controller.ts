@@ -22,12 +22,12 @@ export default class PostController implements IController {
     }
 
     private initializeRoutes() {
-        this.router.get(this.path, authMiddleware, this.getAllPosts);
+        this.router.get(this.path, [authMiddleware, roleCheckMiddleware(["admin"])], this.getAllPosts);
         this.router.get(`${this.path}/:id`, authMiddleware, this.getPostById);
-        this.router.get(`${this.path}/:offset/:limit/:order/:sort/:keyword?`, [authMiddleware, roleCheckMiddleware(0b0100 << 4)], this.getPaginatedPosts);
+        this.router.get(`${this.path}/:offset/:limit/:order/:sort/:keyword?`, [authMiddleware, roleCheckMiddleware(["admin"])], this.getPaginatedPosts);
         this.router.patch(`${this.path}/:id`, [authMiddleware, validationMiddleware(CreatePostDto, true)], this.modifyPost);
-        this.router.delete(`${this.path}/:id`, [authMiddleware, roleCheckMiddleware(0b0001 << 4)], this.deletePost);
-        this.router.post(this.path, [authMiddleware, roleCheckMiddleware(0b1000 << 4), validationMiddleware(CreatePostDto)], this.createPost);
+        this.router.delete(`${this.path}/:id`, [authMiddleware, roleCheckMiddleware(["admin"])], this.deletePost);
+        this.router.post(this.path, [authMiddleware, roleCheckMiddleware(["admin"]), validationMiddleware(CreatePostDto)], this.createPost);
     }
 
     private getAllPosts = async (req: Request, res: Response, next: NextFunction) => {

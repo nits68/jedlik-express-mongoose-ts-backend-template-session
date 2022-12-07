@@ -15,16 +15,17 @@ beforeAll(async () => {
 
 describe("test API endpoints", () => {
     it("GET /auth/register", async () => {
-        const response = await request(server).post("/auth/register").send({
-            name: "student001",
-            email: "student001@jedlik.eu",
-            email_address_confirm: "student001@jedlik.eu",
-            email_verifed: true,
-            auto_login: true,
-            picture: "none",
-            role_bits: 255,
-            password: "student001",
-        });
+        const response = await request(server)
+            .post("/auth/register")
+            .send({
+                name: "student001",
+                email: "student001@jedlik.eu",
+                email_verifed: true,
+                auto_login: true,
+                picture: "none",
+                roles: ["admin"],
+                password: "student001",
+            });
         expect(response.statusCode).toEqual(400);
         expect(response.body.message).toEqual("User with email student001@jedlik.eu already exists");
         expect(response.body.status).toEqual(400);

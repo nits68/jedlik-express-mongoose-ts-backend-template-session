@@ -17,10 +17,6 @@ const userSchema = new Schema<IUser>(
             type: String,
             required: true,
         },
-        email_address_confirm: {
-            type: String,
-            required: true,
-        },
         email_verified: {
             type: Boolean,
             required: true,
@@ -41,8 +37,8 @@ const userSchema = new Schema<IUser>(
             type: String,
             required: true,
         },
-        role_bits: {
-            type: Number,
+        roles: {
+            type: [String], // Array of string
             required: true,
         },
     },

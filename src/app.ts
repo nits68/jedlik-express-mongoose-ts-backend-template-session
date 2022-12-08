@@ -27,15 +27,16 @@ export default class App {
         });
     }
 
+    // only use in tests
     public getServer(): express.Application {
         return this.app;
     }
 
     private initializeMiddlewares() {
-        this.app.use(express.json()); // body-parser middleware
-        this.app.use(cookieParser()); // cookie-parser middleware
+        this.app.use(express.json()); // body-parser middleware, for read requests body
+        this.app.use(cookieParser()); // cookie-parser middleware, for read requests cookies
 
-        // Enabled CORS:
+        // Enabled CORS (Cross-Origin Resource Sharing):
         this.app.use(
             cors({
                 origin: ["https://minimal-dialogs.netlify.app", "https://jedlik-vite-quasar-template.netlify.app", "https://jedlik-vite-ts-template.netlify.app", "http://localhost:8080", "http://127.0.0.1:8080"],
@@ -61,6 +62,7 @@ export default class App {
                 stringify: false,
             }),
         };
+        // modify session options for development:
         if (["development", "test"].includes(process.env.NODE_ENV)) {
             mySessionOptions.cookie.secure = false;
             mySessionOptions.cookie.sameSite = "lax";

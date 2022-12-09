@@ -68,7 +68,7 @@ export default class AuthenticationController implements IController {
             const user: IUser = await userModel.findById((req.session as ISession).user_id);
             if (user) {
                 (req.session as ISession).isLoggedIn = true;
-                res.sendStatus(200);
+                res.send(user);
             } else {
                 next(new HttpException(404, "Please log in!"));
             }

@@ -93,7 +93,7 @@
         },
         "email": "student002@jedlik.eu",
         "email_verified": true,
-        "auto_login": true,
+        "auto_login": false,
         "name": "student002",
         "picture": "https://lh3.googleusercontent.com/a/ALm5wu1tqlumAaDE2djCuUE2s4ubsOs6HOkdwfU6ftci=s96-c",
         "password": "$2b$10$Rp5avm47rbRHxJxy8sEVueBTLYFAyrVIFiAebUAJDMKlM5raFnwpi",

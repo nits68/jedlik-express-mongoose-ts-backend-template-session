@@ -136,8 +136,9 @@ export default class AuthenticationController implements IController {
             req.session.destroy(err => {
                 if (err) {
                     console.log("Error at destroyed session");
+                } else {
+                    console.log("Session is destroyed!");
                 }
-                // console.log("Session is destroyed!");
             });
         }
         res.sendStatus(200);

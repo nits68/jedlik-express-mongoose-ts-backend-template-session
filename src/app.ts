@@ -56,6 +56,7 @@ export default class App {
             resave: true,
             saveUninitialized: false,
             cookie: { secure: true, httpOnly: true, sameSite: "none", maxAge: 1000 * 60 * +process.env.MAX_AGE_MIN },
+            unset: "destroy",
             store: MongoStore.create({
                 mongoUrl: process.env.MONGO_URI,
                 dbName: "BackendTemplateDB",

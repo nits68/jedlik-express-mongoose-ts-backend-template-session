@@ -39,6 +39,10 @@ describe("test recipes endpoints", () => {
         const response = await request(server).get("/recipes/0/5/discription/1/paradicsom").set("Cookie", cookie);
         expect(response.statusCode).toEqual(200);
         expect(response.body.count).toEqual(2);
+        expect(response.body.recipes[0].description).toContain("paradicsom");
+        expect(response.body.recipes[0].description).toMatch(/^A tésztát a csomágolásán látható utasítás szerint forró/);
+        expect(response.body.recipes[1].description).toContain("paradicsom");
+        expect(response.body.recipes[1].description).toMatch(/^A világbajnok göngyölt csirkemellhez először/);
     });
 
     it("GET /:offset/:limit/:order/:sort/:keyword? (search for missing 'keyword')", async () => {
@@ -89,7 +93,7 @@ describe("test recipes endpoints", () => {
     it("POST /recipes (with empty json object)", async () => {
         const response = await request(server).post("/recipes").set("Cookie", cookie);
         expect(response.statusCode).toEqual(400);
-        expect(response.body.message).toEqual("recipeName must be a string,recipeName should not be empty, imageURL must be a string,imageURL must be an URL address,imageURL should not be empty, description must be a string,description should not be empty, ingredients should not be empty,ingredients must be an array");
+        expect(response.body.message).toEqual("recipeName must be a string,recipeName should not be empty, imageURL must be a string,imageURL must be a URL address,imageURL should not be empty, description must be a string,description should not be empty, ingredients should not be empty,ingredients must be an array");
     });
 
     it("POST /recipes", async () => {

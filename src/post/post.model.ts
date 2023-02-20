@@ -8,11 +8,15 @@ const postSchema = new Schema<IPost>(
             type: Schema.Types.ObjectId,
         },
         content: String,
-        title: String,
+        title: {
+            type: String,
+            required: true,
+            maxlength: 50,
+        },
     },
     { versionKey: false },
 );
 
-const postModel = model<IPost>("Post", postSchema);
+const postModel = model<IPost>("Post", postSchema, "posts");
 
 export default postModel;

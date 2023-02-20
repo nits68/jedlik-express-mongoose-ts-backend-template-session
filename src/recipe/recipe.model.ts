@@ -9,7 +9,11 @@ const recipeSchema = new Schema<IRecipe>(
             ref: "User",
             type: Schema.Types.ObjectId,
         },
-        recipeName: String,
+        recipeName: {
+            type: String,
+            required: true,
+            maxlength: 50,
+        },
         imageURL: String,
         description: String,
         ingredients: Array,
@@ -17,6 +21,6 @@ const recipeSchema = new Schema<IRecipe>(
     { versionKey: false },
 );
 
-const recipeModel = model<IRecipe>("Recipes", recipeSchema);
+const recipeModel = model<IRecipe>("Recipes", recipeSchema, "recipes");
 
 export default recipeModel;

@@ -1,26 +1,24 @@
 {
     "openapi": "3.0.1",
     "info": {
-        "title": "REST API backend - HaHu",
+        "title": "REST API minta backend",
         "version": "1.0.0",
         "description": "<img alt='HaHu' height='400px' src='https://nitslaszlo.github.io/static/hahu/Hahu.jpg' />"
     },
     "servers": [
         {
-            "url": "https://hahu.cyclic.app"
+            "url": "http://localhost:5000"
         },
         {
-            "url": "http://localhost:5000"
+            "url": "https://jedlik.cyclic.app"
         }
     ],
     "paths": {
-        "/api/kategoriak": {
+        "/api/posts": {
             "get": {
-                "tags": [
-                    "kategoriak"
-                ],
-                "summary": "Összes kategória lekérdezése.",
-                "description": "Az összes kategória adatát tudjuk lekérdezni.",
+                "tags": ["posts"],
+                "summary": "Összes post lekérdezése.",
+                "description": "Az összes post adatát tudjuk lekérdezni.",
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -54,11 +52,9 @@
                 }
             },
             "post": {
-                "tags": [
-                    "kategoriak"
-                ],
-                "summary": "Új kategória mentése.",
-                "description": "Új kategória mentése a 'kategoriak' táblában",
+                "tags": ["posts"],
+                "summary": "Új post mentése.",
+                "description": "Új post mentése a 'kategoriak' táblában",
                 "requestBody": {
                     "content": {
                         "application/json": {
@@ -100,17 +96,15 @@
                 }
             }
         },
-        "/api/kategoriak/{id}": {
+        "/api/posts/{id}": {
             "get": {
-                "tags": [
-                    "kategoriak"
-                ],
-                "summary": "Egy kategória lekérdezése.",
-                "description": "Az id paraméterben megadott kategória adatait kérdezhetjük le.",
+                "tags": ["posts"],
+                "summary": "Egy post lekérdezése.",
+                "description": "Az id paraméterben megadott post adatait kérdezhetjük le.",
                 "parameters": [
                     {
                         "name": "id",
-                        "description": "A kategória azonosítója.",
+                        "description": "A post azonosítója.",
                         "in": "path",
                         "schema": {
                             "type": "number",
@@ -126,7 +120,7 @@
                             "application/json": {
                                 "schema": {
                                     "type": "object",
-                                    "$ref": "#/components/schemas/kategoria_populate"
+                                    "$ref": "#/components/schemas/recipe"
                                 }
                             }
                         }
@@ -156,7 +150,7 @@
                                     "properties": {
                                         "message": {
                                             "type": "string",
-                                            "example": "Ezzel az azonosítóval (id) nincs kategória!"
+                                            "example": "Ezzel az azonosítóval (id) nincs post!"
                                         }
                                     }
                                 }
@@ -166,15 +160,13 @@
                 }
             },
             "patch": {
-                "tags": [
-                    "kategoriak"
-                ],
-                "summary": "Kategória módosítása (PATCH).",
-                "description": "A paraméterben megadott kategória adatait módosítja a végpont.",
+                "tags": ["posts"],
+                "summary": "post módosítása (PATCH).",
+                "description": "A paraméterben megadott post adatait módosítja a végpont.",
                 "parameters": [
                     {
                         "name": "id",
-                        "description": "A PATCH metódussal módosítandó kategória azonosítója (PK).",
+                        "description": "A PATCH metódussal módosítandó post azonosítója (PK).",
                         "in": "path",
                         "schema": {
                             "type": "number",
@@ -195,7 +187,7 @@
                 },
                 "responses": {
                     "200": {
-                        "description": "OK (A módosított kategória adatokkal tér vissza.)",
+                        "description": "OK (A módosított post adatokkal tér vissza.)",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -214,7 +206,7 @@
                                     "properties": {
                                         "message": {
                                             "type": "string",
-                                            "example": "A megadott kategória (id) nem létezik."
+                                            "example": "A megadott post (id) nem létezik."
                                         }
                                     }
                                 }
@@ -224,15 +216,13 @@
                 }
             },
             "put": {
-                "tags": [
-                    "kategoriak"
-                ],
-                "summary": "Kategória módosítása (PUT).",
-                "description": "A paraméterben megadott kategória adatait módosítja a végpont.",
+                "tags": ["posts"],
+                "summary": "post módosítása (PUT).",
+                "description": "A paraméterben megadott post adatait módosítja a végpont.",
                 "parameters": [
                     {
                         "name": "id",
-                        "description": "A PUT metódussal módosítandó kategória azonosítója (PK).",
+                        "description": "A PUT metódussal módosítandó post azonosítója (PK).",
                         "in": "path",
                         "schema": {
                             "type": "number",
@@ -253,7 +243,7 @@
                 },
                 "responses": {
                     "200": {
-                        "description": "OK (A módosított kategória adataival tér vissza.)",
+                        "description": "OK (A módosított post adataival tér vissza.)",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -272,7 +262,7 @@
                                     "properties": {
                                         "message": {
                                             "type": "string",
-                                            "example": "A megadott kategória (id) nem létezik."
+                                            "example": "A megadott post (id) nem létezik."
                                         }
                                     }
                                 }
@@ -282,15 +272,13 @@
                 }
             },
             "delete": {
-                "tags": [
-                    "kategoriak"
-                ],
-                "summary": "Kategória törlése.",
-                "description": "A paraméterben megadott kategóriát törli a végpont.",
+                "tags": ["posts"],
+                "summary": "post törlése.",
+                "description": "A paraméterben megadott postot törli a végpont.",
                 "parameters": [
                     {
                         "name": "id",
-                        "description": "A törlendő kategória azonosítója (PK).",
+                        "description": "A törlendő post azonosítója (PK).",
                         "in": "path",
                         "schema": {
                             "type": "number",
@@ -301,7 +289,7 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "OK (A kategória törölve.)",
+                        "description": "OK (A post törölve.)",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -320,7 +308,7 @@
                                     "properties": {
                                         "message": {
                                             "type": "string",
-                                            "example": "A megadott kategória (id) nem létezik."
+                                            "example": "A megadott post (id) nem létezik."
                                         }
                                     }
                                 }
@@ -346,17 +334,15 @@
                 }
             }
         },
-        "/api/kategoriak/{kategoriaNev}/hirdetesek": {
+        "/api/posts/{kategoriaNev}/hirdetesek": {
             "get": {
-                "tags": [
-                    "kategoriak"
-                ],
-                "summary": "Hirdetések lekérdezése kategórianév szerint.",
-                "description": "A 'kategoriaNev' paraméterben megadott kategóriával és a kategória összes hirdetésével tér vissza a végpont.",
+                "tags": ["posts"],
+                "summary": "receptek lekérdezése postnév szerint.",
+                "description": "A 'kategoriaNev' paraméterben megadott kategóriával és a post összes receptével tér vissza a végpont.",
                 "parameters": [
                     {
                         "name": "kategoriaNev",
-                        "description": "A kategória neve.",
+                        "description": "A post neve.",
                         "in": "path",
                         "schema": {
                             "type": "string",
@@ -372,7 +358,7 @@
                             "application/json": {
                                 "schema": {
                                     "type": "object",
-                                    "$ref": "#/components/schemas/kategoria_populate"
+                                    "$ref": "#/components/schemas/recipe"
                                 }
                             }
                         }
@@ -402,7 +388,7 @@
                                     "properties": {
                                         "message": {
                                             "type": "string",
-                                            "example": "Ebben a kategóriában (Monocikli) nem találtam hirdetést!"
+                                            "example": "Ebben a kategóriában (Monocikli) nem találtam receptt!"
                                         }
                                     }
                                 }
@@ -412,13 +398,11 @@
                 }
             }
         },
-        "/api/hirdetesek": {
+        "/api/recipes": {
             "get": {
-                "tags": [
-                    "hirdetesek"
-                ],
-                "summary": "Összes hirdetés lekérdezése.",
-                "description": "Az összes hirdetés adatát tudjuk lekérdezni.",
+                "tags": ["recipes"],
+                "summary": "Összes recept lekérdezése.",
+                "description": "Az összes recept adatát tudjuk lekérdezni.",
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -427,7 +411,7 @@
                                 "schema": {
                                     "type": "array",
                                     "items": {
-                                        "$ref": "#/components/schemas/hirdetes"
+                                        "$ref": "#/components/schemas/user"
                                     }
                                 }
                             }
@@ -452,29 +436,27 @@
                 }
             },
             "post": {
-                "tags": [
-                    "hirdetesek"
-                ],
-                "summary": "Új hirdetés mentése.",
-                "description": "Az új hirdetés mentése a 'hirdetesek' táblában",
+                "tags": ["recipes"],
+                "summary": "Új recept mentése.",
+                "description": "Az új recept mentése a 'hirdetesek' táblában",
                 "requestBody": {
                     "content": {
                         "application/json": {
                             "schema": {
                                 "type": "object",
-                                "$ref": "#/components/schemas/hirdetes"
+                                "$ref": "#/components/schemas/user"
                             }
                         }
                     }
                 },
                 "responses": {
                     "200": {
-                        "description": "OK (Az új, elmentett hirdetéssel tér vissza.)",
+                        "description": "OK (Az új, elmentett recepttel tér vissza.)",
                         "content": {
                             "application/json": {
                                 "schema": {
                                     "type": "object",
-                                    "$ref": "#/components/schemas/hirdetes"
+                                    "$ref": "#/components/schemas/user"
                                 }
                             }
                         }
@@ -498,17 +480,15 @@
                 }
             }
         },
-        "/api/hirdetesek/{id}": {
+        "/api/recipes/{id}": {
             "get": {
-                "tags": [
-                    "hirdetesek"
-                ],
-                "summary": "Egy hirdetés lekérdezése.",
-                "description": "Az id paraméterben megadott hirdetés adatait kérdezhetjük le.",
+                "tags": ["recipes"],
+                "summary": "Egy recept lekérdezése.",
+                "description": "Az id paraméterben megadott recept adatait kérdezhetjük le.",
                 "parameters": [
                     {
                         "name": "id",
-                        "description": "A hirdetés azonosítója.",
+                        "description": "A recept azonosítója.",
                         "in": "path",
                         "schema": {
                             "type": "number",
@@ -524,7 +504,7 @@
                             "application/json": {
                                 "schema": {
                                     "type": "object",
-                                    "$ref": "#/components/schemas/hirdetes_populate"
+                                    "$ref": "#/components/schemas/user"
                                 }
                             }
                         }
@@ -554,7 +534,7 @@
                                     "properties": {
                                         "message": {
                                             "type": "string",
-                                            "example": "Ezzel az azonosítóval (id) nincs hirdetés!"
+                                            "example": "Ezzel az azonosítóval (id) nincs recept!"
                                         }
                                     }
                                 }
@@ -564,15 +544,13 @@
                 }
             },
             "patch": {
-                "tags": [
-                    "hirdetesek"
-                ],
-                "summary": "Hirdetés módosítása (PATCH).",
-                "description": "A paraméterben megadott hirdetés adatait módosítja a végpont.",
+                "tags": ["recipes"],
+                "summary": "recept módosítása (PATCH).",
+                "description": "A paraméterben megadott recept adatait módosítja a végpont.",
                 "parameters": [
                     {
                         "name": "id",
-                        "description": "A PATCH metódussal módosítandó hirdetés azonosítója (PK).",
+                        "description": "A PATCH metódussal módosítandó recept azonosítója (PK).",
                         "in": "path",
                         "schema": {
                             "type": "number",
@@ -586,19 +564,19 @@
                         "application/json": {
                             "schema": {
                                 "type": "object",
-                                "$ref": "#/components/schemas/hirdetes"
+                                "$ref": "#/components/schemas/user"
                             }
                         }
                     }
                 },
                 "responses": {
                     "200": {
-                        "description": "OK (A módosított hirdetéssel tér vissza.)",
+                        "description": "OK (A módosított receptsel tér vissza.)",
                         "content": {
                             "application/json": {
                                 "schema": {
                                     "type": "object",
-                                    "$ref": "#/components/schemas/hirdetes"
+                                    "$ref": "#/components/schemas/user"
                                 }
                             }
                         }
@@ -612,7 +590,7 @@
                                     "properties": {
                                         "message": {
                                             "type": "string",
-                                            "example": "A megadott hirdetés (id) nem létezik."
+                                            "example": "A megadott recept (id) nem létezik."
                                         }
                                     }
                                 }
@@ -622,15 +600,13 @@
                 }
             },
             "put": {
-                "tags": [
-                    "hirdetesek"
-                ],
-                "summary": "Hirdetés módosítása (PUT).",
-                "description": "A paraméterben megadott hirdetés adatait módosítja a végpont.",
+                "tags": ["recipes"],
+                "summary": "recept módosítása (PUT).",
+                "description": "A paraméterben megadott recept adatait módosítja a végpont.",
                 "parameters": [
                     {
                         "name": "id",
-                        "description": "A PUT metódussal módosítandó hirdetés azonosítója (PK).",
+                        "description": "A PUT metódussal módosítandó recept azonosítója (PK).",
                         "in": "path",
                         "schema": {
                             "type": "number",
@@ -644,19 +620,19 @@
                         "application/json": {
                             "schema": {
                                 "type": "object",
-                                "$ref": "#/components/schemas/hirdetes"
+                                "$ref": "#/components/schemas/user"
                             }
                         }
                     }
                 },
                 "responses": {
                     "200": {
-                        "description": "OK (A módosított hirdetéssel tér vissza.)",
+                        "description": "OK (A módosított receptsel tér vissza.)",
                         "content": {
                             "application/json": {
                                 "schema": {
                                     "type": "object",
-                                    "$ref": "#/components/schemas/hirdetes"
+                                    "$ref": "#/components/schemas/user"
                                 }
                             }
                         }
@@ -670,7 +646,7 @@
                                     "properties": {
                                         "message": {
                                             "type": "string",
-                                            "example": "A megadott hirdetés (id) nem létezik."
+                                            "example": "A megadott recept (id) nem létezik."
                                         }
                                     }
                                 }
@@ -680,15 +656,13 @@
                 }
             },
             "delete": {
-                "tags": [
-                    "hirdetesek"
-                ],
-                "summary": "Hirdetés törlése.",
-                "description": "A paraméterben megadott hirdetést törli a végpont.",
+                "tags": ["recipes"],
+                "summary": "recept törlése.",
+                "description": "A paraméterben megadott receptt törli a végpont.",
                 "parameters": [
                     {
                         "name": "id",
-                        "description": "A törlendő hirdetés azonosítója (PK).",
+                        "description": "A törlendő recept azonosítója (PK).",
                         "in": "path",
                         "schema": {
                             "type": "number",
@@ -699,7 +673,7 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "OK (A hirdetés törölve.)",
+                        "description": "OK (A recept törölve.)",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -718,7 +692,7 @@
                                     "properties": {
                                         "message": {
                                             "type": "string",
-                                            "example": "A megadott hirdetés (id) nem létezik."
+                                            "example": "A megadott recept (id) nem létezik."
                                         }
                                     }
                                 }
@@ -728,13 +702,11 @@
                 }
             }
         },
-        "/api/hirdetesek/order/:mezo": {
+        "/api/recipes/order/:mezo": {
             "get": {
-                "tags": [
-                    "hirdetesek"
-                ],
-                "summary": "Összes hirdetés lekérdezése rendezéssel.",
-                "description": "Az összes hirdetés adatát tudjuk lekérdezni és a paraméterben megadott mező szerint rendezni.",
+                "tags": ["recipes"],
+                "summary": "Összes recept lekérdezése rendezéssel.",
+                "description": "Az összes recept adatát tudjuk lekérdezni és a paraméterben megadott mező szerint rendezni.",
                 "parameters": [
                     {
                         "name": "mezo",
@@ -755,7 +727,7 @@
                                 "schema": {
                                     "type": "array",
                                     "items": {
-                                        "$ref": "#/components/schemas/hirdetes_populate"
+                                        "$ref": "#/components/schemas/user"
                                     }
                                 }
                             }
@@ -780,13 +752,11 @@
                 }
             }
         },
-        "/api/hirdetesek/keyword/{keyword}": {
+        "/api/recipes/keyword/{keyword}": {
             "get": {
-                "tags": [
-                    "hirdetesek"
-                ],
+                "tags": ["recipes"],
                 "summary": "Kulcsszavas szűrés mindkét táblából.",
-                "description": "Azok a hirdetések, melyek leírásában, vagy kategórianevében megtalálható a megadott kulcsszó.",
+                "description": "Azok a receptek, melyek leírásában, vagy postnevében megtalálható a megadott kulcsszó.",
                 "parameters": [
                     {
                         "name": "keyword",
@@ -807,7 +777,7 @@
                                 "schema": {
                                     "type": "array",
                                     "items": {
-                                        "$ref": "#/components/schemas/hirdetes_populate"
+                                        "$ref": "#/components/schemas/user"
                                     }
                                 }
                             }
@@ -832,13 +802,11 @@
                 }
             }
         },
-        "/api/hirdetesek/{offset}/{limit}/{field}": {
+        "/api/recipes/{offset}/{limit}/{field}": {
             "get": {
-                "tags": [
-                    "hirdetesek"
-                ],
+                "tags": ["recipes"],
                 "summary": "Paginált adatok lekérése.",
-                "description": "Hirdetések lekérdezése lapozáshoz.",
+                "description": "receptek lekérdezése lapozáshoz.",
                 "parameters": [
                     {
                         "name": "offset",
@@ -888,7 +856,7 @@
                                             "type": "array",
                                             "description": "A maximum {limit} számú rekord.",
                                             "items": {
-                                                "$ref": "#/components/schemas/hirdetes"
+                                                "$ref": "#/components/schemas/user"
                                             }
                                         }
                                     }
@@ -915,13 +883,11 @@
                 }
             }
         },
-        "/api/hirdetesek/{offset}/{limit}/{field}/{filter}": {
+        "/api/recipes/{offset}/{limit}/{field}/{filter}": {
             "get": {
-                "tags": [
-                    "hirdetesek"
-                ],
+                "tags": ["recipes"],
                 "summary": "Paginált adatok lekérése szűréssel.",
-                "description": "Hirdetések lekérdezése lapozáshoz szűréssel.",
+                "description": "receptek lekérdezése lapozáshoz szűréssel.",
                 "parameters": [
                     {
                         "name": "offset",
@@ -981,7 +947,7 @@
                                             "type": "array",
                                             "description": "A maximum {limit} számú, szűrőnek megfelelő rekord.",
                                             "items": {
-                                                "$ref": "#/components/schemas/hirdetes"
+                                                "$ref": "#/components/schemas/user"
                                             }
                                         }
                                     }
@@ -1011,147 +977,147 @@
     },
     "components": {
         "schemas": {
+            "post": {
+                "type": "object",
+                "required": ["title"],
+                "properties": {
+                    "_id": {
+                        "type": "string",
+                        "description": "PK - A post azonosítója (ObjectID).",
+                        "example": "61b5f28df39e4edcf5b8a3e7"
+                    },
+                    "author": {
+                        "type": "string",
+                        "description": "FK - A post szerzője (ObjectID).",
+                        "example": "61b5e9c0f39e4edcf5b8a3b9"
+                    },
+                    "content": {
+                        "type": "string",
+                        "description": "A post tartalma.",
+                        "example": "Frankie Dunn pályája során számos fantasztikus bunyóst edzett és menedzselt. Legfőbb tanítása, mely vezérli az életét is, hogy a legfontosabb az, hogy mindig védd magad. Mióta elidegenedett a lányától, Frankie jó ideje senkit sem engedett közel magához. Egyetlen barátja Hepaj, az egykori bokszoló, aki rendben tartja Frankie edzőtermét, és tudja, hogy a mogorva külső olyan embert takar, aki az elmúlt 23 évben szinte minden nap misére járt, keresve a megbocsátást, amely valahogy mégsem adatik meg neki. Aztán egy nap Maggie Fitzgerald besétál az edzőterembe. Maggie-nek sosem jutott sok semmiből, de van benne valami, ami csak keveseknek adatik meg: tudja, mit akar, és bármit hajlandó megtenni érte. Az élete állandó küzdelem, amit nyers tehetségével, kizökkenthetetlen koncentrálásával és elképesztő akaraterejével képes túlélni."
+                    },
+                    "title": {
+                        "type": "string",
+                        "maxLength": 50,
+                        "description": "A post címe címe.",
+                        "example": "Millió dolláros bébi 2004"
+                    }
+                }
+            },
             "recipe": {
                 "type": "object",
-                "required": [
-                    "nev"
-                ],
+                "required": ["recipeName"],
                 "properties": {
                     "_id": {
                         "type": "string",
                         "description": "PK - A recept azonosítója (ObjectID).",
                         "example": "61daf48ba5775848e99f555b"
                     },
-                    "nev": {
+                    "author": {
                         "type": "string",
-                        "maxLength": 30,
-                        "uniqueItems": true,
-                        "description": "A kategória neve.",
-                        "example": "Munkagép"
-                    }
-                }
-            },
-            "kategoria_populate": {
-                "allOf": [
-                    {
-                        "$ref": "#/components/schemas/recipe"
+                        "description": "FK - A recept szerzője (ObjectID).",
+                        "example": "61b5e9c0f39e4edcf5b8a3b9"
                     },
-                    {
-                        "type": "object",
-                        "properties": {
-                            "kategoria_hirdetesei": {
-                                "type": "array",
-                                "items": {
-                                    "$ref": "#/components/schemas/hirdetes"
-                                }
-                            }
-                        }
-                    }
-                ]
-            },
-            "hirdetes": {
-                "type": "object",
-                "required": [
-                    "cim",
-                    "kategoria_id",
-                    "vetelar"
-                ],
-                "properties": {
-                    "_id": {
-                        "type": "number",
-                        "description": "PK - A hirdetés azonosítója.",
-                        "example": 2
-                    },
-                    "kategoria_id": {
-                        "type": "number",
-                        "description": "FK - A kategória azonosítója.",
-                        "example": 3
-                    },
-                    "cim": {
+                    "recipeName": {
                         "type": "string",
-                        "uniqueItems": true,
-                        "maxLength": 100,
-                        "description": "A hirdetés címe.",
-                        "example": "BELARUS MTZ 82"
+                        "maxLength": 50,
+                        "description": "A recept neve.",
+                        "example": "PENNE ALL ARRABBIATA CSIRKEMELLEL"
                     },
-                    "evjarat": {
+                    "imageURL": {
                         "type": "string",
-                        "maxLength": 10,
-                        "description": "A jármű évjárata pl: 1995 vagy 2019/08",
-                        "example": "2022/11"
+                        "description": "Az elkészült ételt ábrázoló kép URL címe.",
+                        "example": "https://www.mindmegette.hu/images/240/O/penne-arrabbiata-csirkes.jpg"
                     },
-                    "km_allas": {
-                        "type": "number",
-                        "description": "A járművel eddig megtett távolság [km]",
-                        "example": 210000
-                    },
-                    "szin": {
+                    "decription": {
                         "type": "string",
-                        "description": "A jármű szine",
-                        "example": "ezüst"
+                        "description": "Az étel elkészítésének leírása.",
+                        "example": "A tésztát a csomágolásán látható utasítás szerint forró, sós vízbe kifőzzük és leszűrjük. A finomra vágott hagymákat olajon megdinszteljük, majd hozzáadjuk a kockára vágott csirkemellet és fehéredésig pirítjuk. Sózzuk, borsozzuk, ráöntjük a paradicsomkonzervet és a vörösbort majd forrásig melegítjük.\nHozzáadjuk a chilit, a felaprított bazsalikomot, az oregánót, végül pedig a barnacukrot és 25-30 percig főzzük, míg a csirkemell meg nem puhul, majd összekeverjük a tésztával."
                     },
-                    "uzemanyag": {
-                        "type": "string",
-                        "description": "A jármű által használt üzemanyag típusa.",
-                        "example": "Benzin",
-                        "enum": ["Benzin", "Dízel", "Elektromos", "Hibrid", "Gáz"]
-                    },
-                    "hengerurtartalom": {
-                        "type": "number",
-                        "description": "A jármű lökettérfogata, ha értelmezhető, -1 értékű, ha nem. [cm2]",
-                        "example": 1890
-                    },
-                    "teljesitmeny": {
-                        "type": "number",
-                        "description": "A jármű teljesítménye [LE]",
-                        "example": 1890
-                    },
-                    "serulesmentes": {
-                        "type": "boolean",
-                        "description": "Igaz értékű, ha az autó nem volt sérült.",
-                        "example": true
-                    },
-                    "leiras": {
-                        "type": "string",
-                        "description": "A hirdetés szövege.",
-                        "example": "MTZ 82 traktor, eredeti piros. ..."
-                    },
-                    "hirdetes_datum": {
-                        "type": "string",
-                        "description": "A hirdetés feladásának dátuma.",
-                        "example": "2023-01-02"
-                    },
-                    "vetelar": {
-                        "type": "number",
-                        "description": "A jármű meghirdetett vételára [Forint].",
-                        "example": 2500000
-                    },
-                    "kepek": {
+                    "ingredients": {
                         "type": "array",
                         "items": {
-                            "type": "string",
-                            "maxLength": 300
+                            "type": "string"
                         },
-                        "description": "A hirdetett jármű fényképeinek URL címe.",
-                        "example": "[https://nitslaszlo.github.io/static/hahu/68a.jpg, https://nitslaszlo.github.io/static/hahu/68b.jpg]"
+                        "description": "A hozzávalókat tartalmazó tömb.",
+                        "example": "[\"50 dkg penne\", \"1 db vöröshagyma\", \"4 gerezd fokhagyma\", \"30 dkg\tcsirkemell\", \"só\", \"bors\", \"stb.\"]"
                     }
                 }
             },
-            "hirdetes_populate": {
-                "allOf": [
-                    {
-                        "$ref": "#/components/schemas/hirdetes"
+            "address": {
+                "type": "object",
+                "properties": {
+                    "street": {
+                        "type": "string",
+                        "description": "A közterület neve és száma.",
+                        "example": "Szent István út 7."
                     },
-                    {
-                        "type": "object",
-                        "properties": {
-                            "hirdetes_kategoria": {
-                                "type": "object",
-                                "$ref": "#/components/schemas/recipe"
-                            }
-                        }
+                    "city": {
+                        "type": "string",
+                        "description": "A település, ahol felhasználó lakik.",
+                        "example": "Győr"
+                    },
+                    "country": {
+                        "type": "string",
+                        "description": "Az ország, ahol a felhasználó él.",
+                        "example": "Hungary"
                     }
-                ]
+                }
+            },
+            "user": {
+                "type": "object",
+                "required": ["name", "email", "email_verified", "auto_login", "picture", "password", "roles"],
+                "properties": {
+                    "_id": {
+                        "type": "string",
+                        "description": "PK - A felhasználó azonosítója (ObjectID).",
+                        "example": "61b5f0c1f39e4edcf5b8a3d8"
+                    },
+                    "name": {
+                        "type": "string",
+                        "description": "A felhasználó neve",
+                        "example": "student005"
+                    },
+                    "email": {
+                        "type": "string",
+                        "description": "A felhasználó által használt e-mail cím a regisztráció során",
+                        "example": "student005@jedlik.eu"
+                    },
+                    "email_verified": {
+                        "type": "boolean",
+                        "description": "Igaz értékű, ha megadott e-mail-cím ellenőrzésre kerrült.",
+                        "example": true
+                    },
+                    "auto_login": {
+                        "type": "boolean",
+                        "description": "Igaz értékű, ha a felhasználónál be van kapcsolva az automatikus bejelentkezés.",
+                        "example": true
+                    },
+                    "picture": {
+                        "type": "string",
+                        "description": "A felhasználó avatarja/fényképe.",
+                        "example": "https://lh3.googleusercontent.com/a/ALm5wu1tqlumAaDE2djCuUE2s4ubsOs6HOkdwfU6ftci=s96-c"
+                    },
+                    "password": {
+                        "type": "string",
+                        "description": "A felhasználó jelszavához tartozó hash-kód.",
+                        "example": "$2b$10$HBH36EkxhwwOcI7UM/Km3uHUcgwPJjleZYS9fqOgjIr.qmvTUlGPu"
+                    },
+                    "roles": {
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        },
+                        "description": "A szerepköröket tartalmazó tömb, mely szepköket megkapott a felhasználó.",
+                        "example": "[\"user\", \"admin\"]"
+                    },
+                    "address": {
+                        "type": "object",
+                        "$ref": "#/components/schemas/address",
+                        "description": "A felhasználó lakcíme.",
+                        "example": true
+                    }
+                }
             }
         }
     }

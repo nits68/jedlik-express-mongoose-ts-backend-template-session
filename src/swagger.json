@@ -1,0 +1,1158 @@
+{
+    "openapi": "3.0.1",
+    "info": {
+        "title": "REST API backend - HaHu",
+        "version": "1.0.0",
+        "description": "<img alt='HaHu' height='400px' src='https://nitslaszlo.github.io/static/hahu/Hahu.jpg' />"
+    },
+    "servers": [
+        {
+            "url": "https://hahu.cyclic.app"
+        },
+        {
+            "url": "http://localhost:5000"
+        }
+    ],
+    "paths": {
+        "/api/kategoriak": {
+            "get": {
+                "tags": [
+                    "kategoriak"
+                ],
+                "summary": "Összes kategória lekérdezése.",
+                "description": "Az összes kategória adatát tudjuk lekérdezni.",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/kategoria"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "error.message"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "kategoriak"
+                ],
+                "summary": "Új kategória mentése.",
+                "description": "Új kategória mentése a 'kategoriak' táblában",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "$ref": "#/components/schemas/kategoria"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK (Az új, elmentett kategóriával tér vissza.)",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "$ref": "#/components/schemas/kategoria"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "error.message"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/kategoriak/{id}": {
+            "get": {
+                "tags": [
+                    "kategoriak"
+                ],
+                "summary": "Egy kategória lekérdezése.",
+                "description": "Az id paraméterben megadott kategória adatait kérdezhetjük le.",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "description": "A kategória azonosítója.",
+                        "in": "path",
+                        "schema": {
+                            "type": "number",
+                            "example": 2
+                        },
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "$ref": "#/components/schemas/kategoria_populate"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "error.message"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Ezzel az azonosítóval (id) nincs kategória!"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "patch": {
+                "tags": [
+                    "kategoriak"
+                ],
+                "summary": "Kategória módosítása (PATCH).",
+                "description": "A paraméterben megadott kategória adatait módosítja a végpont.",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "description": "A PATCH metódussal módosítandó kategória azonosítója (PK).",
+                        "in": "path",
+                        "schema": {
+                            "type": "number",
+                            "example": 3
+                        },
+                        "required": true
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "$ref": "#/components/schemas/kategoria"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK (A módosított kategória adatokkal tér vissza.)",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "$ref": "#/components/schemas/kategoria"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "A megadott kategória (id) nem létezik."
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "kategoriak"
+                ],
+                "summary": "Kategória módosítása (PUT).",
+                "description": "A paraméterben megadott kategória adatait módosítja a végpont.",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "description": "A PUT metódussal módosítandó kategória azonosítója (PK).",
+                        "in": "path",
+                        "schema": {
+                            "type": "number",
+                            "example": 3
+                        },
+                        "required": true
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "$ref": "#/components/schemas/kategoria"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK (A módosított kategória adataival tér vissza.)",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "$ref": "#/components/schemas/kategoria"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "A megadott kategória (id) nem létezik."
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "kategoriak"
+                ],
+                "summary": "Kategória törlése.",
+                "description": "A paraméterben megadott kategóriát törli a végpont.",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "description": "A törlendő kategória azonosítója (PK).",
+                        "in": "path",
+                        "schema": {
+                            "type": "number",
+                            "example": 99
+                        },
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK (A kategória törölve.)",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "string",
+                                    "example": "OK"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "A megadott kategória (id) nem létezik."
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "409": {
+                        "description": "Conflict",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "A megadott (id) kategóriára még hivatkoznak, nem törölhető!"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/kategoriak/{kategoriaNev}/hirdetesek": {
+            "get": {
+                "tags": [
+                    "kategoriak"
+                ],
+                "summary": "Hirdetések lekérdezése kategórianév szerint.",
+                "description": "A 'kategoriaNev' paraméterben megadott kategóriával és a kategória összes hirdetésével tér vissza a végpont.",
+                "parameters": [
+                    {
+                        "name": "kategoriaNev",
+                        "description": "A kategória neve.",
+                        "in": "path",
+                        "schema": {
+                            "type": "string",
+                            "example": "Személyautó"
+                        },
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "$ref": "#/components/schemas/kategoria_populate"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "error.message"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Ebben a kategóriában (Monocikli) nem találtam hirdetést!"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/hirdetesek": {
+            "get": {
+                "tags": [
+                    "hirdetesek"
+                ],
+                "summary": "Összes hirdetés lekérdezése.",
+                "description": "Az összes hirdetés adatát tudjuk lekérdezni.",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/hirdetes"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "error.message"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "hirdetesek"
+                ],
+                "summary": "Új hirdetés mentése.",
+                "description": "Az új hirdetés mentése a 'hirdetesek' táblában",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "$ref": "#/components/schemas/hirdetes"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK (Az új, elmentett hirdetéssel tér vissza.)",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "$ref": "#/components/schemas/hirdetes"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "error.message"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/hirdetesek/{id}": {
+            "get": {
+                "tags": [
+                    "hirdetesek"
+                ],
+                "summary": "Egy hirdetés lekérdezése.",
+                "description": "Az id paraméterben megadott hirdetés adatait kérdezhetjük le.",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "description": "A hirdetés azonosítója.",
+                        "in": "path",
+                        "schema": {
+                            "type": "number",
+                            "example": 2
+                        },
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "$ref": "#/components/schemas/hirdetes_populate"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "error.message"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Ezzel az azonosítóval (id) nincs hirdetés!"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "patch": {
+                "tags": [
+                    "hirdetesek"
+                ],
+                "summary": "Hirdetés módosítása (PATCH).",
+                "description": "A paraméterben megadott hirdetés adatait módosítja a végpont.",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "description": "A PATCH metódussal módosítandó hirdetés azonosítója (PK).",
+                        "in": "path",
+                        "schema": {
+                            "type": "number",
+                            "example": 3
+                        },
+                        "required": true
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "$ref": "#/components/schemas/hirdetes"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK (A módosított hirdetéssel tér vissza.)",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "$ref": "#/components/schemas/hirdetes"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "A megadott hirdetés (id) nem létezik."
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "hirdetesek"
+                ],
+                "summary": "Hirdetés módosítása (PUT).",
+                "description": "A paraméterben megadott hirdetés adatait módosítja a végpont.",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "description": "A PUT metódussal módosítandó hirdetés azonosítója (PK).",
+                        "in": "path",
+                        "schema": {
+                            "type": "number",
+                            "example": 3
+                        },
+                        "required": true
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "$ref": "#/components/schemas/hirdetes"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK (A módosított hirdetéssel tér vissza.)",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "$ref": "#/components/schemas/hirdetes"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "A megadott hirdetés (id) nem létezik."
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "hirdetesek"
+                ],
+                "summary": "Hirdetés törlése.",
+                "description": "A paraméterben megadott hirdetést törli a végpont.",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "description": "A törlendő hirdetés azonosítója (PK).",
+                        "in": "path",
+                        "schema": {
+                            "type": "number",
+                            "example": 99
+                        },
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK (A hirdetés törölve.)",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "string",
+                                    "example": "OK"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "A megadott hirdetés (id) nem létezik."
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/hirdetesek/order/:mezo": {
+            "get": {
+                "tags": [
+                    "hirdetesek"
+                ],
+                "summary": "Összes hirdetés lekérdezése rendezéssel.",
+                "description": "Az összes hirdetés adatát tudjuk lekérdezni és a paraméterben megadott mező szerint rendezni.",
+                "parameters": [
+                    {
+                        "name": "mezo",
+                        "description": "Mező, amely szerint rendezni kell, a '-' karakter a mező neve előtt a csökkenő rendezést kódolja.",
+                        "in": "path",
+                        "schema": {
+                            "type": "string",
+                            "example": "-arFt"
+                        },
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/hirdetes_populate"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "error.message"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/hirdetesek/keyword/{keyword}": {
+            "get": {
+                "tags": [
+                    "hirdetesek"
+                ],
+                "summary": "Kulcsszavas szűrés mindkét táblából.",
+                "description": "Azok a hirdetések, melyek leírásában, vagy kategórianevében megtalálható a megadott kulcsszó.",
+                "parameters": [
+                    {
+                        "name": "keyword",
+                        "description": "Kulcsszó, melyet keresünk a mezőkben (bárhol lehet egy-egy mezőn belül, OR kapcsolat).",
+                        "in": "path",
+                        "schema": {
+                            "type": "string",
+                            "example": "gép"
+                        },
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/hirdetes_populate"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "error.message"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/hirdetesek/{offset}/{limit}/{field}": {
+            "get": {
+                "tags": [
+                    "hirdetesek"
+                ],
+                "summary": "Paginált adatok lekérése.",
+                "description": "Hirdetések lekérdezése lapozáshoz.",
+                "parameters": [
+                    {
+                        "name": "offset",
+                        "description": "Ennyi rekordot hagyunk el (skip) a lekérdezés 'elejéről'.",
+                        "in": "path",
+                        "schema": {
+                            "type": "number",
+                            "example": "5"
+                        },
+                        "required": true
+                    },
+                    {
+                        "name": "limit",
+                        "description": "Ennyi rekordot küld (take) maximum az API",
+                        "in": "path",
+                        "schema": {
+                            "type": "number",
+                            "example": "5"
+                        },
+                        "required": true
+                    },
+                    {
+                        "name": "field",
+                        "description": "Melyik mező szerint legyenek rendezve a rekordok. A kötőjel '-' karakter a csökkenő rendezést jelöli.",
+                        "in": "path",
+                        "schema": {
+                            "type": "string",
+                            "example": "-cim"
+                        },
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "count": {
+                                            "type": "number",
+                                            "description": "Az összes rekord száma.",
+                                            "example": "16"
+                                        },
+                                        "data": {
+                                            "type": "array",
+                                            "description": "A maximum {limit} számú rekord.",
+                                            "items": {
+                                                "$ref": "#/components/schemas/hirdetes"
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "error.message"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/hirdetesek/{offset}/{limit}/{field}/{filter}": {
+            "get": {
+                "tags": [
+                    "hirdetesek"
+                ],
+                "summary": "Paginált adatok lekérése szűréssel.",
+                "description": "Hirdetések lekérdezése lapozáshoz szűréssel.",
+                "parameters": [
+                    {
+                        "name": "offset",
+                        "description": "Ennyi rekordot hagyunk el (skip) a lekérdezés 'elejéről'.",
+                        "in": "path",
+                        "schema": {
+                            "type": "number",
+                            "example": "0"
+                        },
+                        "required": true
+                    },
+                    {
+                        "name": "limit",
+                        "description": "Ennyi rekordot küld (take) maximum az API.",
+                        "in": "path",
+                        "schema": {
+                            "type": "number",
+                            "example": "2"
+                        },
+                        "required": true
+                    },
+                    {
+                        "name": "field",
+                        "description": "Melyik mező szerint legyenek rendezve a rekordok. A kötőjel '-' karakter a csökkenő rendezést jelöli.",
+                        "in": "path",
+                        "schema": {
+                            "type": "string",
+                            "example": "-cim"
+                        },
+                        "required": true
+                    },
+                    {
+                        "name": "filter",
+                        "description": "Szűrő - a 'cim' és a 'leiras' mezőkben keressük.",
+                        "in": "path",
+                        "schema": {
+                            "type": "string",
+                            "example": "sport"
+                        },
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "count": {
+                                            "type": "number",
+                                            "description": "A szűrőnek megfelelő rekordok száma",
+                                            "example": "16"
+                                        },
+                                        "data": {
+                                            "type": "array",
+                                            "description": "A maximum {limit} számú, szűrőnek megfelelő rekord.",
+                                            "items": {
+                                                "$ref": "#/components/schemas/hirdetes"
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "error.message"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "kategoria": {
+                "type": "object",
+                "required": [
+                    "nev"
+                ],
+                "properties": {
+                    "_id": {
+                        "type": "number",
+                        "description": "PK - A kategória azonosítója.",
+                        "example": 3
+                    },
+                    "nev": {
+                        "type": "string",
+                        "maxLength": 30,
+                        "uniqueItems": true,
+                        "description": "A kategória neve.",
+                        "example": "Munkagép"
+                    }
+                }
+            },
+            "kategoria_populate": {
+                "allOf": [
+                    {
+                        "$ref": "#/components/schemas/kategoria"
+                    },
+                    {
+                        "type": "object",
+                        "properties": {
+                            "kategoria_hirdetesei": {
+                                "type": "array",
+                                "items": {
+                                    "$ref": "#/components/schemas/hirdetes"
+                                }
+                            }
+                        }
+                    }
+                ]
+            },
+            "hirdetes": {
+                "type": "object",
+                "required": [
+                    "cim",
+                    "kategoria_id",
+                    "vetelar"
+                ],
+                "properties": {
+                    "_id": {
+                        "type": "number",
+                        "description": "PK - A hirdetés azonosítója.",
+                        "example": 2
+                    },
+                    "kategoria_id": {
+                        "type": "number",
+                        "description": "FK - A kategória azonosítója.",
+                        "example": 3
+                    },
+                    "cim": {
+                        "type": "string",
+                        "uniqueItems": true,
+                        "maxLength": 100,
+                        "description": "A hirdetés címe.",
+                        "example": "BELARUS MTZ 82"
+                    },
+                    "evjarat": {
+                        "type": "string",
+                        "maxLength": 10,
+                        "description": "A jármű évjárata pl: 1995 vagy 2019/08",
+                        "example": "2022/11"
+                    },
+                    "km_allas": {
+                        "type": "number",
+                        "description": "A járművel eddig megtett távolság [km]",
+                        "example": 210000
+                    },
+                    "szin": {
+                        "type": "string",
+                        "description": "A jármű szine",
+                        "example": "ezüst"
+                    },
+                    "uzemanyag": {
+                        "type": "string",
+                        "description": "A jármű által használt üzemanyag típusa.",
+                        "example": "Benzin",
+                        "enum": ["Benzin", "Dízel", "Elektromos", "Hibrid", "Gáz"]
+                    },
+                    "hengerurtartalom": {
+                        "type": "number",
+                        "description": "A jármű lökettérfogata, ha értelmezhető, -1 értékű, ha nem. [cm2]",
+                        "example": 1890
+                    },
+                    "teljesitmeny": {
+                        "type": "number",
+                        "description": "A jármű teljesítménye [LE]",
+                        "example": 1890
+                    },
+                    "serulesmentes": {
+                        "type": "boolean",
+                        "description": "Igaz értékű, ha az autó nem volt sérült.",
+                        "example": true
+                    },
+                    "leiras": {
+                        "type": "string",
+                        "description": "A hirdetés szövege.",
+                        "example": "MTZ 82 traktor, eredeti piros. ..."
+                    },
+                    "hirdetes_datum": {
+                        "type": "string",
+                        "description": "A hirdetés feladásának dátuma.",
+                        "example": "2023-01-02"
+                    },
+                    "vetelar": {
+                        "type": "number",
+                        "description": "A jármű meghirdetett vételára [Forint].",
+                        "example": 2500000
+                    },
+                    "kepek": {
+                        "type": "array",
+                        "items": {
+                            "type": "string",
+                            "maxLength": 300
+                        },
+                        "description": "A hirdetett jármű fényképeinek URL címe.",
+                        "example": "[https://nitslaszlo.github.io/static/hahu/68a.jpg, https://nitslaszlo.github.io/static/hahu/68b.jpg]"
+                    }
+                }
+            },
+            "hirdetes_populate": {
+                "allOf": [
+                    {
+                        "$ref": "#/components/schemas/hirdetes"
+                    },
+                    {
+                        "type": "object",
+                        "properties": {
+                            "hirdetes_kategoria": {
+                                "type": "object",
+                                "$ref": "#/components/schemas/kategoria"
+                            }
+                        }
+                    }
+                ]
+            }
+        }
+    }
+}

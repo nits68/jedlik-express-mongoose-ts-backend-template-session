@@ -100,6 +100,7 @@ export default class App {
         });
         mongoose.connection.on("connected", () => {
             console.log("Connected to MongoDB server.");
+            this.listen();
         });
     }
 }

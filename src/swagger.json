@@ -29,7 +29,7 @@
                                 "schema": {
                                     "type": "array",
                                     "items": {
-                                        "$ref": "#/components/schemas/kategoria"
+                                        "$ref": "#/components/schemas/recipe"
                                     }
                                 }
                             }
@@ -64,7 +64,7 @@
                         "application/json": {
                             "schema": {
                                 "type": "object",
-                                "$ref": "#/components/schemas/kategoria"
+                                "$ref": "#/components/schemas/recipe"
                             }
                         }
                     }
@@ -76,7 +76,7 @@
                             "application/json": {
                                 "schema": {
                                     "type": "object",
-                                    "$ref": "#/components/schemas/kategoria"
+                                    "$ref": "#/components/schemas/recipe"
                                 }
                             }
                         }
@@ -188,7 +188,7 @@
                         "application/json": {
                             "schema": {
                                 "type": "object",
-                                "$ref": "#/components/schemas/kategoria"
+                                "$ref": "#/components/schemas/recipe"
                             }
                         }
                     }
@@ -200,7 +200,7 @@
                             "application/json": {
                                 "schema": {
                                     "type": "object",
-                                    "$ref": "#/components/schemas/kategoria"
+                                    "$ref": "#/components/schemas/recipe"
                                 }
                             }
                         }
@@ -246,7 +246,7 @@
                         "application/json": {
                             "schema": {
                                 "type": "object",
-                                "$ref": "#/components/schemas/kategoria"
+                                "$ref": "#/components/schemas/recipe"
                             }
                         }
                     }
@@ -258,7 +258,7 @@
                             "application/json": {
                                 "schema": {
                                     "type": "object",
-                                    "$ref": "#/components/schemas/kategoria"
+                                    "$ref": "#/components/schemas/recipe"
                                 }
                             }
                         }
@@ -1011,16 +1011,16 @@
     },
     "components": {
         "schemas": {
-            "kategoria": {
+            "recipe": {
                 "type": "object",
                 "required": [
                     "nev"
                 ],
                 "properties": {
                     "_id": {
-                        "type": "number",
-                        "description": "PK - A kategória azonosítója.",
-                        "example": 3
+                        "type": "string",
+                        "description": "PK - A recept azonosítója (ObjectID).",
+                        "example": "61daf48ba5775848e99f555b"
                     },
                     "nev": {
                         "type": "string",
@@ -1034,7 +1034,7 @@
             "kategoria_populate": {
                 "allOf": [
                     {
-                        "$ref": "#/components/schemas/kategoria"
+                        "$ref": "#/components/schemas/recipe"
                     },
                     {
                         "type": "object",
@@ -1147,7 +1147,7 @@
                         "properties": {
                             "hirdetes_kategoria": {
                                 "type": "object",
-                                "$ref": "#/components/schemas/kategoria"
+                                "$ref": "#/components/schemas/recipe"
                             }
                         }
                     }

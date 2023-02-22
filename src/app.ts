@@ -8,6 +8,8 @@ import session from "express-session";
 import MongoStore from "connect-mongo";
 import morgan from "morgan";
 import { config } from "dotenv";
+import swaggerUi, { SwaggerUiOptions } from "swagger-ui-express";
+import * as swaggerDocument from "./swagger.json";
 
 export default class App {
     public app: express.Application;
@@ -33,6 +35,18 @@ export default class App {
     }
 
     private initializeMiddlewares() {
+        const options: SwaggerUiOptions = {
+            swaggerOptions: {
+                docExpansion: "list",
+                displayRequestDuration: true,
+                defaultModelsExpandDepth: 3,
+                defaultModelExpandDepth: 3,
+                tryItOutEnabled: true,
+                showCommonExtensions: true,
+                // filter: true,
+            },
+        };
+        this.app.use("/docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument, options));
         this.app.use(express.json()); // body-parser middleware, for read requests body
         this.app.use(cookieParser()); // cookie-parser middleware, for read requests cookies
 
@@ -100,6 +114,7 @@ export default class App {
         });
         mongoose.connection.on("connected", () => {
             console.log("Connected to MongoDB server.");
+            this.listen();
         });
     }
 }

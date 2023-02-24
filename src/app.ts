@@ -10,12 +10,22 @@ import morgan from "morgan";
 import swaggerUi, { SwaggerUiOptions } from "swagger-ui-express";
 import * as swaggerDocument from "./swagger.json";
 import { config } from "dotenv";
+import favicon from "serve-favicon";
+import path from "path";
 
 export default class App {
     public app: express.Application;
 
     constructor(controllers: IController[]) {
         config(); // Read and set variables from .env file.
+
+        // Serve favicon.ico:
+        try {
+            this.app.use(favicon(path.join(__dirname, "../favicon.ico")));
+        } catch (error) {
+            console.log(error.message);
+        }
+
         this.app = express();
         this.connectToTheDatabase();
         this.initializeMiddlewares();

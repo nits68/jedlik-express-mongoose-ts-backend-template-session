@@ -1,7 +1,7 @@
-import { Types } from "mongoose";
+import { Schema } from "mongoose";
 export default interface IPost {
-    _id: Types.ObjectId | string;
-    author: Types.ObjectId | string;
+    _id: Schema.Types.ObjectId;
+    user_id: Schema.Types.ObjectId;
     content: string;
     title: string;
 }

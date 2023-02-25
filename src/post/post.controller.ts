@@ -32,9 +32,9 @@ export default class PostController implements IController {
 
     private getAllPosts = async (req: Request, res: Response, next: NextFunction) => {
         try {
-            // const posts = await this.post.find().populate("author", "-password");
+            // const posts = await this.post.find().populate("user_id", "-password");
             const count = await this.post.countDocuments();
-            const posts = await this.post.find();
+            const posts = await this.post.find().populate("author", "-password");
             res.send({ count: count, posts: posts });
         } catch (error) {
             next(new HttpException(400, error.message));
@@ -75,7 +75,7 @@ export default class PostController implements IController {
         try {
             const id = req.params.id;
             if (Types.ObjectId.isValid(id)) {
-                const post = await this.post.findById(id).populate("author", "-password");
+                const post = await this.post.findById(id).populate("user_id", "-password");
                 if (post) {
                     res.send(post);
                 } else {
@@ -113,10 +113,10 @@ export default class PostController implements IController {
             const postData: IPost = req.body;
             const createdPost = new this.post({
                 ...postData,
-                author: req.user._id,
+                user_id: req.user._id,
             });
             const savedPost = await createdPost.save();
-            await savedPost.populate("author", "-password");
+            await savedPost.populate("user_id", "-password");
             const count = await this.post.countDocuments();
             res.send({ count: count, post: savedPost });
             // res.send(savedPost);

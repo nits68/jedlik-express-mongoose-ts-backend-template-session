@@ -3,8 +3,9 @@ import IPost from "./post.interface";
 
 const postSchema = new Schema<IPost>(
     {
-        author: {
-            ref: "User",
+        _id: Schema.Types.ObjectId,
+        user_id: {
+            ref: "Users",
             type: Schema.Types.ObjectId,
         },
         content: String,
@@ -14,9 +15,16 @@ const postSchema = new Schema<IPost>(
             maxlength: 50,
         },
     },
-    { versionKey: false },
+    { versionKey: false, id: false, toJSON: { virtuals: true }, toObject: { virtuals: true } },
 );
 
-const postModel = model<IPost>("Post", postSchema, "posts");
+postSchema.virtual("author", {
+    ref: "Users",
+    localField: "user_id",
+    foreignField: "_id",
+    justOne: true,
+});
+
+const postModel = model<IPost>("Posts", postSchema, "posts");
 
 export default postModel;

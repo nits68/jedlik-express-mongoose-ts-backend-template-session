@@ -5,8 +5,9 @@ import IRecipe from "./recipe.interface";
 
 const recipeSchema = new Schema<IRecipe>(
     {
-        author: {
-            ref: "User",
+        _id: Schema.Types.ObjectId,
+        user_id: {
+            ref: "Users",
             type: Schema.Types.ObjectId,
         },
         recipeName: {
@@ -18,8 +19,15 @@ const recipeSchema = new Schema<IRecipe>(
         description: String,
         ingredients: Array,
     },
-    { versionKey: false },
+    { versionKey: false, id: false, toJSON: { virtuals: true }, toObject: { virtuals: true } },
 );
+
+recipeSchema.virtual("author", {
+    ref: "Users",
+    localField: "user_id",
+    foreignField: "_id",
+    justOne: true,
+});
 
 const recipeModel = model<IRecipe>("Recipes", recipeSchema, "recipes");
 

@@ -3,7 +3,7 @@
         "_id": {
             "$oid": "61daf48ba5775848e99f555b"
         },
-        "author": {
+        "user_id": {
             "$oid": "61b5e9c0f39e4edcf5b8a3b9"
         },
         "recipeName": "PENNE ALL ARRABBIATA CSIRKEMELLEL",
@@ -28,7 +28,7 @@
         "_id": {
             "$oid": "61dafb17f6fb8e890682fa17"
         },
-        "author": {
+        "user_id": {
             "$oid": "61b5e9c0f39e4edcf5b8a3b9"
         },
         "recipeName": "PIRÍTOTT CSIRKEMÁJ EGYSZERŰEN",
@@ -47,7 +47,7 @@
         "_id": {
             "$oid": "61dbfdc2e397a1e9cf988b0d"
         },
-        "author": {
+        "user_id": {
             "$oid": "61b5e9c0f39e4edcf5b8a3b9"
         },
         "recipeName": "CITROMOS-ZSÁLYÁS CSIRKECOMBOK",
@@ -73,7 +73,7 @@
         "_id": {
             "$oid": "61dbfe81e397a1e9cf988b13"
         },
-        "author": {
+        "user_id": {
             "$oid": "61b5e9c0f39e4edcf5b8a3b9"
         },
         "recipeName": "TERIYAKI CSIRKEMELL - 3 HOZZÁVALÓBÓL",
@@ -89,7 +89,7 @@
         "_id": {
             "$oid": "61dc0000e397a1e9cf988b19"
         },
-        "author": {
+        "user_id": {
             "$oid": "61b5e9c0f39e4edcf5b8a3b9"
         },
         "recipeName": "FEHÉRBOROS-SAJTOS CSIRKERAGU",
@@ -113,7 +113,7 @@
         "_id": {
             "$oid": "61dc00afe397a1e9cf988b1f"
         },
-        "author": {
+        "user_id": {
             "$oid": "61b5e9c0f39e4edcf5b8a3b9"
         },
         "recipeName": "VILÁGBAJNOK GÖNGYÖLT CSIRKEMELL",
@@ -132,7 +132,7 @@
         "_id": {
             "$oid": "61dc01b1e397a1e9cf988b25"
         },
-        "author": {
+        "user_id": {
             "$oid": "61b5e9c0f39e4edcf5b8a3b9"
         },
         "recipeName": "PARMEZÁNOS-TEPSIS CSIRKE BROKKOLIVAL",
@@ -157,7 +157,7 @@
         "_id": {
             "$oid": "61dc0232e397a1e9cf988b2b"
         },
-        "author": {
+        "user_id": {
             "$oid": "61b5e9c0f39e4edcf5b8a3b9"
         },
         "recipeName": "MOGYORÓVAJAS CSIRKEMELL - 5 HOZZÁVALÓBÓL",
@@ -177,7 +177,7 @@
         "_id": {
             "$oid": "61dc02ebe397a1e9cf988b31"
         },
-        "author": {
+        "user_id": {
             "$oid": "61b5e9c0f39e4edcf5b8a3b9"
         },
         "recipeName": "SAJTTAL TÖLTÖTT RÁNTOTT CSIRKEMELL",
@@ -199,7 +199,7 @@
         "_id": {
             "$oid": "61dc03c0e397a1e9cf988b37"
         },
-        "author": {
+        "user_id": {
             "$oid": "61b5e9c0f39e4edcf5b8a3b9"
         },
         "recipeName": "KELKÁPOSZTA FŐZELÉK",

@@ -3,7 +3,7 @@
     "info": {
         "title": "REST API minta backend",
         "version": "1.0.0",
-        "description": "<img alt='HaHu' height='400px' src='https://nitslaszlo.github.io/static/hahu/Hahu.jpg' />"
+        "description": "<img alt='DB_diagram' height='300px' src='https://nitslaszlo.github.io/static/session/db_diagram.jpg' />"
     },
     "servers": [
         {
@@ -14,7 +14,78 @@
         }
     ],
     "paths": {
-        "/api/posts": {
+        "/auth/login": {
+            "post": {
+                "tags": ["authentication"],
+                "summary": "Bejelentkezés",
+                "description": "Bejelentkezés a megadott felhasználói adatokkal.",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "email": {
+                                        "type": "string",
+                                        "example": "student005@jedlik.eu"
+                                    },
+                                    "password": {
+                                        "type": "string",
+                                        "example": "student005"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "$ref": "#/components/schemas/user"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "status": {
+                                            "type": "number",
+                                            "example": 401
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Wrong credentials provided"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/auth/logout": {
+            "post": {
+                "tags": ["authentication"],
+                "summary": "Kijelentkezés",
+                "description": "Kijelentkezés. Kliens süti-token érvénytelenítése.",
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            }
+        },
+        "/posts": {
             "get": {
                 "tags": ["posts"],
                 "summary": "Összes post lekérdezése.",
@@ -27,7 +98,7 @@
                                 "schema": {
                                     "type": "array",
                                     "items": {
-                                        "$ref": "#/components/schemas/recipe"
+                                        "$ref": "#/components/schemas/post"
                                     }
                                 }
                             }
@@ -96,7 +167,7 @@
                 }
             }
         },
-        "/api/posts/{id}": {
+        "/posts/{id}": {
             "get": {
                 "tags": ["posts"],
                 "summary": "Egy post lekérdezése.",
@@ -334,7 +405,7 @@
                 }
             }
         },
-        "/api/posts/{kategoriaNev}/hirdetesek": {
+        "/posts/{kategoriaNev}/hirdetesek": {
             "get": {
                 "tags": ["posts"],
                 "summary": "receptek lekérdezése postnév szerint.",
@@ -398,7 +469,7 @@
                 }
             }
         },
-        "/api/recipes": {
+        "/recipes": {
             "get": {
                 "tags": ["recipes"],
                 "summary": "Összes recept lekérdezése.",
@@ -480,7 +551,7 @@
                 }
             }
         },
-        "/api/recipes/{id}": {
+        "/recipes/{id}": {
             "get": {
                 "tags": ["recipes"],
                 "summary": "Egy recept lekérdezése.",
@@ -702,7 +773,7 @@
                 }
             }
         },
-        "/api/recipes/order/:mezo": {
+        "/recipes/order/:mezo": {
             "get": {
                 "tags": ["recipes"],
                 "summary": "Összes recept lekérdezése rendezéssel.",
@@ -752,7 +823,7 @@
                 }
             }
         },
-        "/api/recipes/keyword/{keyword}": {
+        "/recipes/keyword/{keyword}": {
             "get": {
                 "tags": ["recipes"],
                 "summary": "Kulcsszavas szűrés mindkét táblából.",
@@ -802,7 +873,7 @@
                 }
             }
         },
-        "/api/recipes/{offset}/{limit}/{field}": {
+        "/recipes/{offset}/{limit}/{field}": {
             "get": {
                 "tags": ["recipes"],
                 "summary": "Paginált adatok lekérése.",
@@ -883,7 +954,7 @@
                 }
             }
         },
-        "/api/recipes/{offset}/{limit}/{field}/{filter}": {
+        "/recipes/{offset}/{limit}/{field}/{filter}": {
             "get": {
                 "tags": ["recipes"],
                 "summary": "Paginált adatok lekérése szűréssel.",
@@ -986,7 +1057,7 @@
                         "description": "PK - A post azonosítója (ObjectID).",
                         "example": "61b5f28df39e4edcf5b8a3e7"
                     },
-                    "author": {
+                    "user_id": {
                         "type": "string",
                         "description": "FK - A post szerzője (ObjectID).",
                         "example": "61b5e9c0f39e4edcf5b8a3b9"
@@ -1013,7 +1084,7 @@
                         "description": "PK - A recept azonosítója (ObjectID).",
                         "example": "61daf48ba5775848e99f555b"
                     },
-                    "author": {
+                    "user_id": {
                         "type": "string",
                         "description": "FK - A recept szerzője (ObjectID).",
                         "example": "61b5e9c0f39e4edcf5b8a3b9"
@@ -1066,7 +1137,7 @@
             },
             "user": {
                 "type": "object",
-                "required": ["name", "email", "email_verified", "auto_login", "picture", "password", "roles"],
+                "required": ["name", "email", "email_verified", "auto_login", "picture", "roles"],
                 "properties": {
                     "_id": {
                         "type": "string",
@@ -1116,6 +1187,22 @@
                         "$ref": "#/components/schemas/address",
                         "description": "A felhasználó lakcíme.",
                         "example": true
+                    }
+                }
+            },
+            "userLogin": {
+                "type": "object",
+                "required": ["email", "password"],
+                "properties": {
+                    "email": {
+                        "type": "string",
+                        "description": "A felhasználó által használt e-mail cím a regisztráció során",
+                        "example": "student005@jedlik.eu"
+                    },
+                    "password": {
+                        "type": "string",
+                        "description": "A felhasználó kódolatlan jelszava.",
+                        "example": "student005"
                     }
                 }
             }

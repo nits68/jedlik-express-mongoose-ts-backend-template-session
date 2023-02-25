@@ -105,7 +105,7 @@ export default class UserController implements IController {
     private getAllPostsOfLoggedUser = async (req: IRequestWithUser, res: Response, next: NextFunction) => {
         try {
             const id = req.user._id; // Stored user's ID in Cookie
-            const posts = await this.post.find({ author: id });
+            const posts = await this.post.find({ user_id: id });
             res.send(posts);
         } catch (error) {
             next(new HttpException(400, error.message));
@@ -116,7 +116,7 @@ export default class UserController implements IController {
         try {
             if (Types.ObjectId.isValid(req.params.id)) {
                 const id: string = req.params.id;
-                const posts = await this.post.find({ author: id });
+                const posts = await this.post.find({ user_id: id });
                 res.send(posts);
             } else {
                 next(new IdNotValidException(req.params.id));

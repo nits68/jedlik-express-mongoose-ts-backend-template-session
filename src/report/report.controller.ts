@@ -49,7 +49,7 @@ export default class ReportController implements IController {
                     $lookup: {
                         from: "posts",
                         localField: "users._id",
-                        foreignField: "author",
+                        foreignField: "user_id",
                         as: "articles",
                     },
                 },

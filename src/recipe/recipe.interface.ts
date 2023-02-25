@@ -1,7 +1,7 @@
-import { Types } from "mongoose";
+import { Schema } from "mongoose";
 export default interface IRecipe {
-    _id?: Types.ObjectId | string;
-    author?: Types.ObjectId | string;
+    _id?: Schema.Types.ObjectId;
+    user_id?: Schema.Types.ObjectId;
     recipeName: string;
     imageURL: string;
     description: string;

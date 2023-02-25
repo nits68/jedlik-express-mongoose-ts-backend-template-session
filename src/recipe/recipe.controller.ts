@@ -74,7 +74,7 @@ export default class RecipeController implements IController {
         try {
             const id = req.params.id;
             if (Types.ObjectId.isValid(id)) {
-                const recipe = await this.recipeM.findById(id).populate("author", "-password");
+                const recipe = await this.recipeM.findById(id).populate("user_id", "-password");
                 if (recipe) {
                     res.send(recipe);
                 } else {
@@ -112,10 +112,10 @@ export default class RecipeController implements IController {
             const recipeData: IRecipe = req.body;
             const createdRecipe = new this.recipeM({
                 ...recipeData,
-                author: req.user._id,
+                user_id: req.user._id,
             });
             const savedRecipe = await createdRecipe.save();
-            await savedRecipe.populate("author", "-password");
+            await savedRecipe.populate("user_id", "-password");
             res.send(savedRecipe);
         } catch (error) {
             next(new HttpException(400, error.message));

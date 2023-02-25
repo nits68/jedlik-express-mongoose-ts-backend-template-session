@@ -14,6 +14,7 @@ import IGoogleUserInfo from "../interfaces/googleUserInfo.interface";
 import IRequestWithUser from "../interfaces/requestWithUser.interface";
 import ISession from "../interfaces/session.interface";
 import IUser from "../user/user.interface";
+import { Schema } from "mongoose";
 
 export default class AuthenticationController implements IController {
     public path = "/auth";
@@ -54,7 +55,7 @@ export default class AuthenticationController implements IController {
                         next(new HttpException(400, error.message)); // to do
                     }
                     console.log("regenerate ok");
-                    (req.session as ISession).user_id = user._id as string;
+                    (req.session as ISession).user_id = user._id as Schema.Types.ObjectId;
                     (req.session as ISession).user_email = user.email as string;
                     (req.session as ISession).isLoggedIn = true;
                     (req.session as ISession).isAutoLogin = user.auto_login;
@@ -102,7 +103,7 @@ export default class AuthenticationController implements IController {
                             next(new HttpException(400, error.message)); // to do
                         }
                         // console.log("regenerate ok");
-                        (req.session as ISession).user_id = user._id as string;
+                        (req.session as ISession).user_id = user._id as Schema.Types.ObjectId;
                         (req.session as ISession).user_email = user.email;
                         (req.session as ISession).isLoggedIn = true;
                         (req.session as ISession).isAutoLogin = user.auto_login;
@@ -168,7 +169,7 @@ export default class AuthenticationController implements IController {
                                     next(new HttpException(400, error.message)); // to do
                                 }
                                 console.log("regenerate ok");
-                                (req.session as ISession).user_id = user._id as string;
+                                (req.session as ISession).user_id = user._id as Schema.Types.ObjectId;
                                 (req.session as ISession).user_email = user.email as string;
                                 (req.session as ISession).isLoggedIn = true;
                                 (req.session as ISession).isAutoLogin = user.auto_login;
@@ -188,7 +189,7 @@ export default class AuthenticationController implements IController {
                                         if (error) {
                                             next(new HttpException(400, error.message)); // to do
                                         }
-                                        (req.session as ISession).user_id = user._id as string;
+                                        (req.session as ISession).user_id = user._id as Schema.Types.ObjectId;
                                         (req.session as ISession).user_email = user.email as string;
                                         (req.session as ISession).isLoggedIn = true;
                                         (req.session as ISession).isAutoLogin = user.auto_login;

@@ -17,7 +17,10 @@ export default class App {
     public app: express.Application;
 
     constructor(controllers: IController[]) {
-        config(); // Read and set variables from .env file.
+        config(); // Read and set variables from .env file (only during development).
+
+        // create express application:
+        this.app = express();
 
         // Serve favicon.ico:
         try {
@@ -26,7 +29,6 @@ export default class App {
             console.log(error.message);
         }
 
-        this.app = express();
         this.connectToTheDatabase();
         this.initializeMiddlewares();
         this.initializeControllers(controllers);
@@ -45,6 +47,7 @@ export default class App {
     }
 
     private initializeMiddlewares() {
+        // Swagger
         const options: SwaggerUiOptions = {
             swaggerOptions: {
                 docExpansion: "list",
@@ -57,6 +60,7 @@ export default class App {
             },
         };
         this.app.use("/docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument, options));
+
         this.app.use(express.json()); // body-parser middleware, for read requests body
         this.app.use(cookieParser()); // cookie-parser middleware, for read requests cookies
 
@@ -94,7 +98,7 @@ export default class App {
         }
         this.app.use(session(mySessionOptions));
 
-        // Logger:
+        // Morgan logger:
         if (["development", "test"].includes(process.env.NODE_ENV)) this.app.use(morgan(":method :url status=:status :date[iso] rt=:response-time ms"));
         if (process.env.NODE_ENV == "deployment") this.app.use(morgan("tiny"));
     }

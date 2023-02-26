@@ -10,7 +10,7 @@
             "url": "http://localhost:5000"
         },
         {
-            "url": "https://jedlik.cyclic.app"
+            "url": "https://jedliksession.cyclic.app"
         }
     ],
     "paths": {
@@ -26,14 +26,16 @@
                                 "type": "object",
                                 "properties": {
                                     "email": {
-                                        "type": "string",
-                                        "example": "student005@jedlik.eu"
+                                        "type": "string"
                                     },
                                     "password": {
-                                        "type": "string",
-                                        "example": "student005"
+                                        "type": "string"
                                     }
                                 }
+                            },
+                            "example": {
+                                "email": "student005@jedlik.eu",
+                                "password": "student005"
                             }
                         }
                     }
@@ -114,6 +116,10 @@
                                         "message": {
                                             "type": "string",
                                             "example": "error.message"
+                                        },
+                                        "status": {
+                                            "type": "number",
+                                            "example": 400
                                         }
                                     }
                                 }
@@ -125,25 +131,25 @@
             "post": {
                 "tags": ["posts"],
                 "summary": "Új post mentése.",
-                "description": "Új post mentése a 'kategoriak' táblában",
+                "description": "Új post mentése a 'post' táblában",
                 "requestBody": {
                     "content": {
                         "application/json": {
                             "schema": {
                                 "type": "object",
-                                "$ref": "#/components/schemas/recipe"
+                                "$ref": "#/components/schemas/post"
                             }
                         }
                     }
                 },
                 "responses": {
                     "200": {
-                        "description": "OK (Az új, elmentett kategóriával tér vissza.)",
+                        "description": "OK (Az új, elmentett posttal tér vissza.)",
                         "content": {
                             "application/json": {
                                 "schema": {
                                     "type": "object",
-                                    "$ref": "#/components/schemas/recipe"
+                                    "$ref": "#/components/schemas/post"
                                 }
                             }
                         }
@@ -178,8 +184,8 @@
                         "description": "A post azonosítója.",
                         "in": "path",
                         "schema": {
-                            "type": "number",
-                            "example": 2
+                            "type": "string",
+                            "example": "61b5f28df39e4edcf5b8a3e7"
                         },
                         "required": true
                     }
@@ -191,7 +197,7 @@
                             "application/json": {
                                 "schema": {
                                     "type": "object",
-                                    "$ref": "#/components/schemas/recipe"
+                                    "$ref": "#/components/schemas/post"
                                 }
                             }
                         }
@@ -240,8 +246,8 @@
                         "description": "A PATCH metódussal módosítandó post azonosítója (PK).",
                         "in": "path",
                         "schema": {
-                            "type": "number",
-                            "example": 3
+                            "type": "string",
+                            "example": "61b5f28df39e4edcf5b8a3e7"
                         },
                         "required": true
                     }
@@ -251,7 +257,7 @@
                         "application/json": {
                             "schema": {
                                 "type": "object",
-                                "$ref": "#/components/schemas/recipe"
+                                "$ref": "#/components/schemas/post"
                             }
                         }
                     }
@@ -263,7 +269,7 @@
                             "application/json": {
                                 "schema": {
                                     "type": "object",
-                                    "$ref": "#/components/schemas/recipe"
+                                    "$ref": "#/components/schemas/post"
                                 }
                             }
                         }
@@ -289,15 +295,15 @@
             "put": {
                 "tags": ["posts"],
                 "summary": "post módosítása (PUT).",
-                "description": "A paraméterben megadott post adatait módosítja a végpont.",
+                "description": "A paraméterben megadott post adatait módosítja a végpont PUT metódussal.",
                 "parameters": [
                     {
                         "name": "id",
                         "description": "A PUT metódussal módosítandó post azonosítója (PK).",
                         "in": "path",
                         "schema": {
-                            "type": "number",
-                            "example": 3
+                            "type": "string",
+                            "example": "61b5f28df39e4edcf5b8a3e7"
                         },
                         "required": true
                     }
@@ -307,7 +313,7 @@
                         "application/json": {
                             "schema": {
                                 "type": "object",
-                                "$ref": "#/components/schemas/recipe"
+                                "$ref": "#/components/schemas/post"
                             }
                         }
                     }
@@ -319,7 +325,7 @@
                             "application/json": {
                                 "schema": {
                                     "type": "object",
-                                    "$ref": "#/components/schemas/recipe"
+                                    "$ref": "#/components/schemas/post"
                                 }
                             }
                         }
@@ -352,8 +358,8 @@
                         "description": "A törlendő post azonosítója (PK).",
                         "in": "path",
                         "schema": {
-                            "type": "number",
-                            "example": 99
+                            "type": "string",
+                            "example": "61b5f28df39e4edcf5b8a3e7"
                         },
                         "required": true
                     }
@@ -380,22 +386,6 @@
                                         "message": {
                                             "type": "string",
                                             "example": "A megadott post (id) nem létezik."
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    },
-                    "409": {
-                        "description": "Conflict",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "type": "object",
-                                    "properties": {
-                                        "message": {
-                                            "type": "string",
-                                            "example": "A megadott (id) kategóriára még hivatkoznak, nem törölhető!"
                                         }
                                     }
                                 }
@@ -1046,6 +1036,11 @@
             }
         }
     },
+    "security": [
+        {
+            "name": []
+        }
+    ],
     "components": {
         "schemas": {
             "post": {
@@ -1190,21 +1185,21 @@
                     }
                 }
             },
-            "userLogin": {
-                "type": "object",
-                "required": ["email", "password"],
-                "properties": {
-                    "email": {
-                        "type": "string",
-                        "description": "A felhasználó által használt e-mail cím a regisztráció során",
-                        "example": "student005@jedlik.eu"
-                    },
-                    "password": {
-                        "type": "string",
-                        "description": "A felhasználó kódolatlan jelszava.",
-                        "example": "student005"
-                    }
+            "ErrorShema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string"
+                },
+                "status": {
+                  "type": "integer"
                 }
+              },
+              "additionalProperties": false,
+              "required": [
+                "message",
+                "status"
+              ]
             }
         }
     }

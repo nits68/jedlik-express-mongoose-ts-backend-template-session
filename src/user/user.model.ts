@@ -1,19 +1,19 @@
-import { Types, Schema, model } from "mongoose";
+import { Schema, model } from "mongoose";
 import IUser from "./user.interface";
+import IAddress from "./address.interface";
 
-const addressSchema = new Schema(
+const addressSchema = new Schema<IAddress>(
     {
         city: String,
         country: String,
         street: String,
     },
-    { versionKey: false },
+    { versionKey: false, id: false, toJSON: { virtuals: true }, toObject: { virtuals: true } },
 );
 
 const userSchema = new Schema<IUser>(
     {
-        _id: Types.ObjectId,
-        address: addressSchema,
+        _id: Schema.Types.ObjectId,
         email: {
             type: String,
             required: true,
@@ -42,6 +42,7 @@ const userSchema = new Schema<IUser>(
             type: [String], // Array of string
             required: true,
         },
+        address: addressSchema,
     },
     { versionKey: false, id: false, toJSON: { virtuals: true }, toObject: { virtuals: true } },
 );

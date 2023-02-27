@@ -87,6 +87,47 @@
                 }
             }
         },
+        "/auth/register": {
+            "post": {
+                "tags": ["authentication"],
+                "summary": "Regisztráció",
+                "description": "Regisztráció a megadott adattokkal.",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "$ref": "#/components/schemas/user"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK (Az új, elmentett felhasználó adataival tér vissza.)",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "$ref": "#/components/schemas/user"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorSchema"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        
         "/posts": {
             "get": {
                 "tags": ["posts"],

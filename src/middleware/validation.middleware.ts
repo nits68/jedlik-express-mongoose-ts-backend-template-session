@@ -4,11 +4,20 @@ import express from "express";
 import HttpException from "../exceptions/HttpException";
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/explicit-module-boundary-types
-export default function validationMiddleware(type: any, skipMissingProperties = false): express.RequestHandler {
+export default function validationMiddleware(type: any, skipMissingProp = false): express.RequestHandler {
     return (req, res, next) => {
-        validate(plainToInstance(type, req.body), { skipMissingProperties }).then((errors: ValidationError[]) => {
+        validate(plainToInstance(type, req.body), { skipMissingProperties: skipMissingProp, forbidUnknownValues: false }).then((errors: ValidationError[]) => {
             if (errors.length > 0) {
-                const message = errors.map((error: ValidationError) => Object.values(error.constraints)).join(", ");
+                // Break down, if validate nested object in latest version of class-validator
+                // const message = errors.map((error: ValidationError) => Object.values(error.constraints)).join(", ");
+                let message = "";
+                if (errors[0].constraints) {
+                    message = errors.map((error: ValidationError) => Object.values(error.constraints)).join(", ");
+                } else {
+                    message = "Error on check DTO-s ";
+                    message += errors.map((error: ValidationError) => Object.values(error.children[0].constraints)).join(", ");
+                    // message: " an unknown value was passed to the validate function"
+                }
                 next(new HttpException(400, message));
             } else {
                 next();

@@ -1,8 +1,9 @@
-import SessionExpiredException from "./../exceptions/SessionExpiredException";
 import { NextFunction, Response } from "express";
-import ISession from "./../interfaces/session.interface";
-import IRequestWithUser from "./../interfaces/requestWithUser.interface";
-import userModel from "./../user/user.model";
+
+import SessionExpiredException from "../exceptions/SessionExpiredException";
+import IRequestWithUser from "../interfaces/requestWithUser.interface";
+import ISession from "../interfaces/session.interface";
+import userModel from "../user/user.model";
 
 export default async function authMiddleware(req: IRequestWithUser, res: Response, next: NextFunction): Promise<void> {
     if (req.session.id && (req.session as ISession).user_id) {

@@ -1,6 +1,7 @@
-import { Schema, model } from "mongoose";
-import IUser from "./user.interface";
+import { model, Schema } from "mongoose";
+
 import IAddress from "./address.interface";
+import IUser from "./user.interface";
 
 const addressSchema = new Schema<IAddress>(
     {

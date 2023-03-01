@@ -1,20 +1,20 @@
 import bcrypt from "bcrypt";
-import { Router, Request, Response, NextFunction } from "express";
+import { NextFunction, Request, Response, Router } from "express";
+import { OAuth2Client } from "google-auth-library";
+import { Schema } from "mongoose";
+
+import HttpException from "../exceptions/HttpException";
 import UserWithThatEmailAlreadyExistsException from "../exceptions/UserWithThatEmailAlreadyExistsException";
 import WrongCredentialsException from "../exceptions/WrongCredentialsException";
-import HttpException from "../exceptions/HttpException";
-import validationMiddleware from "../middleware/validation.middleware";
-import userModel from "./../user/user.model";
-import CreateUserDto from "../user/user.dto";
-import LogInDto from "./logIn.dto";
-import { OAuth2Client } from "google-auth-library";
-
 import IController from "../interfaces/controller.interface";
 import IGoogleUserInfo from "../interfaces/googleUserInfo.interface";
 import IRequestWithUser from "../interfaces/requestWithUser.interface";
 import ISession from "../interfaces/session.interface";
+import validationMiddleware from "../middleware/validation.middleware";
+import CreateUserDto from "../user/user.dto";
 import IUser from "../user/user.interface";
-import { Schema } from "mongoose";
+import userModel from "../user/user.model";
+import LogInDto from "./logIn.dto";
 
 export default class AuthenticationController implements IController {
     public path = "/auth";

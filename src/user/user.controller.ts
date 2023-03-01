@@ -1,16 +1,17 @@
-import { Router, Request, Response, NextFunction } from "express";
+import { NextFunction, Request, Response, Router } from "express";
 import { Types } from "mongoose";
+
+import HttpException from "../exceptions/HttpException";
+import IdNotValidException from "../exceptions/IdNotValidException";
+import UserNotFoundException from "../exceptions/UserNotFoundException";
 import IController from "../interfaces/controller.interface";
 import IRequestWithUser from "../interfaces/requestWithUser.interface";
 import authMiddleware from "../middleware/auth.middleware";
 import validationMiddleware from "../middleware/validation.middleware";
-import CreateUserDto from "./user.dto";
-import UserNotFoundException from "../exceptions/UserNotFoundException";
-import IdNotValidException from "../exceptions/IdNotValidException";
-import HttpException from "../exceptions/HttpException";
-import userModel from "./user.model";
 import postModel from "../post/post.model";
+import CreateUserDto from "./user.dto";
 import IUser from "./user.interface";
+import userModel from "./user.model";
 
 export default class UserController implements IController {
     public path = "/users";

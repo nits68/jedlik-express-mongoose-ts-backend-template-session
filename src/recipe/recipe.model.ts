@@ -1,6 +1,7 @@
 // https://mongoosejs.com/docs/validation.html
 
-import { Schema, model } from "mongoose";
+import { model, Schema } from "mongoose";
+
 import IRecipe from "./recipe.interface";
 
 const recipeSchema = new Schema<IRecipe>(

@@ -1,17 +1,18 @@
+import MongoStore from "connect-mongo";
 import cookieParser from "cookie-parser";
-import express from "express";
-import mongoose from "mongoose";
 import cors from "cors";
+import { config } from "dotenv";
+import express from "express";
+import session from "express-session";
+import mongoose from "mongoose";
+import morgan from "morgan";
+import path from "path";
+import favicon from "serve-favicon";
+import swaggerUi, { SwaggerUiOptions } from "swagger-ui-express";
+
 import IController from "./interfaces/controller.interface";
 import errorMiddleware from "./middleware/error.middleware";
-import session from "express-session";
-import MongoStore from "connect-mongo";
-import morgan from "morgan";
-import swaggerUi, { SwaggerUiOptions } from "swagger-ui-express";
 import * as swaggerDocument from "./swagger.json";
-import { config } from "dotenv";
-import favicon from "serve-favicon";
-import path from "path";
 
 export default class App {
     public app: express.Application;

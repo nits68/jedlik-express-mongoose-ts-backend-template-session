@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { IsString, IsOptional, MinLength } from "class-validator";
+import { IsString, MinLength } from "class-validator";
+
 import IAddress from "./address.interface";
 
 export default class CreateAddressDto implements IAddress {

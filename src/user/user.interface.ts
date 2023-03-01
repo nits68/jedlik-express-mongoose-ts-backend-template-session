@@ -8,7 +8,7 @@ export default interface IUser {
     picture: string;
     password: string;
     roles: string[];
-    address: {
+    address?: {
         street: string;
         city: string;
         country: string;

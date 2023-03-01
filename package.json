@@ -34,6 +34,7 @@
         "google-auth-library": "^8.7.0",
         "mongoose": "6.10.0",
         "morgan": "^1.10.0",
+        "reflect-metadata": "^0.1.13",
         "serve-favicon": "^2.5.0",
         "swagger-ui-express": "^4.6.1"
     },

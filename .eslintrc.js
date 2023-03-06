@@ -31,8 +31,9 @@ module.exports = {
         // "arrow-parens": ["error", "as-needed"],
         "@typescript-eslint/no-inferrable-types": "off",
         // "@typescript-eslint/explicit-module-boundary-types": "off",
-        "simple-import-sort/imports": "error",
-        "simple-import-sort/exports": "error",
+        "simple-import-sort/imports": "warn",
+        "simple-import-sort/exports": "warn",
+        "max-len": ["error", { code: 160, tabWidth: 4, ignoreStrings: true, ignoreUrls: true }],
     },
     overrides: [
         {

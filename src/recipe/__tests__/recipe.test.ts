@@ -94,7 +94,9 @@ describe("test recipes endpoints", () => {
     it("POST /recipes (with empty json object)", async () => {
         const response = await request(server).post("/recipes").set("Cookie", cookie);
         expect(response.statusCode).toEqual(400);
-        expect(response.body.message).toEqual("recipeName must be a string,recipeName should not be empty, imageURL must be a string,imageURL must be a URL address,imageURL should not be empty, description must be a string,description should not be empty, ingredients should not be empty,ingredients must be an array");
+        expect(response.body.message).toEqual(
+            "recipeName must be a string,recipeName should not be empty, imageURL must be a string,imageURL must be a URL address,imageURL should not be empty, description must be a string,description should not be empty, ingredients should not be empty,ingredients must be an array",
+        );
     });
 
     it("POST /recipes", async () => {

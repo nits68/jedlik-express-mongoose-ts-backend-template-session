@@ -1,4 +1,4 @@
-import { plainToInstance } from "class-transformer";
+// import { plainToInstance } from "class-transformer";
 import { validate, ValidationError } from "class-validator";
 import express from "express";
 
@@ -7,32 +7,25 @@ import HttpException from "../exceptions/HttpException";
 // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/explicit-module-boundary-types
 export default function validationMiddleware(type: any, skipMissingProp = false): express.RequestHandler {
     return (req, res, next) => {
-        validate(plainToInstance(type, req.body), { skipMissingProperties: skipMissingProp, whitelist: true, forbidNonWhitelisted: true }).then(
-            (errors: ValidationError[]) => {
-                if (errors.length > 0) {
-                    let message: string = "";
-                    for (const e of errors) {
-                        if (e.constraints) {
-                            if (message.length > 0 && !message.endsWith(", ")) message += ", ";
-                            message += Object.values(e.constraints).join(", ");
-                        }
-                        if (e.children) {
-                            for (const c of e.children) {
-                                if (message.length > 0 && !message.endsWith(", ")) message += ", ";
-                                const children_errors: string[] = [];
-                                for (const v of Object.values(c.constraints)) {
-                                    children_errors.push(`${e.property}.${v}`);
-                                }
-                                message += children_errors.join(", ");
-                            }
-                        }
-                    }
-                    next(new HttpException(400, message));
+        // forbidUnknownValues: false
+        const validatorObject = Object.assign(new type(), req.body);
+        validate(validatorObject, { skipMissingProperties: skipMissingProp }).then((errors: ValidationError[]) => {
+            if (errors.length > 0) {
+                // Break down, if validate nested object in latest version of class-validator
+                // const message = errors.map((error: ValidationError) => Object.values(error.constraints)).join(", ");
+                let message = "";
+                if (errors[0].constraints) {
+                    message = errors.map((error: ValidationError) => Object.values(error.constraints)).join(", ");
                 } else {
-                    next();
+                    message = "Error on check DTO-s ";
+                    message += errors.map((error: ValidationError) => Object.values(error.children[0].constraints)).join(", ");
+                    // message: " an unknown value was passed to the validate function"
                 }
-            },
-        );
+                next(new HttpException(400, message));
+            } else {
+                next();
+            }
+        });
     };
 }
 

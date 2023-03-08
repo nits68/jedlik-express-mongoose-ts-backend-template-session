@@ -103,7 +103,6 @@ export default class App {
             mySessionOptions.cookie.secure = false;
             mySessionOptions.cookie.sameSite = "lax";
         }
-        console.log(mySessionOptions);
         this.app.use(session(mySessionOptions));
 
         // Morgan logger:

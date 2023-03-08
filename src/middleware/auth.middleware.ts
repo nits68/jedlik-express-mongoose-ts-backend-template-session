@@ -17,7 +17,7 @@ export default async function authMiddleware(req: IRequestWithUser, res: Respons
                 next(req.session);
             } else {
                 // next(new SessionExpiredException());
-                console.log()
+                console.log(req.session);
                 next(new HttpException(400, `Hiba1: oid: ${uid} rs: ${req.session}`));
             }
         } catch (error) {

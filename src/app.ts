@@ -94,7 +94,7 @@ export default class App {
             unset: "destroy",
             store: MongoStore.create({
                 mongoUrl: process.env.MONGO_URI,
-                dbName: "BackendTemplateDB",
+                dbName: process.env.MONGO_DB,
                 stringify: false,
             }),
         };
@@ -103,6 +103,7 @@ export default class App {
             mySessionOptions.cookie.secure = false;
             mySessionOptions.cookie.sameSite = "lax";
         }
+        console.log(mySessionOptions);
         this.app.use(session(mySessionOptions));
 
         // Morgan logger:

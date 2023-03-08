@@ -9,13 +9,15 @@ import userModel from "../user/user.model";
 export default async function authMiddleware(req: IRequestWithUser, res: Response, next: NextFunction): Promise<void> {
     if (req.session.id && (req.session as ISession).user_id) {
         try {
-            const user = await userModel.findById((req.session as ISession).user_id);
+            const uid = (req.session as ISession).user_id;
+            // const user = await userModel.findById((req.session as ISession).user_id);
+            const user = await userModel.findById(uid);
             if (user) {
                 req.user = user;
                 next();
             } else {
                 // next(new SessionExpiredException());
-                next(new HttpException(400, "Hiba1"));
+                next(new HttpException(400, `Hiba1: ${uid}`));
             }
         } catch (error) {
             // next(new SessionExpiredException());

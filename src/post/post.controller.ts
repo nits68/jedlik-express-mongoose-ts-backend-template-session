@@ -35,7 +35,7 @@ export default class PostController implements IController {
         try {
             // const posts = await this.post.find().populate("user_id", "-password");
             const count = await this.post.countDocuments();
-            const posts = await this.post.find().populate("author", "-password");
+            const posts = await this.post.find().populate("user_id", "-password");
             res.send({ count: count, posts: posts });
         } catch (error) {
             next(new HttpException(400, error.message));

@@ -414,64 +414,6 @@
                 }
             }
         },
-        "/posts/{kategoriaNev}/hirdetesek": {
-            "get": {
-                "tags": ["posts"],
-                "summary": "receptek lekérdezése postnév szerint.",
-                "description": "A 'kategoriaNev' paraméterben megadott kategóriával és a post összes receptével tér vissza a végpont.",
-                "parameters": [
-                    {
-                        "name": "kategoriaNev",
-                        "description": "A post neve.",
-                        "in": "path",
-                        "schema": {
-                            "type": "string",
-                            "example": "Személyautó"
-                        },
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "type": "object",
-                                    "$ref": "#/components/schemas/recipe"
-                                }
-                            }
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/ErrorSchema"
-                                }
-                            }
-                        }
-                    },
-                    "404": {
-                        "description": "Not Found",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "type": "object",
-                                    "properties": {
-                                        "message": {
-                                            "type": "string",
-                                            "example": "Ebben a kategóriában nem találtam receptt!"
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        },
         "/recipes": {
             "get": {
                 "tags": ["recipes"],

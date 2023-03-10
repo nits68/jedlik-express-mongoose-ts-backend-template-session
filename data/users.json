@@ -17,7 +17,7 @@
         "name": "student005",
         "picture": "https://lh3.googleusercontent.com/a/ALm5wu1tqlumAaDE2djCuUE2s4ubsOs6HOkdwfU6ftci=s96-c",
         "password": "$2b$10$HBH36EkxhwwOcI7UM/Km3uHUcgwPJjleZYS9fqOgjIr.qmvTUlGPu",
-        "roles": ["admin"]
+        "roles": ["user"]
     },
     {
         "_id": {
@@ -37,7 +37,7 @@
         "name": "student001",
         "picture": "https://lh3.googleusercontent.com/a/ALm5wu1tqlumAaDE2djCuUE2s4ubsOs6HOkdwfU6ftci=s96-c",
         "password": "$2b$10$9Czj8XCCZ6Wg5h9HSngl2eMqAO0Pk/LFmf.LrfeLKDXsBQaI07Pv.",
-        "roles": ["admin"]
+        "roles": ["user", "admin"]
     },
     {
         "_id": {
@@ -57,7 +57,7 @@
         "name": "student004",
         "picture": "https://lh3.googleusercontent.com/a/ALm5wu1tqlumAaDE2djCuUE2s4ubsOs6HOkdwfU6ftci=s96-c",
         "password": "$2b$10$saCo0rqdGbIiacjcZ60CGuGw8QhA8tgh3gfn0w.LFaVlyPJzd9zA6",
-        "roles": ["admin"]
+        "roles": ["user"]
     },
     {
         "_id": {
@@ -77,7 +77,7 @@
         "name": "student003",
         "picture": "https://lh3.googleusercontent.com/a/ALm5wu1tqlumAaDE2djCuUE2s4ubsOs6HOkdwfU6ftci=s96-c",
         "password": "$2b$10$WTvhxEncr.YdgIquNpob8OpWqf5hNWEynKNFyQukvmtM/DzRt9ulW",
-        "roles": ["admin"]
+        "roles": ["user"]
     },
     {
         "_id": {
@@ -97,7 +97,7 @@
         "name": "student002",
         "picture": "https://lh3.googleusercontent.com/a/ALm5wu1tqlumAaDE2djCuUE2s4ubsOs6HOkdwfU6ftci=s96-c",
         "password": "$2b$10$Rp5avm47rbRHxJxy8sEVueBTLYFAyrVIFiAebUAJDMKlM5raFnwpi",
-        "roles": ["admin"]
+        "roles": ["user"]
     },
     {
         "_id": {
@@ -109,7 +109,7 @@
         "name": "László Nits",
         "picture": "https://lh3.googleusercontent.com/a/ALm5wu1tqlumAaDE2djCuUE2s4ubsOs6HOkdwfU6ftci=s96-c",
         "password": "stored at Google",
-        "roles": ["admin"]
+        "roles": ["user","admin"]
     },
     {
         "_id": {
@@ -121,6 +121,6 @@
         "name": "László Nits",
         "picture": "https://lh3.googleusercontent.com/a/ALm5wu2jmh9fOUPPn5aOKfXmqhbhvS0kCgdMc-fbMWcm0g=s96-c",
         "password": "stored at Google",
-        "roles": ["admin"]
+        "roles": ["user"]
     }
 ]

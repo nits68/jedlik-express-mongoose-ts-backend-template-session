@@ -109,6 +109,7 @@ export default class AuthenticationController implements IController {
                         (req.session as ISession).user_email = user.email;
                         (req.session as ISession).isLoggedIn = true;
                         (req.session as ISession).isAutoLogin = user.auto_login;
+                        (req.session as ISession).roles = user.roles;
                         res.send(user);
                     });
                 } else {

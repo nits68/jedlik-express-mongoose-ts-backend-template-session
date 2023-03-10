@@ -6,4 +6,5 @@ export default interface ISession extends Session {
     user_email: string;
     isAutoLogin: boolean;
     isLoggedIn: boolean;
+    roles: string[];
 }

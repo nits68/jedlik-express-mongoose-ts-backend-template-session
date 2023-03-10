@@ -102,7 +102,6 @@ export default class App {
         if (["development", "test"].includes(process.env.NODE_ENV)) {
             mySessionOptions.cookie.secure = false;
             mySessionOptions.cookie.sameSite = "lax";
-            console.log("set develeopment cookie options (secure=false, samSite=lax)");
         }
         this.app.use(session(mySessionOptions));
 

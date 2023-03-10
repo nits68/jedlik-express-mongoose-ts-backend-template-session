@@ -23,8 +23,7 @@ export default class PostController implements IController {
     }
 
     private initializeRoutes() {
-        // this.router.get(this.path, [authMiddleware, roleCheckMiddleware(["admin"])], this.getAllPosts);
-        this.router.get(this.path, roleCheckMiddleware(["admin"]), this.getAllPosts);
+        this.router.get(this.path, [authMiddleware, roleCheckMiddleware(["admin"])], this.getAllPosts);
         this.router.get(`${this.path}/:id`, authMiddleware, this.getPostById);
         this.router.get(`${this.path}/:offset/:limit/:order/:sort/:keyword?`, [authMiddleware, roleCheckMiddleware(["admin"])], this.getPaginatedPosts);
         this.router.patch(`${this.path}/:id`, [authMiddleware, validationMiddleware(CreatePostDto, true)], this.modifyPost);

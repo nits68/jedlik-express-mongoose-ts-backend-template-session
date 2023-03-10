@@ -1,7 +1,6 @@
 import { NextFunction, Response } from "express";
 
-import HttpException from "../exceptions/HttpException";
-// import SessionExpiredException from "../exceptions/SessionExpiredException";
+import SessionExpiredException from "../exceptions/SessionExpiredException";
 import IRequestWithUser from "../interfaces/requestWithUser.interface";
 import ISession from "../interfaces/session.interface";
 import userModel from "../user/user.model";
@@ -16,16 +15,12 @@ export default async function authMiddleware(req: IRequestWithUser, res: Respons
                 req.user = user;
                 next(req.session);
             } else {
-                // next(new SessionExpiredException());
-                console.log(req.session);
-                next(new HttpException(400, `Hiba1: oid: ${uid} rs: ${req.session}`));
+                next(new SessionExpiredException());
             }
         } catch (error) {
-            // next(new SessionExpiredException());
-            next(new HttpException(400, "Hiba2"));
+            next(new SessionExpiredException());
         }
     } else {
-        // next(new SessionExpiredException());
-        next(new HttpException(400, "Hiba1"));
+        next(new SessionExpiredException());
     }
 }

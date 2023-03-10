@@ -50,6 +50,7 @@ export default class AuthenticationController implements IController {
                 const user = await this.user.create({
                     ...userData,
                     password: hashedPassword,
+                    roles: ["user"],
                 });
                 user.password = undefined;
                 req.session.regenerate(error => {
@@ -61,6 +62,7 @@ export default class AuthenticationController implements IController {
                     (req.session as ISession).user_email = user.email as string;
                     (req.session as ISession).isLoggedIn = true;
                     (req.session as ISession).isAutoLogin = user.auto_login;
+                    (req.session as ISession).roles = user.roles;
                 });
                 res.send(user);
             }
@@ -176,6 +178,7 @@ export default class AuthenticationController implements IController {
                                 (req.session as ISession).user_email = user.email as string;
                                 (req.session as ISession).isLoggedIn = true;
                                 (req.session as ISession).isAutoLogin = user.auto_login;
+                                (req.session as ISession).roles = user.roles;
                                 res.send(user);
                             });
                         } else {
@@ -185,7 +188,7 @@ export default class AuthenticationController implements IController {
                                     ...googleUser,
                                     password: "stored at Google",
                                     auto_login: true,
-                                    roles: ["admin"],
+                                    roles: ["user"], // default role on registration
                                 })
                                 .then(user => {
                                     req.session.regenerate(error => {
@@ -196,6 +199,7 @@ export default class AuthenticationController implements IController {
                                         (req.session as ISession).user_email = user.email as string;
                                         (req.session as ISession).isLoggedIn = true;
                                         (req.session as ISession).isAutoLogin = user.auto_login;
+                                        (req.session as ISession).roles = user.roles;
                                         res.send(user);
                                     });
                                 });

@@ -36,6 +36,8 @@ export default class CreateUserDto implements IUser {
     @IsString()
     public password: string;
 
+    // roles set ["user"] in handler registration
+    @IsOptional()
     @IsArray()
     @ArrayNotEmpty()
     @IsString({ each: true })

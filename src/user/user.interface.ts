@@ -7,7 +7,7 @@ export default interface IUser {
     auto_login: boolean;
     picture: string;
     password: string;
-    roles: string[];
+    roles?: string[];
     address?: {
         street: string;
         city: string;

@@ -1,3 +1,4 @@
+import { ISession } from 'interfaces/session.interface';
 import { NextFunction, Request, Response, Router } from "express";
 import { Types } from "mongoose";
 
@@ -74,7 +75,7 @@ export default class RecipeController implements IController {
         try {
             const id = req.params.id;
             if (Types.ObjectId.isValid(id)) {
-                const recipe = await this.recipeM.findById(id).populate("user_id", "-password");
+                const recipe = await this.recipeM.findById(id).populate("author", "-password");
                 if (recipe) {
                     res.send(recipe);
                 } else {
@@ -112,10 +113,10 @@ export default class RecipeController implements IController {
             const recipeData: IRecipe = req.body;
             const createdRecipe = new this.recipeM({
                 ...recipeData,
-                user_id: req.user._id,
+                user_id: (req.session as ISession).user_id,
             });
             const savedRecipe = await createdRecipe.save();
-            await savedRecipe.populate("user_id", "-password");
+            await savedRecipe.populate("author", "-password");
             res.send(savedRecipe);
         } catch (error) {
             next(new HttpException(400, error.message));

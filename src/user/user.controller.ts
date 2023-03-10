@@ -1,4 +1,5 @@
 import { NextFunction, Request, Response, Router } from "express";
+import ISession from "interfaces/session.interface";
 import { Types } from "mongoose";
 
 import HttpException from "../exceptions/HttpException";
@@ -52,7 +53,9 @@ export default class UserController implements IController {
                 // if (request.query.withPosts === "true") {
                 //     userQuery.populate("posts").exec();
                 // }
-                const user = await this.user.findById(id).populate("posts");
+
+                // Multiple populates:
+                const user = await this.user.findById(id).populate("posts").populate("recipes");
                 if (user) {
                     res.send(user);
                 } else {
@@ -105,7 +108,7 @@ export default class UserController implements IController {
 
     private getAllPostsOfLoggedUser = async (req: IRequestWithUser, res: Response, next: NextFunction) => {
         try {
-            const id = req.user._id; // Stored user's ID in Cookie
+            const id = (req.session as ISession).user_id; // Stored user's ID in Cookie
             const posts = await this.post.find({ user_id: id });
             res.send(posts);
         } catch (error) {

@@ -1,3 +1,4 @@
+import { ISession } from 'interfaces/session.interface';
 import { NextFunction, Request, Response, Router } from "express";
 import { Types } from "mongoose";
 
@@ -76,7 +77,7 @@ export default class PostController implements IController {
         try {
             const id = req.params.id;
             if (Types.ObjectId.isValid(id)) {
-                const post = await this.post.findById(id).populate("user_id", "-password");
+                const post = await this.post.findById(id).populate("author", "-password");
                 if (post) {
                     res.send(post);
                 } else {
@@ -114,10 +115,10 @@ export default class PostController implements IController {
             const postData: IPost = req.body;
             const createdPost = new this.post({
                 ...postData,
-                user_id: req.user._id,
+                user_id: (req.session as ISession).user_id,
             });
             const savedPost = await createdPost.save();
-            await savedPost.populate("user_id", "-password");
+            await savedPost.populate("author", "-password");
             const count = await this.post.countDocuments();
             res.send({ count: count, post: savedPost });
             // res.send(savedPost);

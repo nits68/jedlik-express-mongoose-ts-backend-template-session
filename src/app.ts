@@ -30,10 +30,10 @@ export default class App {
             console.log(error.message);
         }
 
-        this.connectToTheDatabase();
-        this.initializeMiddlewares();
-        this.initializeControllers(controllers);
-        this.initializeErrorHandling();
+        this.connectToTheDatabase(controllers);
+        // this.initializeMiddlewares();
+        // this.initializeControllers(controllers);
+        // this.initializeErrorHandling();
     }
 
     public listen(): void {
@@ -102,6 +102,7 @@ export default class App {
         if (["development", "test"].includes(process.env.NODE_ENV)) {
             mySessionOptions.cookie.secure = false;
             mySessionOptions.cookie.sameSite = "lax";
+            console.log("set develeopment cookie options (secure=false, samSite=lax)");
         }
         this.app.use(session(mySessionOptions));
 
@@ -120,7 +121,7 @@ export default class App {
         });
     }
 
-    private connectToTheDatabase() {
+    private connectToTheDatabase(controllers: IController[]) {
         const { MONGO_URI, MONGO_DB } = process.env;
         // Connect to MongoDB Atlas, create database if not exist::
         mongoose.set("strictQuery", true); // for disable DeprecationWarning
@@ -131,6 +132,9 @@ export default class App {
         });
         mongoose.connection.on("connected", () => {
             console.log("Connected to MongoDB server.");
+            this.initializeMiddlewares();
+            this.initializeControllers(controllers);
+            this.initializeErrorHandling();
             this.listen();
         });
     }

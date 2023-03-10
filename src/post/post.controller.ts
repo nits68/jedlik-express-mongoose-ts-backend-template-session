@@ -1,5 +1,5 @@
-import { ISession } from 'interfaces/session.interface';
 import { NextFunction, Request, Response, Router } from "express";
+import ISession from "interfaces/session.interface";
 import { Types } from "mongoose";
 
 import HttpException from "../exceptions/HttpException";

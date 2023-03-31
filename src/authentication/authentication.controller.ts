@@ -106,7 +106,7 @@ export default class AuthenticationController implements IController {
                         if (error) {
                             next(new HttpException(400, error.message)); // to do
                         }
-                        // console.log("regenerate ok");
+                        console.log("regenerate ok");
                         (req.session as ISession).user_id = user._id as Schema.Types.ObjectId;
                         (req.session as ISession).user_email = user.email;
                         (req.session as ISession).isLoggedIn = true;

@@ -2,48 +2,48 @@ import { NextFunction, Request, Response, Router } from "express";
 // import ISession from "interfaces/session.interface";
 import { Types } from "mongoose";
 
+import AuthorNotFoundException from "../exceptions/AuthorNotFoundException";
 import HttpException from "../exceptions/HttpException";
 import IdNotValidException from "../exceptions/IdNotValidException";
-import PostNotFoundException from "../exceptions/PostNotFoundException";
 import IController from "../interfaces/controller.interface";
 import IRequestWithUser from "../interfaces/requestWithUser.interface";
 import authMiddleware from "../middleware/auth.middleware";
 import roleCheckMiddleware from "../middleware/roleCheckMiddleware";
 import validationMiddleware from "../middleware/validation.middleware";
-import CreatePostDto from "./post.dto";
-import IPost from "./post.interface";
-import postModel from "./post.model";
+import CreateAuthorDto from "./author.dto";
+import IAuthor from "./author.interface";
+import authorModel from "./author.model";
 
 export default class PostController implements IController {
-    public path = "/posts";
+    public path = "/authors";
     public router = Router();
-    private post = postModel;
+    private author = authorModel;
 
     constructor() {
         this.initializeRoutes();
     }
 
     private initializeRoutes() {
-        this.router.get(this.path, [authMiddleware, roleCheckMiddleware(["user", "admin"])], this.getAllPosts);
-        this.router.get(`${this.path}/:id`, [authMiddleware, roleCheckMiddleware(["admin"])], this.getPostById);
-        this.router.get(`${this.path}/:offset/:limit/:order/:sort/:keyword?`, [authMiddleware, roleCheckMiddleware(["user"])], this.getPaginatedPosts);
-        this.router.patch(`${this.path}/:id`, [authMiddleware, roleCheckMiddleware(["admin"]), validationMiddleware(CreatePostDto, true)], this.modifyPost);
-        this.router.delete(`${this.path}/:id`, [authMiddleware, roleCheckMiddleware(["admin"])], this.deletePost);
-        this.router.post(this.path, [authMiddleware, roleCheckMiddleware(["admin"]), validationMiddleware(CreatePostDto)], this.createPost);
+        this.router.get(this.path, [authMiddleware, roleCheckMiddleware(["user", "admin"])], this.getAllAuthors);
+        this.router.get(`${this.path}/:id`, [authMiddleware, roleCheckMiddleware(["admin"])], this.getAuthorById);
+        this.router.get(`${this.path}/:offset/:limit/:order/:sort/:keyword?`, [authMiddleware, roleCheckMiddleware(["user"])], this.getPaginatedAuthors);
+        this.router.patch(`${this.path}/:id`, [authMiddleware, roleCheckMiddleware(["admin"]), validationMiddleware(CreateAuthorDto, true)], this.modifyAuthor);
+        this.router.delete(`${this.path}/:id`, [authMiddleware, roleCheckMiddleware(["admin"])], this.deleteAuthor);
+        this.router.post(this.path, [authMiddleware, roleCheckMiddleware(["admin"]), validationMiddleware(CreateAuthorDto)], this.createAuthor);
     }
 
-    private getAllPosts = async (req: Request, res: Response, next: NextFunction) => {
+    private getAllAuthors = async (req: Request, res: Response, next: NextFunction) => {
         try {
             // const posts = await this.post.find().populate("user_id", "-password");
-            const count = await this.post.countDocuments();
-            const posts = await this.post.find();
+            const count = await this.author.countDocuments();
+            const posts = await this.author.find();
             res.send({ count: count, posts: posts });
         } catch (error) {
             next(new HttpException(400, error.message));
         }
     };
 
-    private getPaginatedPosts = async (req: Request, res: Response, next: NextFunction) => {
+    private getPaginatedAuthors = async (req: Request, res: Response, next: NextFunction) => {
         try {
             const offset = parseInt(req.params.offset);
             const limit = parseInt(req.params.limit);
@@ -53,15 +53,15 @@ export default class PostController implements IController {
             let count = 0;
             if (req.params.keyword && req.params.keyword != "") {
                 const myRegex = new RegExp(req.params.keyword, "i"); // i for case insensitive
-                count = await this.post.find({ $or: [{ title: myRegex }, { content: myRegex }] }).count();
-                posts = await this.post
+                count = await this.author.find({ $or: [{ user_id: myRegex }, { post_id: myRegex }] }).count();
+                posts = await this.author
                     .find({ $or: [{ title: myRegex }, { content: myRegex }] })
                     .sort(`${sort == -1 ? "-" : ""}${order}`)
                     .skip(offset)
                     .limit(limit);
             } else {
-                count = await this.post.countDocuments();
-                posts = await this.post
+                count = await this.author.countDocuments();
+                posts = await this.author
                     .find({})
                     .sort(`${sort == -1 ? "-" : ""}${order}`)
                     .skip(offset)
@@ -73,15 +73,15 @@ export default class PostController implements IController {
         }
     };
 
-    private getPostById = async (req: Request, res: Response, next: NextFunction) => {
+    private getAuthorById = async (req: Request, res: Response, next: NextFunction) => {
         try {
             const id = req.params.id;
             if (Types.ObjectId.isValid(id)) {
-                const post = await this.post.findById(id).populate("author", "-password");
+                const post = await this.author.findById(id).populate("user");
                 if (post) {
                     res.send(post);
                 } else {
-                    next(new PostNotFoundException(id));
+                    next(new AuthorNotFoundException(id));
                 }
             } else {
                 next(new IdNotValidException(id));
@@ -91,16 +91,16 @@ export default class PostController implements IController {
         }
     };
 
-    private modifyPost = async (req: Request, res: Response, next: NextFunction) => {
+    private modifyAuthor = async (req: Request, res: Response, next: NextFunction) => {
         try {
             const id = req.params.id;
             if (Types.ObjectId.isValid(id)) {
-                const postData: IPost = req.body;
-                const post = await this.post.findByIdAndUpdate(id, postData, { new: true });
+                const authorData: IAuthor = req.body;
+                const post = await this.author.findByIdAndUpdate(id, authorData, { new: true });
                 if (post) {
                     res.send(post);
                 } else {
-                    next(new PostNotFoundException(id));
+                    next(new AuthorNotFoundException(id));
                 }
             } else {
                 next(new IdNotValidException(id));
@@ -110,34 +110,34 @@ export default class PostController implements IController {
         }
     };
 
-    private createPost = async (req: IRequestWithUser, res: Response, next: NextFunction) => {
+    private createAuthor = async (req: IRequestWithUser, res: Response, next: NextFunction) => {
         try {
-            const postData: IPost = req.body;
-            const createdPost = new this.post({
-                ...postData,
+            const authorData: IAuthor = req.body;
+            const createdAuthor = new this.author({
+                ...authorData,
                 // user_id: (req.session as ISession).user_id,
             });
-            const savedPost = await createdPost.save();
-            await savedPost.populate("author", "-password");
-            const count = await this.post.countDocuments();
-            res.send({ count: count, post: savedPost });
+            const savedAuthor = await createdAuthor.save();
+            await savedAuthor.populate("user");
+            const count = await this.author.countDocuments();
+            res.send({ count: count, post: savedAuthor });
             // res.send(savedPost);
         } catch (error) {
             next(new HttpException(400, error.message));
         }
     };
 
-    private deletePost = async (req: Request, res: Response, next: NextFunction) => {
+    private deleteAuthor = async (req: Request, res: Response, next: NextFunction) => {
         try {
             const id = req.params.id;
             if (Types.ObjectId.isValid(id)) {
-                const successResponse = await this.post.findByIdAndDelete(id);
+                const successResponse = await this.author.findByIdAndDelete(id);
                 if (successResponse) {
                     // const count = await this.post.countDocuments();
                     // res.send({ count: count, status: 200 });
                     res.sendStatus(200);
                 } else {
-                    next(new PostNotFoundException(id));
+                    next(new AuthorNotFoundException(id));
                 }
             } else {
                 next(new IdNotValidException(id));

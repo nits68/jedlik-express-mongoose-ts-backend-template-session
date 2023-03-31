@@ -48,20 +48,20 @@ const userSchema = new Schema<IUser>(
     { versionKey: false, id: false, toJSON: { virtuals: true }, toObject: { virtuals: true } },
 );
 
-userSchema.virtual("recipes", {
-    ref: "Recipes",
-    localField: "_id",
-    foreignField: "user_id", // ref_Field
-    justOne: false,
-});
+// userSchema.virtual("recipes", {
+//     ref: "Recipe",
+//     localField: "_id",
+//     foreignField: "user_id", // ref_Field
+//     justOne: false,
+// });
 
-userSchema.virtual("posts", {
-    ref: "Posts",
-    localField: "_id",
-    foreignField: "user_id", // ref_Field
-    justOne: false,
-});
+// userSchema.virtual("posts", {
+//     ref: "Post",
+//     localField: "_id",
+//     foreignField: "user_id", // ref_Field
+//     justOne: false,
+// });
 
-const userModel = model<IUser>("Users", userSchema, "users");
+const userModel = model<IUser>("User", userSchema, "users");
 
 export default userModel;

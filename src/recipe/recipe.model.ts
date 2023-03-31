@@ -8,7 +8,7 @@ const recipeSchema = new Schema<IRecipe>(
     {
         _id: Schema.Types.ObjectId,
         user_id: {
-            ref: "Users",
+            ref: "User",
             type: Schema.Types.ObjectId,
         },
         recipeName: {
@@ -24,12 +24,12 @@ const recipeSchema = new Schema<IRecipe>(
 );
 
 recipeSchema.virtual("author", {
-    ref: "Users",
+    ref: "User",
     localField: "user_id",
     foreignField: "_id",
     justOne: true,
 });
 
-const recipeModel = model<IRecipe>("Recipes", recipeSchema, "recipes");
+const recipeModel = model<IRecipe>("Recipe", recipeSchema, "recipes");
 
 export default recipeModel;

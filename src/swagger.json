@@ -3,7 +3,7 @@
     "info": {
         "title": "REST API minta backend",
         "version": "1.0.0",
-        "description": "<img alt='DB_diagram' height='300px' src='https://nitslaszlo.github.io/static/session/db_diagram.jpg' />"
+        "description": "<img alt='DB_diagram' height='700px' src='https://nitslaszlo.github.io/static/session/db_diagram_new.jpg' />"
     },
     "servers": [
         {
@@ -16,7 +16,9 @@
     "paths": {
         "/auth/login": {
             "post": {
-                "tags": ["authentication"],
+                "tags": [
+                    "authentication"
+                ],
                 "summary": "Bejelentkezés",
                 "description": "Bejelentkezés a megadott felhasználói adatokkal.",
                 "requestBody": {
@@ -77,7 +79,9 @@
         },
         "/auth/logout": {
             "post": {
-                "tags": ["authentication"],
+                "tags": [
+                    "authentication"
+                ],
                 "summary": "Kijelentkezés",
                 "description": "Kijelentkezés. Kliens süti-token érvénytelenítése.",
                 "responses": {
@@ -89,7 +93,9 @@
         },
         "/auth/register": {
             "post": {
-                "tags": ["authentication"],
+                "tags": [
+                    "authentication"
+                ],
                 "summary": "Regisztráció",
                 "description": "Regisztráció a megadott adattokkal.",
                 "requestBody": {
@@ -127,10 +133,11 @@
                 }
             }
         },
-        
         "/posts": {
             "get": {
-                "tags": ["posts"],
+                "tags": [
+                    "posts"
+                ],
                 "summary": "Összes post lekérdezése.",
                 "description": "Az összes post adatát tudjuk lekérdezni.",
                 "responses": {
@@ -160,7 +167,9 @@
                 }
             },
             "post": {
-                "tags": ["posts"],
+                "tags": [
+                    "posts"
+                ],
                 "summary": "Új post mentése.",
                 "description": "Új post mentése a 'post' táblában",
                 "requestBody": {
@@ -200,7 +209,9 @@
         },
         "/posts/{id}": {
             "get": {
-                "tags": ["posts"],
+                "tags": [
+                    "posts"
+                ],
                 "summary": "Egy post lekérdezése.",
                 "description": "Az id paraméterben megadott post adatait kérdezhetjük le.",
                 "parameters": [
@@ -256,7 +267,9 @@
                 }
             },
             "patch": {
-                "tags": ["posts"],
+                "tags": [
+                    "posts"
+                ],
                 "summary": "post módosítása (PATCH).",
                 "description": "A paraméterben megadott post adatait módosítja a végpont.",
                 "parameters": [
@@ -312,7 +325,9 @@
                 }
             },
             "put": {
-                "tags": ["posts"],
+                "tags": [
+                    "posts"
+                ],
                 "summary": "post módosítása (PUT).",
                 "description": "A paraméterben megadott post adatait módosítja a végpont PUT metódussal.",
                 "parameters": [
@@ -368,7 +383,9 @@
                 }
             },
             "delete": {
-                "tags": ["posts"],
+                "tags": [
+                    "posts"
+                ],
                 "summary": "post törlése.",
                 "description": "A paraméterben megadott postot törli a végpont.",
                 "parameters": [
@@ -416,7 +433,9 @@
         },
         "/authors": {
             "get": {
-                "tags": ["authors"],
+                "tags": [
+                    "authors"
+                ],
                 "summary": "Összes szerző (user, post páros) lekérdezése.",
                 "description": "Összes szerző (user, post páros) lekérdezése.",
                 "responses": {
@@ -446,7 +465,9 @@
                 }
             },
             "post": {
-                "tags": ["authors"],
+                "tags": [
+                    "authors"
+                ],
                 "summary": "Új author mentése.",
                 "description": "Új author mentése a 'post' táblában",
                 "requestBody": {
@@ -486,7 +507,9 @@
         },
         "/authors/{id}": {
             "get": {
-                "tags": ["authors"],
+                "tags": [
+                    "authors"
+                ],
                 "summary": "Egy author lekérdezése.",
                 "description": "Az id paraméterben megadott author adatait kérdezhetjük le.",
                 "parameters": [
@@ -542,7 +565,9 @@
                 }
             },
             "patch": {
-                "tags": ["authors"],
+                "tags": [
+                    "authors"
+                ],
                 "summary": "author módosítása (PATCH).",
                 "description": "A paraméterben megadott author adatait módosítja a végpont.",
                 "parameters": [
@@ -598,7 +623,9 @@
                 }
             },
             "put": {
-                "tags": ["authors"],
+                "tags": [
+                    "authors"
+                ],
                 "summary": "author módosítása (PUT).",
                 "description": "A paraméterben megadott author adatait módosítja a végpont PUT metódussal.",
                 "parameters": [
@@ -654,7 +681,9 @@
                 }
             },
             "delete": {
-                "tags": ["authors"],
+                "tags": [
+                    "authors"
+                ],
                 "summary": "author törlése.",
                 "description": "A paraméterben megadott author-t törli a végpont.",
                 "parameters": [
@@ -702,7 +731,9 @@
         },
         "/recipes": {
             "get": {
-                "tags": ["recipes"],
+                "tags": [
+                    "recipes"
+                ],
                 "summary": "Összes recept lekérdezése.",
                 "description": "Az összes recept adatát tudjuk lekérdezni.",
                 "responses": {
@@ -732,7 +763,9 @@
                 }
             },
             "post": {
-                "tags": ["recipes"],
+                "tags": [
+                    "recipes"
+                ],
                 "summary": "Új recept mentése.",
                 "description": "Az új recept mentése a 'hirdetesek' táblában",
                 "requestBody": {
@@ -772,7 +805,9 @@
         },
         "/recipes/{id}": {
             "get": {
-                "tags": ["recipes"],
+                "tags": [
+                    "recipes"
+                ],
                 "summary": "Egy recept lekérdezése.",
                 "description": "Az id paraméterben megadott recept adatait kérdezhetjük le.",
                 "parameters": [
@@ -828,7 +863,9 @@
                 }
             },
             "patch": {
-                "tags": ["recipes"],
+                "tags": [
+                    "recipes"
+                ],
                 "summary": "recept módosítása (PATCH).",
                 "description": "A paraméterben megadott recept adatait módosítja a végpont.",
                 "parameters": [
@@ -888,7 +925,9 @@
                 }
             },
             "put": {
-                "tags": ["recipes"],
+                "tags": [
+                    "recipes"
+                ],
                 "summary": "recept módosítása (PUT).",
                 "description": "A paraméterben megadott recept adatait módosítja a végpont.",
                 "parameters": [
@@ -944,7 +983,9 @@
                 }
             },
             "delete": {
-                "tags": ["recipes"],
+                "tags": [
+                    "recipes"
+                ],
                 "summary": "recept törlése.",
                 "description": "A paraméterben megadott receptt törli a végpont.",
                 "parameters": [
@@ -992,7 +1033,9 @@
         },
         "/recipes/order/:mezo": {
             "get": {
-                "tags": ["recipes"],
+                "tags": [
+                    "recipes"
+                ],
                 "summary": "Összes recept lekérdezése rendezéssel.",
                 "description": "Az összes recept adatát tudjuk lekérdezni és a paraméterben megadott mező szerint rendezni.",
                 "parameters": [
@@ -1036,7 +1079,9 @@
         },
         "/recipes/keyword/{keyword}": {
             "get": {
-                "tags": ["recipes"],
+                "tags": [
+                    "recipes"
+                ],
                 "summary": "Kulcsszavas szűrés mindkét táblából.",
                 "description": "Azok a receptek, melyek leírásában, vagy postnevében megtalálható a megadott kulcsszó.",
                 "parameters": [
@@ -1080,7 +1125,9 @@
         },
         "/recipes/{offset}/{limit}/{field}": {
             "get": {
-                "tags": ["recipes"],
+                "tags": [
+                    "recipes"
+                ],
                 "summary": "Paginált adatok lekérése.",
                 "description": "receptek lekérdezése lapozáshoz.",
                 "parameters": [
@@ -1155,7 +1202,9 @@
         },
         "/recipes/{offset}/{limit}/{field}/{filter}": {
             "get": {
-                "tags": ["recipes"],
+                "tags": [
+                    "recipes"
+                ],
                 "summary": "Paginált adatok lekérése szűréssel.",
                 "description": "Receptek lekérdezése lapozáshoz szűréssel.",
                 "parameters": [
@@ -1248,7 +1297,9 @@
         "schemas": {
             "post": {
                 "type": "object",
-                "required": ["title"],
+                "required": [
+                    "title"
+                ],
                 "properties": {
                     "_id": {
                         "type": "string",
@@ -1270,7 +1321,10 @@
             },
             "author": {
                 "type": "object",
-                "required": ["user_id", "post_id"],
+                "required": [
+                    "user_id",
+                    "post_id"
+                ],
                 "properties": {
                     "_id": {
                         "type": "string",
@@ -1291,7 +1345,9 @@
             },
             "recipe": {
                 "type": "object",
-                "required": ["recipeName"],
+                "required": [
+                    "recipeName"
+                ],
                 "properties": {
                     "_id": {
                         "type": "string",
@@ -1351,7 +1407,14 @@
             },
             "user": {
                 "type": "object",
-                "required": ["name", "email", "email_verified", "auto_login", "picture", "roles"],
+                "required": [
+                    "name",
+                    "email",
+                    "email_verified",
+                    "auto_login",
+                    "picture",
+                    "roles"
+                ],
                 "properties": {
                     "_id": {
                         "type": "string",
@@ -1405,17 +1468,17 @@
                 }
             },
             "ErrorSchema": {
-              "type": "object",
-              "properties": {
-                "message": {
-                  "type": "string",
-                  "example": "error.message value"
-                },
-                "status": {
-                  "type": "integer",
-                  "example": 400
+                "type": "object",
+                "properties": {
+                    "message": {
+                        "type": "string",
+                        "example": "error.message value"
+                    },
+                    "status": {
+                        "type": "integer",
+                        "example": 400
+                    }
                 }
-              }
             }
         }
     }

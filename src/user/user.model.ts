@@ -55,8 +55,8 @@ const userSchema = new Schema<IUser>(
 //     justOne: false,
 // });
 
-// userSchema.virtual("posts", {
-//     ref: "Post",
+// userSchema.virtual("author", {
+//     ref: "Author",
 //     localField: "_id",
 //     foreignField: "user_id", // ref_Field
 //     justOne: false,

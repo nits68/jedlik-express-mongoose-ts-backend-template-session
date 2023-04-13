@@ -19,12 +19,12 @@ const postSchema = new Schema<IPost>(
     { versionKey: false, id: false, toJSON: { virtuals: true }, toObject: { virtuals: true } },
 );
 
-// postSchema.virtual("author", {
-//     ref: "User",
-//     localField: "user_id",
-//     foreignField: "_id",
-//     justOne: true,
-// });
+postSchema.virtual("author", {
+    ref: "User",
+    localField: "user_id",
+    foreignField: "_id",
+    justOne: true,
+});
 
 const postModel = model<IPost>("Post", postSchema, "posts");
 

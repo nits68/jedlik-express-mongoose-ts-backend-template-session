@@ -50,10 +50,10 @@ export default class PostController implements IController {
             const order = req.params.order;
             const sort = parseInt(req.params.sort); // desc: -1  asc: 1
             let posts = [];
-            let count = 0;
+            let count: number = 0;
             if (req.params.keyword && req.params.keyword != "") {
                 const myRegex = new RegExp(req.params.keyword, "i"); // i for case insensitive
-                count = await this.author.find({ $or: [{ user_id: myRegex }, { post_id: myRegex }] }).count();
+                count = await this.author.find({ $or: [{ user_id: myRegex }, { post_id: myRegex }] }).countDocuments();
                 posts = await this.author
                     .find({ $or: [{ title: myRegex }, { content: myRegex }] })
                     .sort(`${sort == -1 ? "-" : ""}${order}`)

@@ -5,15 +5,15 @@ import request from "supertest";
 import App from "../../app";
 import AuthenticationController from "../../authentication/authentication.controller";
 
-let server: Express.Application;
+let server: App;
 
 beforeAll(async () => {
-    server = new App([new AuthenticationController()]).getServer();
+    server = new App([new AuthenticationController()]);
 });
 
 describe("test API endpoints", () => {
     it("GET /auth/register", async () => {
-        const response = await request(server)
+        const response = await request(server.getServer())
             .post("/auth/register")
             .send({
                 name: "student001",
@@ -30,7 +30,7 @@ describe("test API endpoints", () => {
     });
 
     it("GET /auth/login", async () => {
-        const response = await request(server).post("/auth/login").send({
+        const response = await request(server.getServer()).post("/auth/login").send({
             email: "student001@jedlik.eu",
             password: "student001",
         });
@@ -45,7 +45,7 @@ describe("test API endpoints", () => {
     });
 
     it("GET /auth/logout", async () => {
-        const response = await request(server).post("/auth/logout");
+        const response = await request(server.getServer()).post("/auth/logout");
         expect(response.text).toEqual("OK");
         expect(response.statusCode).toEqual(200);
     });

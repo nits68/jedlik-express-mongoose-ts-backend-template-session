@@ -22,6 +22,7 @@
     "author": "Nits László",
     "license": "MIT",
     "dependencies": {
+        "@netlify/functions": "^2.6.0",
         "bcrypt": "^5.1.1",
         "class-transformer": "^0.5.1",
         "class-validator": "^0.14.1",
@@ -36,6 +37,7 @@
         "morgan": "^1.10.0",
         "reflect-metadata": "^0.2.1",
         "serve-favicon": "^2.5.0",
+        "serverless-http": "^3.2.0",
         "swagger-ui-express": "^5.0.0",
         "tslib": "^2.6.2"
     },

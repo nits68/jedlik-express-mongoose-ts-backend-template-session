@@ -1,12 +1,8 @@
-# The following redirect is intended for use with most SPA's that handles routing internally.
+[functions]
+  external_node_modules = ["express"]
+  node_bundler = "esbuild"
 [[redirects]]
+  force = true
   from = "/*"
-  to = "/docs"
   status = 200
-
-[build]
-command = "CI= npm run compile"
-
-# Skip all post processing in deploy previews, ignoring any other settings
-[build.processing]
-  skip_processing = true
+  to = "/.netlify/functions/api/:splat"

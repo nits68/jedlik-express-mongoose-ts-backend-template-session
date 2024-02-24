@@ -14,7 +14,7 @@ const addressSchema = new Schema<IAddress>(
 
 const userSchema = new Schema<IUser>(
     {
-        _id: Schema.Types.ObjectId,
+        // _id: Schema.Types.ObjectId,
         email: {
             type: String,
             required: true,

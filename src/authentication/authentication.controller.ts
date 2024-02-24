@@ -1,7 +1,9 @@
 import bcrypt from "bcrypt";
+import crypto from "crypto";
 import { NextFunction, Request, Response, Router } from "express";
 import { OAuth2Client } from "google-auth-library";
 import { Schema } from "mongoose";
+import nodemailer from "nodemailer";
 
 import HttpException from "../exceptions/HttpException";
 import UserWithThatEmailAlreadyExistsException from "../exceptions/UserWithThatEmailAlreadyExistsException";
@@ -15,11 +17,13 @@ import CreateUserDto from "../user/user.dto";
 import IUser from "../user/user.interface";
 import userModel from "../user/user.model";
 import LogInDto from "./logIn.dto";
+import tokenModel from "./token.model";
 
 export default class AuthenticationController implements IController {
     public path = "/auth";
     public router = Router();
     private user = userModel;
+    private token = tokenModel;
 
     constructor() {
         this.initializeRoutes();
@@ -50,9 +54,48 @@ export default class AuthenticationController implements IController {
                 const user = await this.user.create({
                     ...userData,
                     password: hashedPassword,
+                    email_verified: false,
                     roles: ["user"],
                 });
                 user.password = undefined;
+
+                // e-mail verification
+                const token: string = crypto.randomBytes(16).toString("hex");
+                await this.token
+                    .create({
+                        _userId: user._id,
+                        token: token,
+                    })
+                    .catch(error => {
+                        next(new HttpException(500, error.message));
+                    });
+
+                // Send email (use verified sender's email address & generated API_KEY on SendGrid)
+                const transporter = nodemailer.createTransport({
+                    host: "smtp.sendgrid.net",
+                    port: 587,
+                    auth: {
+                        user: "apikey",
+                        pass: process.env.NITS_APIKEY,
+                    },
+                });
+
+                transporter.sendMail(
+                    {
+                        from: "nits.laszlo@jedlik.eu", // verified sender email
+                        to: user.email, // recipient email
+                        subject: "Megerősítés kérése", // Subject line
+                        text: `Kedves ${userData.name}! Következő hivatkozásra a megerősítéshez ${token}`, // plain text body
+                    },
+                    function (error, info) {
+                        if (error) {
+                            console.log(error);
+                        } else {
+                            console.log("Email sent: " + info.response);
+                        }
+                    },
+                );
+
                 req.session.regenerate(error => {
                     if (error) {
                         next(new HttpException(400, error.message)); // to do
@@ -61,6 +104,7 @@ export default class AuthenticationController implements IController {
                     (req.session as ISession).user_id = user._id as Schema.Types.ObjectId;
                     (req.session as ISession).user_email = user.email as string;
                     (req.session as ISession).isLoggedIn = true;
+                    (req.session as ISession).email_verified = false;
                     (req.session as ISession).isAutoLogin = user.auto_login;
                     (req.session as ISession).roles = user.roles;
                 });

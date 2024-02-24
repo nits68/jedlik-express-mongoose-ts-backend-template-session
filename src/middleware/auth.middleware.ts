@@ -1,5 +1,6 @@
 import { NextFunction, Response } from "express";
 
+import EmailNotVerifiedException from "../exceptions/EmailNotVerifiedException";
 import SessionExpiredException from "../exceptions/SessionExpiredException";
 import IRequestWithUser from "../interfaces/requestWithUser.interface";
 import ISession from "../interfaces/session.interface";
@@ -9,6 +10,9 @@ export default async function authMiddleware(req: IRequestWithUser, res: Respons
     if (req.session.id && (req.session as ISession).user_id) {
         try {
             const user = await userModel.findById((req.session as ISession).user_id);
+            if (user && !user.email_verified) {
+                next(new EmailNotVerifiedException(user.email));
+            }
             if (user) {
                 next();
             } else {

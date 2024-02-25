@@ -41,6 +41,8 @@ export default class AuthenticationController implements IController {
         this.router.post(`${this.path}/closeapp`, this.closeApp);
         this.router.post(`${this.path}/logout`, this.logout);
         this.router.post(`${this.path}/google`, this.loginAndRegisterWithGoogle);
+        this.router.get(`${this.path}/confirmation/:email/:token`, this.confirmEmail);
+        this.router.get(`${this.path}/resend/:email`, this.resendLink);
     }
 
     private registration = async (req: Request, res: Response, next: NextFunction) => {
@@ -60,6 +62,7 @@ export default class AuthenticationController implements IController {
                 user.password = undefined;
 
                 // e-mail verification
+                // save token to Mongo
                 const token: string = crypto.randomBytes(16).toString("hex");
                 await this.token
                     .create({
@@ -86,6 +89,7 @@ export default class AuthenticationController implements IController {
                         to: user.email, // recipient email
                         subject: "Megerősítés kérése", // Subject line
                         text: `Kedves ${userData.name}! Következő hivatkozásra a megerősítéshez ${token}`, // plain text body
+                        html: `<b>Kedves ${userData.name}! Következő hivatkozásra a megerősítéshez ${token}</b>`, // html body
                     },
                     function (error, info) {
                         if (error) {
@@ -95,21 +99,104 @@ export default class AuthenticationController implements IController {
                         }
                     },
                 );
-
-                req.session.regenerate(error => {
-                    if (error) {
-                        next(new HttpException(400, error.message)); // to do
-                    }
-                    console.log("regenerate ok");
-                    (req.session as ISession).user_id = user._id as Schema.Types.ObjectId;
-                    (req.session as ISession).user_email = user.email as string;
-                    (req.session as ISession).isLoggedIn = true;
-                    (req.session as ISession).email_verified = false;
-                    (req.session as ISession).isAutoLogin = user.auto_login;
-                    (req.session as ISession).roles = user.roles;
-                });
-                res.send(user);
+                // res.send(user);
+                next(new HttpException(200, `A verification email has been sent to ${user.email}, It will be expire after one day.`));
             }
+        } catch (error) {
+            next(new HttpException(400, error.message));
+        }
+    };
+
+    private confirmEmail = (req: Request, res: Response, next: NextFunction) => {
+        try {
+            this.token
+                .findOne({ token: req.params.token })
+                .then(token => {
+                    if (!token) {
+                        next(new HttpException(401, "We were unable to find a user for this verification. Please SignUp!"));
+                    } else {
+                        this.user.findOne({ _id: token._userId, email: req.params.email }).then(user => {
+                            if (!user) {
+                                next(new HttpException(401, "We were unable to find a user for this verification. Please SignUp!"));
+                            } else if (user.email_verified) {
+                                next(new HttpException(200, "User has been already verified. Please Login!"));
+                            } else {
+                                // change email_verified to true
+                                this.user
+                                    .findByIdAndUpdate(user._id, { email_verified: true })
+                                    .then(() => {
+                                        next(new HttpException(200, "Your account has been successfully verified"));
+                                    })
+                                    .catch(error => {
+                                        next(new HttpException(500, error.mesage));
+                                    });
+                            }
+                        });
+                    }
+                })
+                .catch(error => {
+                    console.log(error.message);
+                });
+        } catch (error) {
+            next(new HttpException(400, error.message));
+        }
+    };
+
+    private resendLink = (req: Request, res: Response, next: NextFunction) => {
+        try {
+            this.user.findOne({ email: req.params.email }).then(user => {
+                if (!user) {
+                    next(new HttpException(400, "We were unable to find a user with that email. Make sure your Email is correct!"));
+                } else if (user.email_verified) {
+                    next(new HttpException(200, "This account has been already verified. Please log in."));
+                } else {
+                    const token: string = crypto.randomBytes(16).toString("hex");
+                    this.token
+                        .create({
+                            _userId: user._id,
+                            token: token,
+                        })
+                        .catch(error => {
+                            next(new HttpException(500, error.message));
+                        });
+
+                    // Send email (use verified sender's email address & generated API_KEY on SendGrid)
+                    const transporter = nodemailer.createTransport({
+                        host: "smtp.sendgrid.net",
+                        port: 587,
+                        auth: {
+                            user: "apikey",
+                            pass: process.env.NITS_APIKEY,
+                        },
+                    });
+
+                    transporter.sendMail(
+                        {
+                            from: "nits.laszlo@jedlik.eu", // verified sender email
+                            to: user.email, // recipient email
+                            subject: "Megerősítés kérése", // Subject line
+                            text: `Kedves ${user.name}! Következő hivatkozásra a megerősítéshez ${token}`, // plain text body
+                            html: `<b>Kedves ${user.name}! Következő hivatkozásra a megerősítéshez ${token}</b>`, // html body
+                        },
+                        function (error, info) {
+                            if (error) {
+                                console.log(error);
+                            } else {
+                                console.log("Email sent: " + info.response);
+                                next(
+                                    new HttpException(
+                                        200,
+                                        "A verification email has been sent to " +
+                                            user.email +
+                                            ". It will be expire after one day. " +
+                                            "If you not get verification Email click on resend token.",
+                                    ),
+                                );
+                            }
+                        },
+                    );
+                }
+            });
         } catch (error) {
             next(new HttpException(400, error.message));
         }
@@ -146,18 +233,22 @@ export default class AuthenticationController implements IController {
                 const isPasswordMatching = await bcrypt.compare(logInData.password, user.password);
                 if (isPasswordMatching) {
                     user.password = undefined;
-                    req.session.regenerate(error => {
-                        if (error) {
-                            next(new HttpException(400, error.message)); // to do
-                        }
-                        console.log("regenerate ok");
-                        (req.session as ISession).user_id = user._id as Schema.Types.ObjectId;
-                        (req.session as ISession).user_email = user.email;
-                        (req.session as ISession).isLoggedIn = true;
-                        (req.session as ISession).isAutoLogin = user.auto_login;
-                        (req.session as ISession).roles = user.roles;
-                        res.send(user);
-                    });
+                    if (!user.email_verified) {
+                        next(new HttpException(401, "Your Email has not been verified. Please click on resend!"));
+                    } else {
+                        req.session.regenerate(error => {
+                            if (error) {
+                                next(new HttpException(400, error.message)); // to do
+                            }
+                            console.log("regenerate ok");
+                            (req.session as ISession).user_id = user._id as Schema.Types.ObjectId;
+                            (req.session as ISession).user_email = user.email;
+                            (req.session as ISession).isLoggedIn = true;
+                            (req.session as ISession).isAutoLogin = user.auto_login;
+                            (req.session as ISession).roles = user.roles;
+                            res.send(user);
+                        });
+                    }
                 } else {
                     next(new WrongCredentialsException());
                 }

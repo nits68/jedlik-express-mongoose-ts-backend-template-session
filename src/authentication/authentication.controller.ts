@@ -56,14 +56,16 @@ export default class AuthenticationController implements IController {
                 const user = await this.user.create({
                     ...userData,
                     password: hashedPassword,
-                    email_verified: false,
-                    roles: ["user"],
+                    email_verified: false, // must do email verification
+                    roles: ["user"], // set default role
                 });
                 user.password = undefined;
 
                 // e-mail verification
-                // save token to Mongo
+                // ====================
+                // create token:
                 const token: string = crypto.randomBytes(16).toString("hex");
+                // save token in MongoDB, see token.model.ts:
                 await this.token
                     .create({
                         _userId: user._id,
@@ -87,9 +89,9 @@ export default class AuthenticationController implements IController {
                     {
                         from: "nits.laszlo@jedlik.eu", // verified sender email
                         to: user.email, // recipient email
-                        subject: "Megerősítés kérése", // Subject line
-                        text: `Kedves ${userData.name}! Következő hivatkozásra a megerősítéshez ${token}`, // plain text body
-                        html: `<b>Kedves ${userData.name}! Következő hivatkozásra a megerősítéshez ${token}</b>`, // html body
+                        subject: "Confirm your e-mail address", // Subject line
+                        text: `Dear ${userData.name}! Click on the following link to confirm your email address: ${token}`, // plain text body
+                        html: `<b>Dear ${userData.name}! Click on the following link to confirm your email address. ${token}</b>`, // html body
                     },
                     function (error, info) {
                         if (error) {
@@ -99,7 +101,6 @@ export default class AuthenticationController implements IController {
                         }
                     },
                 );
-                // res.send(user);
                 next(new HttpException(200, `A verification email has been sent to ${user.email}, It will be expire after one day.`));
             }
         } catch (error) {

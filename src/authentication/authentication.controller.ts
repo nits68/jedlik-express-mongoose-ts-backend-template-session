@@ -99,16 +99,16 @@ export default class AuthenticationController implements IController {
                     },
                 });
 
-                const confirmURL: string = `${process.env.BACKEND_API}/confirmation/${user.email}/${token}/`;
+                const confirmURL: string = `${process.env.BACKEND_API}/auth/confirmation/${user.email}/${token}`;
                 transporter.sendMail(
                     {
                         from: "nits.laszlo@jedlik.eu", // verified sender email
                         to: user.email, // recipient email
                         subject: "Confirm your e-mail address", // Subject line
                         text: `Dear ${userData.name}! Click on the following link to confirm your email address: 
-                            <a>href="${confirmURL}"CONFIRM!</a>`, // plain text body
+                            ${confirmURL}`, // plain text body
                         html: `<b>Dear ${userData.name}! Click on the following link to confirm your email address: 
-                            <a>href="${confirmURL}"CONFIRM!</a></b>`, // html body
+                            <a href="${confirmURL}" target="_blank">CONFIRM!</a></b>`, // html body
                     },
                     function (error, info) {
                         if (error) {

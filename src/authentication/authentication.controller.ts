@@ -57,6 +57,8 @@ export default class AuthenticationController implements IController {
                     ...userData,
                     password: hashedPassword,
                     email_verified: false, // must do email verification
+                    auto_login: false,
+                    picture: "none",
                     roles: ["user"], // set default role
                 });
                 user.password = undefined;
@@ -76,22 +78,37 @@ export default class AuthenticationController implements IController {
                     });
 
                 // Send email (use verified sender's email address & generated API_KEY on SendGrid)
+                // Sendgrid transporter:
+                // const transporter = nodemailer.createTransport({
+                //     host: "smtp.sendgrid.net",
+                //     port: 587,
+                //     auth: {
+                //         user: "apikey",
+                //         pass: process.env.NITS_APIKEY,
+                //     },
+                // });
+
+                // Brevo transporter
                 const transporter = nodemailer.createTransport({
-                    host: "smtp.sendgrid.net",
+                    host: "smtp-relay.brevo.com",
                     port: 587,
+                    secure: false,
                     auth: {
-                        user: "apikey",
-                        pass: process.env.NITS_APIKEY,
+                        user: "nits.laszlo@jedlik.eu",
+                        pass: process.env.BREVO_PASS,
                     },
                 });
 
+                const confirmURL: string = `${process.env.BACKEND_API}/confirmation/${user.email}/${token}/`;
                 transporter.sendMail(
                     {
                         from: "nits.laszlo@jedlik.eu", // verified sender email
                         to: user.email, // recipient email
                         subject: "Confirm your e-mail address", // Subject line
-                        text: `Dear ${userData.name}! Click on the following link to confirm your email address: ${token}`, // plain text body
-                        html: `<b>Dear ${userData.name}! Click on the following link to confirm your email address. ${token}</b>`, // html body
+                        text: `Dear ${userData.name}! Click on the following link to confirm your email address: 
+                            <a>href="${confirmURL}"CONFIRM!</a>`, // plain text body
+                        html: `<b>Dear ${userData.name}! Click on the following link to confirm your email address: 
+                            <a>href="${confirmURL}"CONFIRM!</a></b>`, // html body
                     },
                     function (error, info) {
                         if (error) {

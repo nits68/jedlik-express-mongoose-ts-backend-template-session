@@ -89,25 +89,25 @@ export default class AuthenticationController implements IController {
                 // });
 
                 // Brevo transporter
-                // const transporter = nodemailer.createTransport({
-                //     host: "smtp-relay.brevo.com",
-                //     port: 587,
-                //     secure: false,
-                //     auth: {
-                //         user: "nits.laszlo@jedlik.eu",
-                //         pass: process.env.BREVO_PASS,
-                //     },
-                // });
-
-                // mailtrap transporter
                 const transporter = nodemailer.createTransport({
-                    host: "sandbox.smtp.mailtrap.io",
-                    port: 2525,
+                    host: "smtp-relay.brevo.com",
+                    port: 587,
+                    secure: false,
                     auth: {
-                        user: process.env.MAILTRAP_USER,
-                        pass: process.env.MAILTRAP_PASS,
+                        user: "nits.laszlo@jedlik.eu",
+                        pass: process.env.BREVO_PASS,
                     },
                 });
+
+                // mailtrap transporter
+                // const transporter = nodemailer.createTransport({
+                //     host: "sandbox.smtp.mailtrap.io",
+                //     port: 2525,
+                //     auth: {
+                //         user: process.env.MAILTRAP_USER,
+                //         pass: process.env.MAILTRAP_PASS,
+                //     },
+                // });
 
                 const confirmURL: string = `${process.env.BACKEND_API}/auth/confirmation/${user.email}/${token}`;
                 transporter.sendMail(

@@ -89,13 +89,23 @@ export default class AuthenticationController implements IController {
                 // });
 
                 // Brevo transporter
+                // const transporter = nodemailer.createTransport({
+                //     host: "smtp-relay.brevo.com",
+                //     port: 587,
+                //     secure: false,
+                //     auth: {
+                //         user: "nits.laszlo@jedlik.eu",
+                //         pass: process.env.BREVO_PASS,
+                //     },
+                // });
+
+                // mailtrap transporter
                 const transporter = nodemailer.createTransport({
-                    host: "smtp-relay.brevo.com",
-                    port: 587,
-                    secure: false,
+                    host: "sandbox.smtp.mailtrap.io",
+                    port: 2525,
                     auth: {
-                        user: "nits.laszlo@jedlik.eu",
-                        pass: process.env.BREVO_PASS,
+                        user: process.env.MAILTRAP_USER,
+                        pass: process.env.MAILTRAP_PASS,
                     },
                 });
 
@@ -107,8 +117,8 @@ export default class AuthenticationController implements IController {
                         subject: "Confirm your e-mail address", // Subject line
                         text: `Dear ${userData.name}! Click on the following link to confirm your email address: 
                             ${confirmURL}`, // plain text body
-                        html: `<b>Dear ${userData.name}! Click on the following link to confirm your email address: 
-                            <a href="${confirmURL}" target="_blank">CONFIRM!</a></b>`, // html body
+                        html: `<h3>Dear ${userData.name}!</h3><p>Click on the following link to confirm your email address: 
+                            <a href="${confirmURL}">CONFIRM!</a></p>`, // html body
                     },
                     function (error, info) {
                         if (error) {

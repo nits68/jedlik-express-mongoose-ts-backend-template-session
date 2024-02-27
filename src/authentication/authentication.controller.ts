@@ -189,37 +189,53 @@ export default class AuthenticationController implements IController {
                         });
 
                     // Send email (use verified sender's email address & generated API_KEY on SendGrid)
+                    // Sendgrid transporter:
+                    // const transporter = nodemailer.createTransport({
+                    //     host: "smtp.sendgrid.net",
+                    //     port: 587,
+                    //     auth: {
+                    //         user: "apikey",
+                    //         pass: process.env.NITS_APIKEY,
+                    //     },
+                    // });
+
+                    // Brevo transporter
                     const transporter = nodemailer.createTransport({
-                        host: "smtp.sendgrid.net",
+                        host: "smtp-relay.brevo.com",
                         port: 587,
+                        secure: false,
                         auth: {
-                            user: "apikey",
-                            pass: process.env.NITS_APIKEY,
+                            user: "nits.laszlo@jedlik.eu",
+                            pass: process.env.BREVO_PASS,
                         },
                     });
 
+                    // mailtrap transporter
+                    // const transporter = nodemailer.createTransport({
+                    //     host: "sandbox.smtp.mailtrap.io",
+                    //     port: 2525,
+                    //     auth: {
+                    //         user: process.env.MAILTRAP_USER,
+                    //         pass: process.env.MAILTRAP_PASS,
+                    //     },
+                    // });
+
+                    const confirmURL: string = `${process.env.BACKEND_API}/auth/confirmation/${user.email}/${token}`;
                     transporter.sendMail(
                         {
                             from: "nits.laszlo@jedlik.eu", // verified sender email
                             to: user.email, // recipient email
-                            subject: "Megerősítés kérése", // Subject line
-                            text: `Kedves ${user.name}! Következő hivatkozásra a megerősítéshez ${token}`, // plain text body
-                            html: `<b>Kedves ${user.name}! Következő hivatkozásra a megerősítéshez ${token}</b>`, // html body
+                            subject: "Confirm your e-mail address", // Subject line
+                            text: `Dear ${user.name}! Copy and paste this link your browser to confirm your email address: 
+                            ${confirmURL}`, // plain text body
+                            html: `<h3>Dear ${user.name}!</h3><p>Click on the following link to confirm your email address: 
+                            <a href="${confirmURL}">CONFIRM!</a></p>`, // html body
                         },
                         function (error, info) {
                             if (error) {
                                 console.log(error);
                             } else {
                                 console.log("Email sent: " + info.response);
-                                next(
-                                    new HttpException(
-                                        200,
-                                        "A verification email has been sent to " +
-                                            user.email +
-                                            ". It will be expire after one day. " +
-                                            "If you not get verification Email click on resend token.",
-                                    ),
-                                );
                             }
                         },
                     );

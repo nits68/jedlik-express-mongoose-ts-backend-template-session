@@ -12,7 +12,7 @@ import swaggerUi, { SwaggerUiOptions } from "swagger-ui-express";
 
 import IController from "./interfaces/controller.interface";
 import errorMiddleware from "./middleware/error.middleware";
-import * as swaggerDocument from "./swagger.json";
+import swaggerDocument from "./swagger";
 
 export default class App {
     public app: express.Application;

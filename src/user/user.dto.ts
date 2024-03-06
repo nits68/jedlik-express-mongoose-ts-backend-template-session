@@ -1,23 +1,35 @@
 import "reflect-metadata";
 
 import { Type } from "class-transformer";
-import { ArrayNotEmpty, IsArray, IsBoolean, IsEmail, IsMongoId, IsOptional, IsString, ValidateNested } from "class-validator";
+import {
+    ArrayNotEmpty,
+    IsArray,
+    IsBoolean,
+    IsDefined,
+    IsEmail,
+    IsMongoId,
+    IsNotEmptyObject,
+    IsObject,
+    IsOptional,
+    IsString,
+    ValidateNested,
+} from "class-validator";
 import { Schema } from "mongoose";
 
 // import { Match } from "./match.decorator";
-import CreateAddressDto from "./address.dto";
+import AddressDto from "./address.dto";
 import IUser from "./user.interface";
 
 export default class CreateUserDto implements IUser {
     @IsMongoId()
     @IsOptional()
-    public _id: Schema.Types.ObjectId;
+    _id: Schema.Types.ObjectId;
 
     @IsString()
-    public name: string;
+    name: string;
 
     @IsEmail()
-    public email: string;
+    email: string;
 
     // Example - compare two fields in document:
     // @IsEmail()
@@ -25,27 +37,29 @@ export default class CreateUserDto implements IUser {
     // public email_address_confirm: string;
 
     @IsBoolean()
-    public email_verified: boolean;
+    email_verified: boolean;
 
     @IsBoolean()
-    public auto_login: boolean;
+    auto_login: boolean;
 
     @IsString()
-    public picture: string;
+    picture: string;
 
     @IsString()
-    public password: string;
+    password: string;
 
     // roles set ["user"] in handler registration
-    @IsOptional()
+    // @IsOptional()
     @IsArray()
     @ArrayNotEmpty()
     @IsString({ each: true })
-    public roles: string[];
+    roles: string[];
 
-    @IsOptional()
     // For validating nested object you must import reflect-metadata and define @Type:
+    @IsDefined()
+    @IsNotEmptyObject()
+    @IsObject()
     @ValidateNested()
-    @Type(() => CreateAddressDto)
-    public address: CreateAddressDto;
+    @Type(() => AddressDto)
+    address: AddressDto;
 }

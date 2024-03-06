@@ -10,6 +10,6 @@ export default interface IUser {
     auto_login: boolean;
     picture: string;
     password: string;
-    roles?: string[];
-    address?: IAddress;
+    roles: string[];
+    address: IAddress;
 }

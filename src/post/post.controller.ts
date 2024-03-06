@@ -5,8 +5,11 @@ import { Types } from "mongoose";
 import HttpException from "../exceptions/HttpException";
 import IdNotValidException from "../exceptions/IdNotValidException";
 import PostNotFoundException from "../exceptions/PostNotFoundException";
+//
 import IController from "../interfaces/controller.interface";
 import IRequestWithUser from "../interfaces/requestWithUser.interface";
+import ISession from "../interfaces/session.interface";
+//
 import authMiddleware from "../middleware/auth.middleware";
 import roleCheckMiddleware from "../middleware/roleCheckMiddleware";
 import validationMiddleware from "../middleware/validation.middleware";
@@ -115,7 +118,8 @@ export default class PostController implements IController {
             const postData: IPost = req.body;
             const createdPost = new this.post({
                 ...postData,
-                // user_id: (req.session as ISession).user_id,
+                //user_id: req.user._id, // vagy:
+                user_id: (req.session as ISession).user_id,
             });
             const savedPost = await createdPost.save();
             await savedPost.populate("author", "-password");

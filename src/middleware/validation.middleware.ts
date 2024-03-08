@@ -16,7 +16,7 @@ export default function validationMiddleware(type: any, skipMissingProp = false)
                 let message = "DTO error:";
                 for (let i = 0; i < errors.length; i++) {
                     if (errors[i].constraints) {
-                        message += `${Object.values(errors[i].constraints)}, `;
+                        message += Object.values(errors[i].constraints).join(", ") + "; ";
                     }
                     if (errors[i].children!.length > 0) {
                         for (let j = 0; j < errors[i].children.length; j++) {

@@ -1,5 +1,4 @@
 import { NextFunction, Request, Response, Router } from "express";
-// import ISession from "interfaces/session.interface";
 import { Types } from "mongoose";
 
 import AuthorNotFoundException from "../exceptions/AuthorNotFoundException";
@@ -7,6 +6,7 @@ import HttpException from "../exceptions/HttpException";
 import IdNotValidException from "../exceptions/IdNotValidException";
 import IController from "../interfaces/controller.interface";
 import IRequestWithUser from "../interfaces/requestWithUser.interface";
+import ISession from "../interfaces/session.interface";
 import authMiddleware from "../middleware/auth.middleware";
 import roleCheckMiddleware from "../middleware/roleCheckMiddleware";
 import validationMiddleware from "../middleware/validation.middleware";
@@ -115,7 +115,7 @@ export default class PostController implements IController {
             const authorData: IAuthor = req.body;
             const createdAuthor = new this.author({
                 ...authorData,
-                // user_id: (req.session as ISession).user_id,
+                user_id: (req.session as ISession).user_id,
             });
             const savedAuthor = await createdAuthor.save();
             await savedAuthor.populate("user");

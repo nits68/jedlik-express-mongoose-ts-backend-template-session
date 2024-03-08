@@ -10,6 +10,7 @@ export default class CreateAuthorDto implements IAuthor {
     public _id: Schema.Types.ObjectId;
 
     @IsMongoId()
+    @IsOptional()
     public user_id: Schema.Types.ObjectId;
 
     @IsMongoId()

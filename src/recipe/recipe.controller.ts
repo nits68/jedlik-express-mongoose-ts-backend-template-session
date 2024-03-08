@@ -116,7 +116,7 @@ export default class RecipeController implements IController {
                 user_id: (req.session as ISession).user_id,
             });
             const savedRecipe = await createdRecipe.save();
-            await savedRecipe.populate("author", "-password");
+            // await savedRecipe.populate("user_id", "-password");
             res.send(savedRecipe);
         } catch (error) {
             next(new HttpException(400, error.message));

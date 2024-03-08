@@ -6,7 +6,7 @@ import IRecipe from "./recipe.interface";
 
 const recipeSchema = new Schema<IRecipe>(
     {
-        _id: Schema.Types.ObjectId,
+        // _id?: Schema.Types.ObjectId,
         user_id: {
             ref: "User",
             type: Schema.Types.ObjectId,

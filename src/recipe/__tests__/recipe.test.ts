@@ -11,13 +11,21 @@ let server: App;
 beforeAll(async () => {
     // create server for test:
     server = new App([new AuthenticationController(), new RecipeController()]);
-    // get cookie for authentication
+    // connect and get cookie for authentication
+    await server.connectToTheDatabase
+        .then(msg => {
+            console.log(msg);
+        })
+        .catch(err => {
+            console.log(err);
+        });
+
     const res = await request(server.getServer()).post("/auth/login").send({
         email: "student001@jedlik.eu",
         password: "student001",
     });
     // set cookie
-    cookie = res.headers["set-cookie"];
+    cookie = res.headers["set-cookie"][0];
 });
 
 describe("test recipes endpoints", () => {
@@ -96,7 +104,7 @@ describe("test recipes endpoints", () => {
         const response = await request(server.getServer()).post("/recipes").set("Cookie", cookie);
         expect(response.statusCode).toEqual(400);
         expect(response.body.message).toEqual(
-            "recipeName must be a string, recipeName should not be empty, imageURL must be a string, imageURL must be a URL address, imageURL should not be empty, description must be a string, description should not be empty, ingredients should not be empty, ingredients must be an array",
+            "DTO error:recipeName must be a string, recipeName should not be empty; imageURL must be a string, imageURL must be a URL address, imageURL should not be empty; description must be a string, description should not be empty; ingredients should not be empty, ingredients must be an array; ",
         );
     });
 

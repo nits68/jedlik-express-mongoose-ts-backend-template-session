@@ -6,4 +6,19 @@ import RecipeController from "./recipe/recipe.controller";
 import ReportController from "./report/report.controller";
 import UserController from "./user/user.controller";
 
-new App([new AuthenticationController(), new UserController(), new PostController(), new RecipeController(), new AuthorController(), new ReportController()]);
+const app = new App([
+    new AuthenticationController(),
+    new UserController(),
+    new PostController(),
+    new RecipeController(),
+    new AuthorController(),
+    new ReportController(),
+]);
+
+app.connectToTheDatabase
+    .then(msg => {
+        console.log(msg);
+    })
+    .catch(err => {
+        console.log(err);
+    });

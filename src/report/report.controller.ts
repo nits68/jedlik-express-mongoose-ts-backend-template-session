@@ -14,7 +14,7 @@ export default class ReportController implements IController {
     }
 
     private initializeRoutes() {
-        this.router.get("/", (req: Request, res: Response) => {
+        this.router.get("/hello", (req: Request, res: Response) => {
             res.send("Hello World!");
         });
         this.router.get(`${this.path}`, this.generateReport);
@@ -48,16 +48,16 @@ export default class ReportController implements IController {
                 },
                 {
                     $lookup: {
-                        from: "posts",
+                        from: "authors",
                         localField: "users._id",
                         foreignField: "user_id",
-                        as: "articles",
+                        as: "auth",
                     },
                 },
                 {
                     $addFields: {
                         amountOfArticles: {
-                            $size: "$articles",
+                            $size: "$auth",
                         },
                     },
                 },

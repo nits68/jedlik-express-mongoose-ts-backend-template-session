@@ -58,7 +58,8 @@ export default class UserController implements IController {
                 // }
 
                 // Multiple populates:
-                const user = await this.user.findById(id).populate("posts").populate("recipes");
+                // const user = await this.user.findById(id).populate("recipes").populate("recipes");
+                const user = await this.user.findById(id).populate("recipes");
                 if (user) {
                     res.send(user);
                 } else {

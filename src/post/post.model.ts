@@ -5,6 +5,7 @@ import IPost from "./post.interface";
 const postSchema = new Schema<IPost>(
     {
         // _id: Schema.Types.ObjectId,
+        // 1:N -> N:M, lsd.: athor collection:
         // user_id: {
         //     ref: "User",
         //     type: Schema.Types.ObjectId,

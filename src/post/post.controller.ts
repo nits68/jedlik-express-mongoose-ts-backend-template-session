@@ -2,6 +2,7 @@ import { NextFunction, Request, Response, Router } from "express";
 // import ISession from "interfaces/session.interface";
 import { Types } from "mongoose";
 
+import authorModel from "../author/author.model";
 import HttpException from "../exceptions/HttpException";
 import IdNotValidException from "../exceptions/IdNotValidException";
 import PostNotFoundException from "../exceptions/PostNotFoundException";
@@ -9,6 +10,7 @@ import PostNotFoundException from "../exceptions/PostNotFoundException";
 import IController from "../interfaces/controller.interface";
 import IRequestWithUser from "../interfaces/requestWithUser.interface";
 import ISession from "../interfaces/session.interface";
+// import ISession from "../interfaces/session.interface";
 //
 import authMiddleware from "../middleware/auth.middleware";
 import roleCheckMiddleware from "../middleware/roleCheckMiddleware";
@@ -21,6 +23,7 @@ export default class PostController implements IController {
     public path = "/posts";
     public router = Router();
     private post = postModel;
+    private author = authorModel;
 
     constructor() {
         this.initializeRoutes();
@@ -118,10 +121,16 @@ export default class PostController implements IController {
             const postData: IPost = req.body;
             const createdPost = new this.post({
                 ...postData,
-                //user_id: req.user._id, // vagy:
-                user_id: (req.session as ISession).user_id,
+                // 1:N -> N:M, lsd.: athor collection:
+                // user_id: req.user._id, // vagy:
+                // user_id: (req.session as ISession).user_id,
             });
             const savedPost = await createdPost.save();
+            const createdAuthor = new this.author({
+                post_id: savedPost._id,
+                user_id: (req.session as ISession).user_id,
+            });
+            await createdAuthor.save();
             await savedPost.populate("author", "-password");
             const count = await this.post.countDocuments();
             res.send({ count: count, post: savedPost });

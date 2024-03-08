@@ -16,10 +16,9 @@ import swaggerDocument from "./swagger";
 
 export default class App {
     public app: express.Application;
+    public controllers: IController[];
 
-    constructor(controllers: IController[]) {
-        config(); // Read and set variables from .env file (only during development).
-
+    public constructor(controllers: IController[]) {
         // create express application:
         this.app = express();
 
@@ -30,7 +29,18 @@ export default class App {
             console.log(error.message);
         }
 
-        this.connectToTheDatabase(controllers);
+        this.controllers = controllers;
+
+        // this.connectToTheDatabase(result => {
+        //     if (result == "OK") {
+        //         this.initializeMiddlewares();
+        //         this.initializeControllers(controllers);
+        //         this.initializeErrorHandling();
+        //         this.listen();
+        //     }
+        // });
+
+        // this.connectToTheDatabase(controllers);
         // this.initializeMiddlewares();
         // this.initializeControllers(controllers);
         // this.initializeErrorHandling();
@@ -122,21 +132,29 @@ export default class App {
         });
     }
 
-    private connectToTheDatabase(controllers: IController[]) {
+    // const connectToTheDatabase(controllers: IController[]): Promise<string> = new Promise((resolve, reject) =>{});
+
+    public connectToTheDatabase: Promise<string> = new Promise((resolve, reject) => {
+        config(); // Read and set variables from .env file (only during development).
         const { MONGO_URI, MONGO_DB } = process.env;
         // Connect to MongoDB Atlas, create database if not exist::
         mongoose.set("strictQuery", true); // for disable DeprecationWarning
         mongoose.connect(MONGO_URI, { dbName: MONGO_DB }).catch(error => console.log(`Mongoose error on connection! Message: ${error.message}`));
 
         mongoose.connection.on("error", error => {
-            console.log(`Mongoose error message: ${error.message}`);
+            // console.log(`Mongoose error message: ${error.message}`);
+            reject(`Mongoose error message: ${error.message}`);
         });
         mongoose.connection.on("connected", () => {
-            console.log("Connected to MongoDB server.");
+            // console.log("Connected to MongoDB server.");
             this.initializeMiddlewares();
-            this.initializeControllers(controllers);
+            this.initializeControllers(this.controllers);
             this.initializeErrorHandling();
-            this.listen();
+            // this.listen();
+            this.app.listen(process.env.PORT, () => {
+                console.log(`App listening on the port ${process.env.PORT}`);
+            });
+            resolve("Connected to MongoDB server.");
         });
-    }
+    });
 }

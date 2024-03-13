@@ -51,7 +51,8 @@ export default class RecipeController implements IController {
             let count: number = 0;
             if (req.params.keyword) {
                 const myRegex = new RegExp(req.params.keyword, "i"); // i for case insensitive
-                count = await this.recipeM.find({ $or: [{ recipeName: myRegex }, { description: myRegex }] }).countDocuments();
+                // count = await this.recipeM.find({ $or: [{ recipeName: myRegex }, { description: myRegex }] }).countDocuments();
+                count = await this.recipeM.countDocuments({ $or: [{ recipeName: myRegex }, { description: myRegex }] });
                 recipes = await this.recipeM
                     .find({ $or: [{ recipeName: myRegex }, { description: myRegex }] })
                     .sort(`${sort == -1 ? "-" : ""}${order}`)
@@ -65,7 +66,9 @@ export default class RecipeController implements IController {
                     .skip(offset)
                     .limit(limit);
             }
-            res.send({ count: count, recipes: recipes });
+            res.append('X-Total-Count', `${count}`)
+            // res.send({ count: count, recipes: recipes });
+            res.send(recipes);
         } catch (error) {
             next(new HttpException(400, error.message));
         }

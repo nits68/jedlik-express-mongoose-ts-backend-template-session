@@ -59,7 +59,8 @@ export default class PostController implements IController {
             let count: number = 0;
             if (req.params.keyword && req.params.keyword != "") {
                 const myRegex = new RegExp(req.params.keyword, "i"); // i for case insensitive
-                count = await this.post.find({ $or: [{ title: myRegex }, { content: myRegex }] }).countDocuments();
+                // count = await this.post.find({ $or: [{ title: myRegex }, { content: myRegex }] }).countDocuments();
+                count = await this.post.countDocuments({ $or: [{ title: myRegex }, { content: myRegex }] });
                 posts = await this.post
                     .find({ $or: [{ title: myRegex }, { content: myRegex }] })
                     .sort(`${sort == -1 ? "-" : ""}${order}`)
@@ -73,7 +74,9 @@ export default class PostController implements IController {
                     .skip(offset)
                     .limit(limit);
             }
-            res.send({ count: count, posts: posts });
+            res.append('X-Total-Count', `${count}`)
+            // res.send({ count: count, posts: posts });
+            res.send(posts);
         } catch (error) {
             next(new HttpException(400, error.message));
         }

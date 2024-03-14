@@ -149,7 +149,7 @@ export default class AuthenticationController implements IController {
                             } else if (user.email_verified) {
                                 next(new HttpException(200, "User has been already verified. Please Login!"));
                             } else {
-                                // change email_verified to true
+                                // change email_verified to true 
                                 this.user
                                     .findByIdAndUpdate(user._id, { email_verified: true })
                                     .then(() => {

@@ -112,7 +112,7 @@ export default class AuthenticationController implements IController {
                 const confirmURL: string = `${process.env.BACKEND_API}/auth/confirmation/${user.email}/${token}`;
                 transporter.sendMail(
                     {
-                        from: "nits.laszlo@jedlik.eu", // verified sender email
+                        from: "noreply@brevo.com", // verified sender email
                         to: user.email, // recipient email
                         subject: "Confirm your e-mail address", // Subject line
                         text: `Dear ${userData.name}! Click on the following link to confirm your email address: 

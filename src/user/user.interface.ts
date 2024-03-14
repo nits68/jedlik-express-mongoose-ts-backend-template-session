@@ -12,4 +12,6 @@ export default interface IUser {
     password: string;
     roles: string[];
     address: IAddress;
+    post_id?: Schema.Types.ObjectId[];
+    recipe_id?: Schema.Types.ObjectId[];
 }

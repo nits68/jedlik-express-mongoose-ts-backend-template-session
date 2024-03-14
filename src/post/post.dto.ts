@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { IsMongoId, IsOptional, IsString } from "class-validator";
+import { Type } from "class-transformer";
+import { IsArray, IsMongoId, IsOptional, IsString, ValidateNested } from "class-validator";
 import { Schema } from "mongoose";
 
 import IPost from "./post.interface";
@@ -7,7 +8,7 @@ import IPost from "./post.interface";
 export default class CreatePostDto implements IPost {
     @IsMongoId()
     @IsOptional()
-    public _id: Schema.Types.ObjectId;
+    _id: Schema.Types.ObjectId;
 
     // 1:N -> N:M, lsd.: athor collection
     // @IsMongoId()
@@ -15,8 +16,15 @@ export default class CreatePostDto implements IPost {
     // public user_id: Schema.Types.ObjectId;
 
     @IsString()
-    public content: string;
+    content: string;
 
     @IsString()
-    public title: string;
+    title: string;
+
+    @IsOptional()
+    @IsArray()
+    @ValidateNested({ each: true })
+    @IsMongoId()
+    @Type(() => Schema.Types.ObjectId)
+    user_id: Schema.Types.ObjectId[];
 }

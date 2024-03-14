@@ -1,4 +1,5 @@
-import { ArrayNotEmpty, IsArray, IsMongoId, IsNotEmpty, IsOptional, IsString, IsUrl } from "class-validator";
+import { Type } from "class-transformer";
+import { ArrayNotEmpty, IsArray, IsMongoId, IsNotEmpty, IsOptional, IsString, IsUrl, ValidateNested } from "class-validator";
 import { Schema } from "mongoose";
 
 import IRecipe from "./recipe.interface";
@@ -6,22 +7,28 @@ import IRecipe from "./recipe.interface";
 export default class CreateRecipeDto implements IRecipe {
     @IsMongoId()
     @IsOptional()
-    public _id: Schema.Types.ObjectId;
+    _id: Schema.Types.ObjectId;
 
     @IsNotEmpty()
     @IsString()
-    public recipeName: string;
+    recipeName: string;
 
     @IsNotEmpty()
     @IsUrl()
     @IsString()
-    public imageURL: string;
+    imageURL: string;
 
     @IsNotEmpty()
     @IsString()
-    public description: string;
+    description: string;
 
     @IsArray()
     @ArrayNotEmpty()
-    public ingredients: string[];
+    ingredients: string[];
+
+    @IsArray()
+    @ValidateNested({ each: true })
+    @IsMongoId()
+    @Type(() => Schema.Types.ObjectId)
+    user_id: Schema.Types.ObjectId[];
 }

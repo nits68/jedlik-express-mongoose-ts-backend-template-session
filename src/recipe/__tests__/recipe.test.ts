@@ -48,7 +48,8 @@ describe("test recipes endpoints", () => {
     it("GET /:offset/:limit/:order/:sort/:keyword? (search for 'keyword')", async () => {
         const response = await request(server.getServer()).get("/recipes/0/5/discription/1/paradicsom").set("Cookie", cookie);
         expect(response.statusCode).toEqual(200);
-        expect(response.body.count).toEqual(2);
+        // expect(response.body.count).toEqual(2);
+        expect(response.headers["x-total-count"]).toEqual("2");
         expect(response.body.recipes[0].description).toContain("paradicsom");
         expect(response.body.recipes[0].description).toMatch(/^A tésztát a csomágolásán látható utasítás szerint forró/);
         expect(response.body.recipes[1].description).toContain("paradicsom");
@@ -58,13 +59,15 @@ describe("test recipes endpoints", () => {
     it("GET /:offset/:limit/:order/:sort/:keyword? (search for missing 'keyword')", async () => {
         const response = await request(server.getServer()).get("/recipes/0/5/discription/1/goesiéhgesouihg").set("Cookie", cookie);
         expect(response.statusCode).toEqual(200);
-        expect(response.body.count).toEqual(0);
+        // expect(response.body.count).toEqual(0);
+        expect(response.headers["x-total-count"]).toEqual("0");
     });
 
     it("GET /:offset/:limit/:order/:sort/:keyword? (no last parameter 'keyword')", async () => {
         const response = await request(server.getServer()).get("/recipes/0/5/discription/1").set("Cookie", cookie);
         expect(response.statusCode).toEqual(200);
-        expect(response.body.count).toEqual(10);
+        // expect(response.body.count).toEqual(10);
+        expect(response.headers["x-total-count"]).toEqual("10");
     });
 
     it("GET /recipes/:id  (correct id)", async () => {

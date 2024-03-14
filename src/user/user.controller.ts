@@ -2,7 +2,7 @@ import { NextFunction, Request, Response, Router } from "express";
 import ISession from "interfaces/session.interface";
 import { Types } from "mongoose";
 
-import authorModel from "../author/author.model";
+// import authorModel from "../author/author.model";
 import HttpException from "../exceptions/HttpException";
 import IdNotValidException from "../exceptions/IdNotValidException";
 import UserNotFoundException from "../exceptions/UserNotFoundException";
@@ -20,14 +20,14 @@ export default class UserController implements IController {
     public router = Router();
     private user = userModel;
     private post = postModel;
-    private author = authorModel;
+    // private author = authorModel;
 
     constructor() {
         this.initializeRoutes();
     }
 
     private initializeRoutes() {
-        this.router.get(`${this.path}/posts/:id`, authMiddleware, this.getAllPostsOfUserByID);
+        // this.router.get(`${this.path}/posts/:id`, authMiddleware, this.getAllPostsOfUserByID);
         this.router.get(`${this.path}/posts/`, authMiddleware, this.getAllPostsOfLoggedUser);
         this.router.get(`${this.path}/:id`, authMiddleware, this.getUserById);
         this.router.get(this.path, authMiddleware, this.getAllUsers);
@@ -40,9 +40,13 @@ export default class UserController implements IController {
 
     private getAllUsers = async (req: Request, res: Response, next: NextFunction) => {
         try {
-            this.user.find().then(users => {
-                res.send(users);
-            });
+            this.user
+                .find()
+                .sort({ _id: 1 })
+                //.populate("post_id")
+                .then(users => {
+                    res.send(users);
+                });
         } catch (error) {
             next(new HttpException(400, error.message));
         }
@@ -120,19 +124,19 @@ export default class UserController implements IController {
         }
     };
 
-    private getAllPostsOfUserByID = async (req: Request, res: Response, next: NextFunction) => {
-        try {
-            if (Types.ObjectId.isValid(req.params.id)) {
-                const id: string = req.params.id;
-                const posts = await this.author.find({ user_id: id }).select("-user_id").populate("post", "-_id");
-                res.send(posts);
-            } else {
-                next(new IdNotValidException(req.params.id));
-            }
-        } catch (error) {
-            next(new HttpException(400, error.message));
-        }
-    };
+    // private getAllPostsOfUserByID = async (req: Request, res: Response, next: NextFunction) => {
+    //     try {
+    //         if (Types.ObjectId.isValid(req.params.id)) {
+    //             const id: string = req.params.id;
+    //             const posts = await this.author.find({ user_id: id }).select("-user_id").populate("post", "-_id");
+    //             res.send(posts);
+    //         } else {
+    //             next(new IdNotValidException(req.params.id));
+    //         }
+    //     } catch (error) {
+    //         next(new HttpException(400, error.message));
+    //     }
+    // };
 
     private getUsersPostsWithSearch = async (req: Request, res: Response, next: NextFunction) => {
         try {

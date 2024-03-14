@@ -74,7 +74,7 @@
     },
     "jest": {
         "roots": [
-            "<rootDir>/src"
+            "<rootDir>/src/recipe"
         ],
         "preset": "ts-jest",
         "verbose": true,

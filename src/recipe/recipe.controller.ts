@@ -34,7 +34,7 @@ export default class RecipeController implements IController {
     private getAllRecipes = async (req: Request, res: Response, next: NextFunction) => {
         try {
             const count = await this.recipeM.countDocuments();
-            const recipes = await this.recipeM.find();
+            const recipes = await this.recipeM.find().sort({ _id: 1 });
             res.send({ count: count, recipes: recipes });
         } catch (error) {
             next(new HttpException(400, error.message));
@@ -66,9 +66,9 @@ export default class RecipeController implements IController {
                     .skip(offset)
                     .limit(limit);
             }
-            res.append('X-Total-Count', `${count}`)
+            res.append("x-total-count", `${count}`);
             // res.send({ count: count, recipes: recipes });
-            res.send(recipes);
+            res.send({ recipes: recipes });
         } catch (error) {
             next(new HttpException(400, error.message));
         }

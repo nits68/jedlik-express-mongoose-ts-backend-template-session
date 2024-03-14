@@ -42,6 +42,7 @@ export default class CreateUserDto implements IUser {
     @IsBoolean()
     auto_login: boolean;
 
+    @IsOptional()
     @IsString()
     picture: string;
 
@@ -62,4 +63,18 @@ export default class CreateUserDto implements IUser {
     @ValidateNested()
     @Type(() => AddressDto)
     address: AddressDto;
+
+    @IsOptional()
+    @IsArray()
+    @ValidateNested({ each: true })
+    @IsMongoId()
+    @Type(() => Schema.Types.ObjectId)
+    recipe_id: Schema.Types.ObjectId[];
+
+    @IsOptional()
+    @IsArray()
+    @ValidateNested({ each: true })
+    @IsMongoId()
+    @Type(() => Schema.Types.ObjectId)
+    post_id: Schema.Types.ObjectId[];
 }

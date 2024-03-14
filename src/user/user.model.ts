@@ -38,23 +38,25 @@ const userSchema = new Schema<IUser>(
             type: addressSchema,
             required: true,
         },
+        post_id: [{ type: Schema.Types.ObjectId, ref: "Post" }],
+        recipe_id: [{ type: Schema.Types.ObjectId, ref: "Recipe" }],
     },
     { versionKey: false, id: false, toJSON: { virtuals: true }, toObject: { virtuals: true } },
 );
 
-userSchema.virtual("recipes", {
-    ref: "Recipe",
-    localField: "_id",
-    foreignField: "user_id", // ref_Field
-    justOne: false,
-});
+// userSchema.virtual("recipes", {
+//     ref: "Recipe",
+//     localField: "_id",
+//     foreignField: "user_id", // ref_Field
+//     justOne: false,
+// });
 
-userSchema.virtual("author", {
-    ref: "Author",
-    localField: "_id",
-    foreignField: "user_id", // ref_Field
-    justOne: false,
-});
+// userSchema.virtual("author", {
+//     ref: "Author",
+//     localField: "_id",
+//     foreignField: "user_id", // ref_Field
+//     justOne: false,
+// });
 
 const userModel = model<IUser>("User", userSchema, "users");
 

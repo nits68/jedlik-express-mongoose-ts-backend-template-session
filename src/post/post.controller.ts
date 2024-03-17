@@ -3,9 +3,9 @@ import { NextFunction, Request, Response, Router } from "express";
 import mongoose, { Schema, Types } from "mongoose";
 
 // import authorModel from "../author/author.model";
-import HttpException from "../exceptions/HttpException";
-import IdNotValidException from "../exceptions/IdNotValidException";
-import PostNotFoundException from "../exceptions/PostNotFoundException";
+import HttpException from "../exceptions/Http.exception";
+import IdNotValidException from "../exceptions/IdNotValid.exception";
+import PostNotFoundException from "../exceptions/PostNotFound.exception";
 //
 import IController from "../interfaces/controller.interface";
 import IRequestWithUser from "../interfaces/requestWithUser.interface";
@@ -34,61 +34,63 @@ export default class PostController implements IController {
     private initializeRoutes() {
         this.router.get(this.path, [authMiddleware, roleCheckMiddleware(["user"])], this.getAllPosts);
         this.router.get(`${this.path}/:id`, [authMiddleware, roleCheckMiddleware(["user"])], this.getPostById);
-        this.router.get(`${this.path}/:offset/:limit/:order/:sort/:keyword?`, [authMiddleware, roleCheckMiddleware(["user"])], this.getPaginatedPosts);
+        this.router.get(`${this.path}/:offset/:limit/:sortField/:filter?`, [authMiddleware, roleCheckMiddleware(["user"])], this.getPaginatedPosts);
         this.router.patch(`${this.path}/:id`, [authMiddleware, roleCheckMiddleware(["user"]), validationMiddleware(CreatePostDto, true)], this.modifyPost);
         this.router.delete(`${this.path}/:id`, [authMiddleware, roleCheckMiddleware(["user"])], this.deletePost);
         this.router.post(this.path, [authMiddleware, roleCheckMiddleware(["user"]), validationMiddleware(CreatePostDto)], this.createPost);
     }
 
+    // LINK ./post.controller.yml#getAllPosts
+    // ANCHOR[id=getAllPosts]
     private getAllPosts = async (req: Request, res: Response, next: NextFunction) => {
         try {
             // const posts = await this.post.find().populate("user_id", "-password");
             const count = await this.post.countDocuments();
             const posts = await this.post.find().sort({ _id: 1 });
-            res.send({ count: count, posts: posts });
+            res.append("x-total-count", `${count}`);
+            res.send(posts);
         } catch (error) {
             next(new HttpException(400, error.message));
         }
     };
 
+    // LINK ./post.controller.yml#getPaginatedPosts
+    // ANCHOR[id=getPaginatedPosts]
     private getPaginatedPosts = async (req: Request, res: Response, next: NextFunction) => {
         try {
             const offset = parseInt(req.params.offset);
             const limit = parseInt(req.params.limit);
-            const order = req.params.order;
-            const sort = parseInt(req.params.sort); // desc: -1  asc: 1
+            const sortField = req.params.sortField;
             let posts = [];
             let count: number = 0;
-            if (req.params.keyword && req.params.keyword != "") {
-                const myRegex = new RegExp(req.params.keyword, "i"); // i for case insensitive
+            if (req.params.filter && req.params.filter != "") {
+                const myRegex = new RegExp(req.params.filter, "i"); // i for case insensitive
                 // count = await this.post.find({ $or: [{ title: myRegex }, { content: myRegex }] }).countDocuments();
                 count = await this.post.countDocuments({ $or: [{ title: myRegex }, { content: myRegex }] });
                 posts = await this.post
                     .find({ $or: [{ title: myRegex }, { content: myRegex }] })
-                    .sort(`${sort == -1 ? "-" : ""}${order}`)
+                    .sort(sortField)
                     .skip(offset)
                     .limit(limit);
             } else {
                 count = await this.post.countDocuments();
-                posts = await this.post
-                    .find({})
-                    .sort(`${sort == -1 ? "-" : ""}${order}`)
-                    .skip(offset)
-                    .limit(limit);
+                posts = await this.post.find({}).sort(sortField).skip(offset).limit(limit);
             }
-            res.append("X-Total-Count", `${count}`);
+            res.append("x-total-count", `${count}`);
             // res.send({ count: count, posts: posts });
-            res.send({ posts: posts });
+            res.send(posts);
         } catch (error) {
             next(new HttpException(400, error.message));
         }
     };
 
+    // LINK ./post.controller.yml#getPostById
+    // ANCHOR[id=getPostById]
     private getPostById = async (req: Request, res: Response, next: NextFunction) => {
         try {
             const id = req.params.id;
             if (Types.ObjectId.isValid(id)) {
-                const post = await this.post.findById(id).populate("author", "-password");
+                const post = await this.post.findById(id).populate("user_id", "-password");
 
                 if (post) {
                     res.send(post);
@@ -103,6 +105,8 @@ export default class PostController implements IController {
         }
     };
 
+    // LINK ./post.controller.yml#modifyPost
+    // ANCHOR[id=modifyPost]
     private modifyPost = async (req: Request, res: Response, next: NextFunction) => {
         try {
             const id = req.params.id;
@@ -122,6 +126,8 @@ export default class PostController implements IController {
         }
     };
 
+    // LINK ./post.controller.yml#createPost
+    // ANCHOR[id=createPost]
     private createPost = async (req: IRequestWithUser, res: Response, next: NextFunction) => {
         try {
             const postData: IPost = req.body;
@@ -129,28 +135,21 @@ export default class PostController implements IController {
             const createdPost = new this.post({
                 ...postData,
                 user_id: [uid],
-                // 1:N -> N:M, lsd.: athor collection:
-                // user_id: req.user._id, // vagy:
-                // user_id: (req.session as ISession).user_id,
             });
             const savedPost = await createdPost.save();
-            // const createdAuthor = new this.author({
-            //     post_id: savedPost._id,
-            //     user_id: (req.session as ISession).user_id,
-            // });
-            // await createdAuthor.save();
-            const teszt = await this.user.findByIdAndUpdate(uid, { $push: { post_id: savedPost._id } });
-            console.log(teszt);
+            await this.user.findByIdAndUpdate(uid, { $push: { post_id: savedPost._id } });
             await savedPost.populate("user_id", "-password");
             const count = await this.post.countDocuments();
             res.append("x-total-count", `${count}`);
-            res.send({ post: savedPost });
+            res.send(savedPost);
             // res.send(savedPost);
         } catch (error) {
             next(new HttpException(400, error.message));
         }
     };
 
+    // LINK ./post.controller.yml#deletePost
+    // ANCHOR[id=deletePost]
     private deletePost = async (req: Request, res: Response, next: NextFunction) => {
         try {
             const id = req.params.id;
@@ -171,8 +170,10 @@ export default class PostController implements IController {
                                 await this.user.updateMany({ post_id: id }, { $pull: { post_id: id } });
                             }
                         }
-                        // commit the changes if everything was successful
+                        // commit the changes if everything (delete and update) was successful
                         await session.commitTransaction();
+                        const count = await this.post.countDocuments();
+                        res.append("x-total-count", `${count}`);
                         res.sendStatus(200);
                     } else {
                         next(new PostNotFoundException(id));

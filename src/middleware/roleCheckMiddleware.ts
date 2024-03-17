@@ -1,8 +1,8 @@
 import { NextFunction, Response } from "express";
 import express from "express";
 
-import HttpException from "../exceptions/HttpException";
-import InsufficientRoleException from "../exceptions/InsufficientRoleException";
+import HttpException from "../exceptions/Http.exception";
+import InsufficientRoleException from "../exceptions/InsufficientRole.exception";
 import IRequestWithUser from "../interfaces/requestWithUser.interface";
 import ISession from "../interfaces/session.interface";
 

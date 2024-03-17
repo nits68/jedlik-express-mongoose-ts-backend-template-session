@@ -1,7 +1,7 @@
 import { NextFunction, Response } from "express";
 
-import EmailNotVerifiedException from "../exceptions/EmailNotVerifiedException";
-import SessionExpiredException from "../exceptions/SessionExpiredException";
+import EmailNotVerifiedException from "../exceptions/EmailNotVerified.exception";
+import SessionExpiredException from "../exceptions/SessionExpired.exception";
 import IRequestWithUser from "../interfaces/requestWithUser.interface";
 import ISession from "../interfaces/session.interface";
 import userModel from "../user/user.model";

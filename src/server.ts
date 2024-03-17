@@ -7,7 +7,7 @@ import UserController from "./user/user.controller";
 
 const app = new App([new AuthenticationController(), new UserController(), new PostController(), new RecipeController(), new ReportController()]);
 
-app.connectToTheDatabase
+app.connectToTheDatabase()
     .then(msg => {
         console.log(msg);
     })

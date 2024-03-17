@@ -4,6 +4,7 @@ import { model, Schema } from "mongoose";
 
 import IRecipe from "./recipe.interface";
 
+// LINK ./recipe.model.yml
 const recipeSchema = new Schema<IRecipe>(
     {
         // _id?: Schema.Types.ObjectId,
@@ -20,12 +21,12 @@ const recipeSchema = new Schema<IRecipe>(
     { versionKey: false, id: false, toJSON: { virtuals: true }, toObject: { virtuals: true } },
 );
 
-// recipeSchema.virtual("author", {
-//     ref: "User",
-//     localField: "user_id",
-//     foreignField: "_id",
-//     justOne: true,
-// });
+recipeSchema.virtual("authors", {
+    ref: "User",
+    localField: "user_id",
+    foreignField: "_id",
+    justOne: false,
+});
 
 const recipeModel = model<IRecipe>("Recipe", recipeSchema, "recipes");
 

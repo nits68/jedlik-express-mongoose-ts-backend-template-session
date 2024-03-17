@@ -1,4 +1,4 @@
-import HttpException from "./HttpException";
+import HttpException from "./Http.exception";
 
 export default class AuthorNotFoundException extends HttpException {
     constructor(id: string) {

@@ -2,7 +2,7 @@ import { plainToInstance } from "class-transformer";
 import { validate, ValidationError } from "class-validator";
 import express from "express";
 
-import HttpException from "../exceptions/HttpException";
+import HttpException from "../exceptions/Http.exception";
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/explicit-module-boundary-types
 export default function validationMiddleware(type: any, skipMissingProp = false): express.RequestHandler {

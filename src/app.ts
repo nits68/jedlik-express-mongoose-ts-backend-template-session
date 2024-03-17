@@ -46,11 +46,11 @@ export default class App {
         // this.initializeErrorHandling();
     }
 
-    public listen(): void {
-        this.app.listen(process.env.PORT, () => {
-            console.log(`App listening on the port ${process.env.PORT}`);
-        });
-    }
+    // public listen(port: string): void {
+    //     this.app.listen(port, () => {
+    //         console.log(`App listening on the port ${port}`);
+    //     });
+    // }
 
     // only use in tests
     public getServer(): express.Application {
@@ -61,12 +61,12 @@ export default class App {
         // Swagger
         const options: SwaggerUiOptions = {
             swaggerOptions: {
-                docExpansion: "list",
+                // docExpansion: "list",
                 displayRequestDuration: true,
-                defaultModelsExpandDepth: 3,
-                defaultModelExpandDepth: 3,
+                // defaultModelsExpandDepth: 3,
+                // defaultModelExpandDepth: 3,
                 tryItOutEnabled: true,
-                showCommonExtensions: true,
+                // showCommonExtensions: true,
                 // filter: true,
             },
         };
@@ -134,27 +134,30 @@ export default class App {
 
     // const connectToTheDatabase(controllers: IController[]): Promise<string> = new Promise((resolve, reject) =>{});
 
-    public connectToTheDatabase: Promise<string> = new Promise((resolve, reject) => {
-        config(); // Read and set variables from .env file (only during development).
-        const { MONGO_URI, MONGO_DB } = process.env;
-        // Connect to MongoDB Atlas, create database if not exist::
-        mongoose.set("strictQuery", true); // for disable DeprecationWarning
-        mongoose.connect(MONGO_URI, { dbName: MONGO_DB }).catch(error => console.log(`Mongoose error on connection! Message: ${error.message}`));
+    public async connectToTheDatabase(port?: string): Promise<string> {
+        return new Promise((resolve, reject) => {
+            // execute some code here
+            config(); // Read and set variables from .env file (only during development).
+            const { MONGO_URI, MONGO_DB, PORT } = process.env;
+            mongoose.set("strictQuery", true); // for disable DeprecationWarning
+            mongoose.connect(MONGO_URI, { dbName: MONGO_DB }).catch(error => console.log(`Mongoose error on connection! Message: ${error.message}`));
 
-        mongoose.connection.on("error", error => {
-            // console.log(`Mongoose error message: ${error.message}`);
-            reject(`Mongoose error message: ${error.message}`);
-        });
-        mongoose.connection.on("connected", () => {
-            // console.log("Connected to MongoDB server.");
-            this.initializeMiddlewares();
-            this.initializeControllers(this.controllers);
-            this.initializeErrorHandling();
-            // this.listen();
-            this.app.listen(process.env.PORT, () => {
-                console.log(`App listening on the port ${process.env.PORT}`);
+            mongoose.connection.on("error", error => {
+                // console.log(`Mongoose error message: ${error.message}`);
+                reject(`Mongoose error message: ${error.message}`);
             });
-            resolve("Connected to MongoDB server.");
+            mongoose.connection.on("connected", () => {
+                // console.log("Connected to MongoDB server.");
+                this.initializeMiddlewares();
+                this.initializeControllers(this.controllers);
+                this.initializeErrorHandling();
+                // this.listen();
+                if (!port) port = PORT;
+                this.app.listen(port, () => {
+                    console.log(`App listening on the port ${port}`);
+                });
+                resolve("Connected to MongoDB server.");
+            });
         });
-    });
+    }
 }

@@ -8,7 +8,17 @@ import AuthenticationController from "../../authentication/authentication.contro
 let server: App;
 
 beforeAll(async () => {
+    // create server for test:
     server = new App([new AuthenticationController()]);
+    // connect and get cookie for authentication
+    await server
+        .connectToTheDatabase("5001")
+        .then(msg => {
+            console.log(msg);
+        })
+        .catch(err => {
+            console.log(err);
+        });
 });
 
 describe("test API endpoints", () => {
@@ -23,6 +33,11 @@ describe("test API endpoints", () => {
                 picture: "none",
                 roles: ["admin"],
                 password: "student001",
+                address: {
+                    city: "Győr",
+                    country: "Hungary",
+                    street: "Futrinka u. 13.",
+                },
             });
         expect(response.statusCode).toEqual(400);
         expect(response.body.message).toEqual("User with email student001@jedlik.eu already exists");
@@ -35,11 +50,11 @@ describe("test API endpoints", () => {
             password: "student001",
         });
         expect(response.statusCode).toEqual(200);
-        expect(response.body._id).toEqual("61b5e9c0f39e4edcf5b8a3b9");
+        expect(response.body._id).toEqual("a11111111111111111111111");
         expect(response.body.address.city).toEqual("Győr");
         expect(response.body.address.country).toEqual("Hungary");
-        expect(response.body.address.street).toEqual("Szent István út 7.");
-        expect(response.body.address._id).toEqual("61b5e9c0f39e4edcf5b8a3ba");
+        expect(response.body.address.street).toEqual("Futrinka utca 13.");
+        expect(response.body.address._id).toEqual("b11111111111111111111111");
         expect(response.body.email).toEqual("student001@jedlik.eu");
         expect(response.body.name).toEqual("student001");
     });

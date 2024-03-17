@@ -1,0 +1,276 @@
+# LINK ./recipe.controller.ts#getAllRecipes
+# ANCHOR[id=getAllRecipes]
+/recipes:
+    get:
+        tags:
+            - Recipes
+        summary: Az összes recept lekérdezése
+        description: A végpont a recepteket kérdezi lesz, a tábla összes adatával tér vissza
+        responses:
+            "200":
+                description: OK.
+                content:
+                    application/json:
+                        schema:
+                            type: array
+                            items:
+                                $ref: "#/components/schemas/Recipe"
+                headers:
+                    x-total-count:
+                        description: A receptek száma
+                        schema:
+                            type: number
+                            example: 34
+            "4XX":
+                description: Hiba
+                content:
+                    application/json:
+                        schema:
+                            $ref: "#/components/schemas/Error"
+
+    # LINK ./recipe.controller.ts#createRecipe
+    # ANCHOR[id=createRecipe]
+    post:
+        tags:
+            - Recipes
+        summary: Új recept létrehozása
+        description: Új recept létrehozása a request body tartalma szerint<br>
+            A recept hivatkozása automatikusan bekerül a bejelentkezett felhasználó receptjei közé.
+        requestBody:
+            content:
+                application/json:
+                    schema:
+                        $ref: "#/components/schemas/Recipe"
+        responses:
+            "200":
+                description: OK
+                content:
+                    application/json:
+                        schema:
+                            $ref: "#/components/schemas/Recipe"
+                headers:
+                    x-total-count:
+                        description: A receptek száma
+                        schema:
+                            type: number
+                            example: 56
+            "4XX":
+                description: Hiba
+                content:
+                    application/json:
+                        schema:
+                            $ref: "#/components/schemas/Error"
+
+# LINK ./recipe.controller.ts#getRecipeById
+# ANCHOR[id=getRecipeById]
+/recipes/{id}:
+    get:
+        tags:
+            - Recipes
+        summary: Egy recept lekérdezése
+        description: Recept lekérdezése elsődleges-kulcs (id) alapján
+        parameters:
+            - name: id
+              in: path
+              description: A recept ObjectId azonosítója
+              schema:
+                  type: string
+                  example: "d12345678901234567890123"
+              required: true
+        responses:
+            "200":
+                description: OK
+                content:
+                    application/json:
+                        schema:
+                            $ref: "#/components/schemas/Recipe"
+            "4XX":
+                description: Hiba
+                content:
+                    application/json:
+                        schema:
+                            $ref: "#/components/schemas/Error"
+
+    # LINK ./recipe.controller.ts#modifyRecipe
+    # ANCHOR[id=modifyRecipe]
+    patch:
+        tags:
+            - Recipes
+        summary: Egy recept módosítása
+        description: Az elsődleges-kulccsal (id) kijelölt recept módosítása
+        parameters:
+            - name: id
+              in: path
+              description: A recept ObjectId azonosítója
+              schema:
+                  type: string
+                  example: "d12345678901234567890123"
+              required: true
+        requestBody:
+            content:
+                application/json:
+                    schema:
+                        type: object
+                        properties:
+                            recipeName:
+                                type: string
+                                example: Ez lesz a recept VADI új címe
+        responses:
+            "200":
+                description: OK
+                content:
+                    application/json:
+                        schema:
+                            $ref: "#/components/schemas/Recipe"
+            "4XX":
+                description: Hiba
+                content:
+                    application/json:
+                        schema:
+                            $ref: "#/components/schemas/Error"
+
+    # LINK ./recipe.controller.ts#deleteRecipe
+    # ANCHOR[id=deleteRecipe]
+    delete:
+        tags:
+            - Recipes
+        summary: Egy recept törlése
+        description: Az elsődleges-kulccsal (id) kijelölt recept törlése.<br>
+            A végpont törli a recept hivatkozását a users kollekcióból is.<br>
+            Csak akkor megy végbe a törlés, ha sikeres a users kollekció módosítása is.<br>
+            A művelet tranzakciókezelést használ.
+        parameters:
+            - name: id
+              in: path
+              description: A törlendő recept ObjectId azonosítója
+              schema:
+                  type: string
+                  example: "d12345678901234567890123"
+              required: true
+        responses:
+            "200":
+                description: OK
+                headers:
+                    x-total-count:
+                        description: A receptek száma a törlés után
+                        schema:
+                            type: number
+                            example: 343
+            "4XX":
+                description: Hiba
+                content:
+                    application/json:
+                        schema:
+                            $ref: "#/components/schemas/Error"
+
+# LINK ./recipe.controller.ts#getPaginatedRecipes
+# ANCHOR[id=getPaginatedRecipes]
+/recipes/{offset}/{limit}/{sortField}:
+    get:
+        tags:
+            - Recipes
+        summary: Paginált adatok lekérése szűrés nélkül
+        description: Receptek lekérdezése lapozással
+        parameters:
+            - name: offset
+              in: path
+              description: Ennyi rekordot hagyunk el (skip) a lekérdezés elejéről
+              schema:
+                  type: number
+                  example: 0
+              required: true
+            - name: limit
+              in: path
+              description: Ennyi rekordot küld (take) maximum az API
+              schema:
+                  type: number
+                  example: 2
+              required: true
+            - name: sortField
+              in: path
+              description: A megadott mező szerint lesznek rendezve a receptek<br>
+                  A "-" karakter a mezőnév előtt a csökkenő rendezést jelzi
+              schema:
+                  type: string
+                  example: -recipeName
+              required: true
+        responses:
+            "200":
+                description: OK
+                content:
+                    application/json:
+                        schema:
+                            type: array
+                            items:
+                                $ref: "#/components/schemas/Recipe"
+                headers:
+                    x-total-count:
+                        description: A receptek száma az adatbázis szerveren
+                        schema:
+                            type: number
+                            example: 423
+            "4XX":
+                description: Hiba
+                content:
+                    application/json:
+                        schema:
+                            $ref: "#/components/schemas/Error"
+
+# LINK ./recipe.controller.ts#getPaginatedRecipes
+/recipes/{offset}/{limit}/{sortField}/{filter}:
+    get:
+        tags:
+            - Recipes
+        summary: Paginált adatok lekérése szűréssel
+        description: Receptek lekérdezése lapozással és szűrési lehetőséggel
+        parameters:
+            - name: offset
+              in: path
+              description: Ennyi rekordot hagyunk el (skip) a lekérdezés elejéről
+              schema:
+                  type: number
+                  example: 0
+              required: true
+            - name: limit
+              in: path
+              description: Ennyi rekordot küld (take) maximum az API
+              schema:
+                  type: number
+                  example: 2
+              required: true
+            - name: sortField
+              in: path
+              description: A megadott mező szerint lesznek rendezve a receptek<br>
+                  A "-" karakter a mezőnév előtt a csökkenő rendezést jelzi
+              schema:
+                  type: string
+                  example: -recipeName
+              required: true
+            - name: filter
+              in: path
+              description: Szűrő - a recipeName és a decription mezőkben keressük a paraméter előfordulását
+              schema:
+                  type: string
+                  example: Paprika
+              required: true
+        responses:
+            "200":
+                description: OK
+                content:
+                    application/json:
+                        schema:
+                            type: array
+                            items:
+                                $ref: "#/components/schemas/Recipe"
+                headers:
+                    x-total-count:
+                        description: A szűrt receptek száma az adatbázis szerveren
+                        schema:
+                            type: number
+                            example: 423
+            "4XX":
+                description: Hiba
+                content:
+                    application/json:
+                        schema:
+                            $ref: "#/components/schemas/Error"

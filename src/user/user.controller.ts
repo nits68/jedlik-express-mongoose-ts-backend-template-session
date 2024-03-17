@@ -3,9 +3,9 @@ import ISession from "interfaces/session.interface";
 import { Types } from "mongoose";
 
 // import authorModel from "../author/author.model";
-import HttpException from "../exceptions/HttpException";
-import IdNotValidException from "../exceptions/IdNotValidException";
-import UserNotFoundException from "../exceptions/UserNotFoundException";
+import HttpException from "../exceptions/Http.exception";
+import IdNotValidException from "../exceptions/IdNotValid.exception";
+import UserNotFoundException from "../exceptions/UserNotFound.exception";
 import IController from "../interfaces/controller.interface";
 import IRequestWithUser from "../interfaces/requestWithUser.interface";
 import authMiddleware from "../middleware/auth.middleware";
@@ -38,13 +38,45 @@ export default class UserController implements IController {
         this.router.delete(`${this.path}/:id`, authMiddleware, this.deleteUser);
     }
 
+    /**
+     * @openapi
+     * /users:
+     *  get:
+     *    tags:
+     *      - Users
+     *    security: []
+     *    summary: Az összes felhasználó lekérdezése
+     *    description: A végpont az összes felhasználót kérdezi le
+     *    responses:
+     *      '200':
+     *        description: OK.
+     *        content:
+     *          application/json:
+     *            schema:
+     *                $ref: '#/components/schemas/User'
+     *        headers:
+     *           x-total-count:
+     *              description: A felhasználók száma
+     *              schema:
+     *                type: number
+     *                example: 3
+     *      '4XX':
+     *        description: Hiba
+     *        content:
+     *          application/json:
+     *            schema:
+     *                $ref: '#/components/schemas/Error'
+     *
+     */
     private getAllUsers = async (req: Request, res: Response, next: NextFunction) => {
         try {
+            const count = await this.user.countDocuments();
             this.user
                 .find()
+                // .populate("recipes")
                 .sort({ _id: 1 })
-                //.populate("post_id")
                 .then(users => {
+                    res.append("x-total-count", `${count}`);
                     res.send(users);
                 });
         } catch (error) {

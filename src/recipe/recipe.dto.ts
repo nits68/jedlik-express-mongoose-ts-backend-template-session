@@ -26,6 +26,7 @@ export default class CreateRecipeDto implements IRecipe {
     @ArrayNotEmpty()
     ingredients: string[];
 
+    @IsOptional()
     @IsArray()
     @ValidateNested({ each: true })
     @IsMongoId()

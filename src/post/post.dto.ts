@@ -10,11 +10,6 @@ export default class CreatePostDto implements IPost {
     @IsOptional()
     _id: Schema.Types.ObjectId;
 
-    // 1:N -> N:M, lsd.: athor collection
-    // @IsMongoId()
-    // @IsOptional()
-    // public user_id: Schema.Types.ObjectId;
-
     @IsString()
     content: string;
 

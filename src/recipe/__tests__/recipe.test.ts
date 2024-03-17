@@ -12,7 +12,8 @@ beforeAll(async () => {
     // create server for test:
     server = new App([new AuthenticationController(), new RecipeController()]);
     // connect and get cookie for authentication
-    await server.connectToTheDatabase
+    await server
+        .connectToTheDatabase("5002")
         .then(msg => {
             console.log(msg);
         })
@@ -36,7 +37,7 @@ describe("test recipes endpoints", () => {
         const response = await request(server.getServer()).get("/recipes").set("Cookie", cookie);
         // check response with jest:
         expect(response.statusCode).toEqual(200);
-        expect(response.body.count).toEqual(10); // basically 10
+        expect(response.header["x-total-count"]).toEqual("10"); // basically 10
     });
 
     it("GET /recipes (missing cookie)", async () => {
@@ -45,33 +46,31 @@ describe("test recipes endpoints", () => {
         expect(response.body.message).toEqual("Session id missing or session has expired, please log in!");
     });
 
-    it("GET /:offset/:limit/:order/:sort/:keyword? (search for 'keyword')", async () => {
-        const response = await request(server.getServer()).get("/recipes/0/5/discription/1/paradicsom").set("Cookie", cookie);
+    it("GET /:offset/:limit/:sortField/:filter? (search for 'filter')", async () => {
+        const response = await request(server.getServer()).get("/recipes/0/5/description/paradicsom").set("Cookie", cookie);
         expect(response.statusCode).toEqual(200);
         // expect(response.body.count).toEqual(2);
         expect(response.headers["x-total-count"]).toEqual("2");
-        expect(response.body.recipes[0].description).toContain("paradicsom");
-        expect(response.body.recipes[0].description).toMatch(/^A tésztát a csomágolásán látható utasítás szerint forró/);
-        expect(response.body.recipes[1].description).toContain("paradicsom");
-        expect(response.body.recipes[1].description).toMatch(/^A világbajnok göngyölt csirkemellhez először/);
+        expect(response.body[0].description).toContain("paradicsom");
+        expect(response.body[0].description).toMatch(/^A tésztát a csomágolásán látható utasítás szerint forró/);
+        expect(response.body[1].description).toContain("paradicsom");
+        expect(response.body[1].description).toMatch(/^A világbajnok göngyölt csirkemellhez először/);
     });
 
-    it("GET /:offset/:limit/:order/:sort/:keyword? (search for missing 'keyword')", async () => {
-        const response = await request(server.getServer()).get("/recipes/0/5/discription/1/goesiéhgesouihg").set("Cookie", cookie);
+    it("GET /:offset/:limit/:sortField/:filter? (search for missing 'keyword')", async () => {
+        const response = await request(server.getServer()).get("/recipes/0/5/description/goesiéhgesouihg").set("Cookie", cookie);
         expect(response.statusCode).toEqual(200);
-        // expect(response.body.count).toEqual(0);
         expect(response.headers["x-total-count"]).toEqual("0");
     });
 
-    it("GET /:offset/:limit/:order/:sort/:keyword? (no last parameter 'keyword')", async () => {
-        const response = await request(server.getServer()).get("/recipes/0/5/discription/1").set("Cookie", cookie);
+    it("GET /:offset/:limit/:sortField/:filter? (no last parameter 'filter')", async () => {
+        const response = await request(server.getServer()).get("/recipes/0/5/description").set("Cookie", cookie);
         expect(response.statusCode).toEqual(200);
-        // expect(response.body.count).toEqual(10);
         expect(response.headers["x-total-count"]).toEqual("10");
     });
 
     it("GET /recipes/:id  (correct id)", async () => {
-        id = "61dc03c0e397a1e9cf988b37";
+        id = "daaaaaaaaaaaaaaaaaaaaaaa";
         const response = await request(server.getServer()).get(`/recipes/${id}`).set("Cookie", cookie);
         expect(response.statusCode).toEqual(200);
         expect(response.body.recipeName).toEqual("KELKÁPOSZTA FŐZELÉK");
@@ -107,7 +106,7 @@ describe("test recipes endpoints", () => {
         const response = await request(server.getServer()).post("/recipes").set("Cookie", cookie);
         expect(response.statusCode).toEqual(400);
         expect(response.body.message).toEqual(
-            "DTO error:recipeName must be a string, recipeName should not be empty; imageURL must be a string, imageURL must be a URL address, imageURL should not be empty; description must be a string, description should not be empty; ingredients should not be empty, ingredients must be an array; ",
+            "DTO error: recipeName must be a string, recipeName should not be empty; imageURL must be a string, imageURL must be a URL address, imageURL should not be empty; description must be a string, description should not be empty; ingredients should not be empty, ingredients must be an array",
         );
     });
 

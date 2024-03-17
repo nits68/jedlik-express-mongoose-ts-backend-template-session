@@ -5,9 +5,9 @@ import { OAuth2Client } from "google-auth-library";
 import { Schema } from "mongoose";
 import nodemailer from "nodemailer";
 
-import HttpException from "../exceptions/HttpException";
-import UserWithThatEmailAlreadyExistsException from "../exceptions/UserWithThatEmailAlreadyExistsException";
-import WrongCredentialsException from "../exceptions/WrongCredentialsException";
+import HttpException from "../exceptions/Http.exception";
+import UserWithThatEmailAlreadyExistsException from "../exceptions/UserWithThatEmailAlreadyExists.exception";
+import WrongCredentialsException from "../exceptions/WrongCredentials.exception";
 import IController from "../interfaces/controller.interface";
 import IGoogleUserInfo from "../interfaces/googleUserInfo.interface";
 import IRequestWithUser from "../interfaces/requestWithUser.interface";
@@ -112,7 +112,7 @@ export default class AuthenticationController implements IController {
                 const confirmURL: string = `${process.env.BACKEND_API}/auth/confirmation/${user.email}/${token}`;
                 transporter.sendMail(
                     {
-                        from: "noreply@brevo.com", // verified sender email
+                        from: "nits.laszlo@jedlik.eu", // verified sender email
                         to: user.email, // recipient email
                         subject: "Confirm your e-mail address", // Subject line
                         text: `Dear ${userData.name}! Click on the following link to confirm your email address: 
@@ -149,7 +149,7 @@ export default class AuthenticationController implements IController {
                             } else if (user.email_verified) {
                                 next(new HttpException(200, "User has been already verified. Please Login!"));
                             } else {
-                                // change email_verified to true 
+                                // change email_verified to true
                                 this.user
                                     .findByIdAndUpdate(user._id, { email_verified: true })
                                     .then(() => {
@@ -269,47 +269,29 @@ export default class AuthenticationController implements IController {
         }
     };
 
+    /**
+     * @openapi
+     * /auth/login:
+     *  post:
+     *    tags:
+     *      - Authentication
+     *    summary: Bejelentkezés
+     *    description: Felhasználó bejelentkezése a megadott adatokkal
+     *    requestBody:
+     *      required: true
+     *      content:
+     *       application/json:
+     *        schema:
+     *         $ref: '#/components/schemas/LoginData'
+     *    responses:
+     *      200:
+     *        description: Authentication successful.
+     *        content:
+     *          application/json:
+     *            schema:
+     *                $ref: '#/components/schemas/LoginData'
+     */
     private login = async (req: Request, res: Response, next: NextFunction) => {
-        /**
-         * @openapi
-         * /auth/login:
-         *  post:
-         *    tags:
-         *      - Authentication
-         *    security: []
-         *    description: |
-         *       ## Felhasználó bejelentkezése a megadott adatokkal
-         *       - It gives back the **authenticated member's data** in the **response body**
-         *       - The **authorization token** is provided in the http header called `x-plander-auth`
-         *       - **Rate limit: 10 requests per hour.**
-         *    requestBody:
-         *      required: true
-         *      content:
-         *       application/json:
-         *        schema:
-         *         $ref: '#/components/schemas/LoginData'
-         *    responses:
-         *      200:
-         *        description: Authentication successful.
-         *        content:
-         *          application/json:
-         *            schema:
-         *                $ref: '#/components/schemas/LoginData'
-         *        headers:
-         *           x-plander-auth:
-         *              description: The (JWT) authorization token.
-         *              schema:
-         *                type: string
-         *                example: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.e30.Et9HFtf9R3GEMA0IICOfFMVXY7kkTX1wr4qCyhIf58U'
-         *      400:
-         *        $ref: '#/components/responses/InvalidPayload'
-         *      401:
-         *        $ref: '#/components/responses/WrongCredentials'
-         *      429:
-         *        $ref: '#/components/responses/SurpassedRateLimit'
-         *      5XX:
-         *        $ref: '#/components/responses/InternalServerError'
-         */
         try {
             const logInData: IUser = req.body;
             const user = await this.user.findOne({ email: logInData.email });

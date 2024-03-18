@@ -188,7 +188,8 @@
               required: true
             - name: sortField
               in: path
-              description: A megadott mező szerint lesznek rendezve a receptek<br>
+              description:
+                  A megadott mező szerint lesznek rendezve a receptek<br>
                   A "-" karakter a mezőnév előtt a csökkenő rendezést jelzi
               schema:
                   type: string
@@ -240,7 +241,8 @@
               required: true
             - name: sortField
               in: path
-              description: A megadott mező szerint lesznek rendezve a receptek<br>
+              description:
+                  A megadott mező szerint lesznek rendezve a receptek<br>
                   A "-" karakter a mezőnév előtt a csökkenő rendezést jelzi
               schema:
                   type: string

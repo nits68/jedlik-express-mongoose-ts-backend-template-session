@@ -12,7 +12,7 @@
         "start": "node ./dist/server.js",
         "compile": "tsc",
         "compile:watch": "tsc --watch",
-        "postinstall": "tsc & copyfiles -u 1 src/**/*.yml dist/",
+        "postinstall": "copyfiles -u 1 src/**/*.yml dist/",
         "dev": "nodemon",
         "format": "prettier --write ./src",
         "lint": "eslint ./src --ext .vue,.js,.ts",

@@ -10,10 +10,10 @@ const options: swaggerJsdoc.Options = {
         },
         servers: [
             {
-                url: "http://localhost:5000",
+                url: "https://jedliksession.cyclic.app",
             },
             {
-                url: "https://jedliksession.cyclic.app",
+                url: "http://localhost:5000",
             },
         ],
     },

@@ -1,4 +1,7 @@
+import { config } from "dotenv";
 import swaggerJsdoc from "swagger-jsdoc";
+
+config();
 
 const options: swaggerJsdoc.Options = {
     definition: {
@@ -10,10 +13,7 @@ const options: swaggerJsdoc.Options = {
         },
         servers: [
             {
-                url: "https://jedliksession.cyclic.app",
-            },
-            {
-                url: "http://localhost:5000",
+                url: process.env.BACKEND_API,
             },
         ],
     },

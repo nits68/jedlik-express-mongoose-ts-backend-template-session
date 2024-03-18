@@ -45,6 +45,45 @@ export default class AuthenticationController implements IController {
         this.router.get(`${this.path}/resend/:email`, this.resendLink);
     }
 
+    // LINK ./authentication.controller.yml#login
+    // ANCHOR[id=login]
+    private login = async (req: Request, res: Response, next: NextFunction) => {
+        try {
+            const logInData: IUser = req.body;
+            const user = await this.user.findOne({ email: logInData.email });
+            if (user) {
+                const isPasswordMatching = await bcrypt.compare(logInData.password, user.password);
+                if (isPasswordMatching) {
+                    user.password = undefined;
+                    if (!user.email_verified) {
+                        next(new HttpException(401, "Your Email has not been verified. Please click on resend!"));
+                    } else {
+                        req.session.regenerate(error => {
+                            if (error) {
+                                next(new HttpException(400, error.message)); // to do
+                            }
+                            console.log("regenerate ok");
+                            (req.session as ISession).user_id = user._id as Schema.Types.ObjectId;
+                            (req.session as ISession).user_email = user.email;
+                            (req.session as ISession).isLoggedIn = true;
+                            (req.session as ISession).isAutoLogin = user.auto_login;
+                            (req.session as ISession).roles = user.roles;
+                            res.send(user);
+                        });
+                    }
+                } else {
+                    next(new WrongCredentialsException());
+                }
+            } else {
+                next(new WrongCredentialsException());
+            }
+        } catch (error: any) {
+            next(new HttpException(400, error.message));
+        }
+    };
+
+    // LINK ./authentication.controller.yml#registration
+    // ANCHOR[id=registration]
     private registration = async (req: Request, res: Response, next: NextFunction) => {
         try {
             const userData: IUser = req.body;
@@ -266,63 +305,6 @@ export default class AuthenticationController implements IController {
             // });
         } else {
             next(new HttpException(404, "Please log in!"));
-        }
-    };
-
-    /**
-     * @openapi
-     * /auth/login:
-     *  post:
-     *    tags:
-     *      - Authentication
-     *    summary: Bejelentkezés
-     *    description: Felhasználó bejelentkezése a megadott adatokkal
-     *    requestBody:
-     *      required: true
-     *      content:
-     *       application/json:
-     *        schema:
-     *         $ref: '#/components/schemas/LoginData'
-     *    responses:
-     *      200:
-     *        description: Authentication successful.
-     *        content:
-     *          application/json:
-     *            schema:
-     *                $ref: '#/components/schemas/LoginData'
-     */
-    private login = async (req: Request, res: Response, next: NextFunction) => {
-        try {
-            const logInData: IUser = req.body;
-            const user = await this.user.findOne({ email: logInData.email });
-            if (user) {
-                const isPasswordMatching = await bcrypt.compare(logInData.password, user.password);
-                if (isPasswordMatching) {
-                    user.password = undefined;
-                    if (!user.email_verified) {
-                        next(new HttpException(401, "Your Email has not been verified. Please click on resend!"));
-                    } else {
-                        req.session.regenerate(error => {
-                            if (error) {
-                                next(new HttpException(400, error.message)); // to do
-                            }
-                            console.log("regenerate ok");
-                            (req.session as ISession).user_id = user._id as Schema.Types.ObjectId;
-                            (req.session as ISession).user_email = user.email;
-                            (req.session as ISession).isLoggedIn = true;
-                            (req.session as ISession).isAutoLogin = user.auto_login;
-                            (req.session as ISession).roles = user.roles;
-                            res.send(user);
-                        });
-                    }
-                } else {
-                    next(new WrongCredentialsException());
-                }
-            } else {
-                next(new WrongCredentialsException());
-            }
-        } catch (error: any) {
-            next(new HttpException(400, error.message));
         }
     };
 

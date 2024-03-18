@@ -14,7 +14,7 @@ import { IsString } from "class-validator";
  *        password:
  *          type: string
  *          description: 'A felhasználó jelszava'
- *          example: 'nem mondom el senkinek'
+ *          example: 'student01'
  *
  */
 export default class LogInDto {

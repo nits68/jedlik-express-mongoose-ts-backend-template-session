@@ -23,7 +23,7 @@ components:
         name:
           type: string
           description: "A felhasználó neve"
-          example: "Student001"
+          example: "student001"
         picture:
           type: string
           description: "A felhasználó avatar képének URL címe"

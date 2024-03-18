@@ -37,6 +37,7 @@ export default class CreateUserDto implements IUser {
     // public email_address_confirm: string;
 
     @IsBoolean()
+    @IsOptional()
     email_verified: boolean;
 
     @IsBoolean()

@@ -282,5 +282,5 @@
                 description: Hiba
                 content:
                     application/json:
-                        schema:
+                        schema: 
                             $ref: "#/components/schemas/Error"

@@ -228,6 +228,7 @@ export default class AuthenticationController implements IController {
                         });
 
                     // Send email (use verified sender's email address & generated API_KEY on SendGrid)
+
                     // Sendgrid transporter:
                     // const transporter = nodemailer.createTransport({
                     //     host: "smtp.sendgrid.net",
@@ -238,7 +239,7 @@ export default class AuthenticationController implements IController {
                     //     },
                     // });
 
-                    // Brevo transporter
+                    // Brevo transporter:
                     const transporter = nodemailer.createTransport({
                         host: "smtp-relay.brevo.com",
                         port: 587,
@@ -249,7 +250,7 @@ export default class AuthenticationController implements IController {
                         },
                     });
 
-                    // mailtrap transporter
+                    // mailtrap transporter:
                     // const transporter = nodemailer.createTransport({
                     //     host: "sandbox.smtp.mailtrap.io",
                     //     port: 2525,
@@ -294,15 +295,6 @@ export default class AuthenticationController implements IController {
             } else {
                 next(new HttpException(404, "Please log in!"));
             }
-            // req.sessionStore.get(req.session.id, (error, s: ISession) => {
-            //     if (error || !s.user_email) {
-            //         next(new HttpException(404, "Please log in!"));
-            //     }
-            //     if (user && s.user_email) {
-            //         (req.session as ISession).isLoggedIn = true;
-            //         res.send(user);
-            //     }
-            // });
         } else {
             next(new HttpException(404, "Please log in!"));
         }

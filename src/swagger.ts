@@ -9,7 +9,7 @@ const options: swaggerJsdoc.Options = {
         info: {
             title: "Jedlik API docs",
             version: "0.0.1",
-            description: "<img alt='DB_diagram' height='700px' src='https://nitslaszlo.github.io/static/session/db_diagram_new.jpg' />",
+            description: "<img alt='DB_diagram' height='700px' src='https://nitslaszlo.github.io/static/session/db_diagram_new_new.jpg' />",
         },
         servers: [
             {

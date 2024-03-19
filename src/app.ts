@@ -30,20 +30,6 @@ export default class App {
         }
 
         this.controllers = controllers;
-
-        // this.connectToTheDatabase(result => {
-        //     if (result == "OK") {
-        //         this.initializeMiddlewares();
-        //         this.initializeControllers(controllers);
-        //         this.initializeErrorHandling();
-        //         this.listen();
-        //     }
-        // });
-
-        // this.connectToTheDatabase(controllers);
-        // this.initializeMiddlewares();
-        // this.initializeControllers(controllers);
-        // this.initializeErrorHandling();
     }
 
     // public listen(port: string): void {

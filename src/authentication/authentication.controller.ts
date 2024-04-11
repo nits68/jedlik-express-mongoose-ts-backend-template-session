@@ -140,16 +140,22 @@ export default class AuthenticationController implements IController {
                     html: `<h3>Dear ${userData.name}!</h3><p>Click on the following link to confirm your email address: <a href="${confirmURL}">CONFIRM!</a></p>`,
                 };
 
-                sgMail
+                await sgMail
                     .send(msg)
                     .then(response => {
                         console.log(response[0].statusCode);
                         console.log(response[0].headers);
-                        next(new HttpException(201, ` OK: ${response[0].statusCode} - ${response[0].headers}`));
+                        next(
+                            new HttpException(
+                                200,
+                                // eslint-disable-next-line max-len
+                                `A verification email has been sent to ${user.email}, It will be expire after one day. ${process.env.SENDGRID_API_KEY} - ${response[0].statusCode} - ${response[0].headers}`,
+                            ),
+                        );
                     })
                     .catch(error => {
                         console.error(error);
-                        next(new HttpException(202, ` Error: ${error}}`));
+                        next(new HttpException(400, error));
                     });
 
                 // Brevo transporter
@@ -192,12 +198,6 @@ export default class AuthenticationController implements IController {
                 //         }
                 //     },
                 // );
-                next(
-                    new HttpException(
-                        200,
-                        `A verification email has been sent to ${user.email}, It will be expire after one day. ${process.env.SENDGRID_API_KEY}`,
-                    ),
-                );
             }
         } catch (error) {
             next(new HttpException(400, error.message));

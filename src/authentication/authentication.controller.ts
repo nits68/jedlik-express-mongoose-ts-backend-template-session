@@ -133,7 +133,7 @@ export default class AuthenticationController implements IController {
 
                 const msg = {
                     to: user.email, // Change to your recipient
-                    from: "nitslaszlo@gmail.com", // Change to your verified sender
+                    from: "nits.laszlo@jedlik.eu", // Change to your verified sender
                     subject: "Confirm your e-mail address",
                     text: `Dear ${userData.name}! Click on the following link to confirm your email address:  ${confirmURL}`,
                     // eslint-disable-next-line max-len

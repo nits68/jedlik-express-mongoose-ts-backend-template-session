@@ -4,7 +4,6 @@ import crypto from "crypto";
 import { NextFunction, Request, Response, Router } from "express";
 import { OAuth2Client } from "google-auth-library";
 import { Schema } from "mongoose";
-import nodemailer from "nodemailer";
 
 import HttpException from "../exceptions/Http.exception";
 import UserWithThatEmailAlreadyExistsException from "../exceptions/UserWithThatEmailAlreadyExists.exception";
@@ -117,16 +116,6 @@ export default class AuthenticationController implements IController {
                         next(new HttpException(500, error.message));
                     });
 
-                // Send email (use verified sender's email address & generated API_KEY on SendGrid)
-                // Sendgrid transporter:
-                // const transporter = nodemailer.createTransport({
-                //     host: "smtp.sendgrid.net",
-                //     port: 587,
-                //     auth: {
-                //         user: "apikey",
-                //         pass: process.env.SENDGRID_API_KEY,
-                //     },
-                // });
                 sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
                 const confirmURL: string = `${process.env.BACKEND_API}/auth/confirmation/${user.email}/${token}`;
@@ -143,61 +132,14 @@ export default class AuthenticationController implements IController {
                 await sgMail
                     .send(msg)
                     .then(response => {
-                        console.log(response[0].statusCode);
-                        console.log(response[0].headers);
                         next(
-                            new HttpException(
-                                200,
-                                // eslint-disable-next-line max-len
-                                `A verification email has been sent to ${user.email}, It will be expire after one day. ${process.env.SENDGRID_API_KEY} - ${response[0].statusCode} - ${response[0].headers}`,
-                            ),
+                            new HttpException(response[0].statusCode, `A verification e-mail has been sent to ${user.email}, It will be expire after one day.`),
                         );
                     })
                     .catch(error => {
                         console.error(error);
                         next(new HttpException(400, error));
                     });
-
-                // Brevo transporter
-                // const transporter = nodemailer.createTransport({
-                //     host: "smtp-relay.brevo.com",
-                //     port: 587,
-                //     secure: false,
-                //     auth: {
-                //         user: "nits.laszlo@jedlik.eu",
-                //         pass: process.env.BREVO_PASS,
-                //     },
-                // });
-
-                // mailtrap transporter
-                // const transporter = nodemailer.createTransport({
-                //     host: "sandbox.smtp.mailtrap.io",
-                //     port: 2525,
-                //     auth: {
-                //         user: process.env.MAILTRAP_USER,
-                //         pass: process.env.MAILTRAP_PASS,
-                //     },
-                // });
-
-                // const confirmURL: string = `${process.env.BACKEND_API}/auth/confirmation/${user.email}/${token}`;
-                // transporter.sendMail(
-                //     {
-                //         from: "nitslaszlo@gmail.com", // verified sender email
-                //         to: user.email, // recipient email
-                //         subject: "Confirm your e-mail address", // Subject line
-                //         text: `Dear ${userData.name}! Click on the following link to confirm your email address:
-                //             ${confirmURL}`, // plain text body
-                //         html: `<h3>Dear ${userData.name}!</h3><p>Click on the following link to confirm your email address:
-                //             <a href="${confirmURL}">CONFIRM!</a></p>`, // html body
-                //     },
-                //     function (error, info) {
-                //         if (error) {
-                //             console.log(error);
-                //         } else {
-                //             console.log("Email sent: " + info.response);
-                //         }
-                //     },
-                // );
             }
         } catch (error) {
             next(new HttpException(400, error.message));
@@ -247,7 +189,9 @@ export default class AuthenticationController implements IController {
                 } else if (user.email_verified) {
                     next(new HttpException(200, "This account has been already verified. Please log in."));
                 } else {
+                    // create token:
                     const token: string = crypto.randomBytes(16).toString("hex");
+                    // save token in MongoDB, see token.model.ts:
                     this.token
                         .create({
                             _userId: user._id,
@@ -257,58 +201,33 @@ export default class AuthenticationController implements IController {
                             next(new HttpException(500, error.message));
                         });
 
-                    // Send email (use verified sender's email address & generated API_KEY on SendGrid)
-
-                    // Sendgrid transporter:
-                    // const transporter = nodemailer.createTransport({
-                    //     host: "smtp.sendgrid.net",
-                    //     port: 587,
-                    //     auth: {
-                    //         user: "apikey",
-                    //         pass: process.env.NITS_APIKEY,
-                    //     },
-                    // });
-
-                    // Brevo transporter:
-                    const transporter = nodemailer.createTransport({
-                        host: "smtp-relay.brevo.com",
-                        port: 587,
-                        secure: false,
-                        auth: {
-                            user: "nits.laszlo@jedlik.eu",
-                            pass: process.env.BREVO_PASS,
-                        },
-                    });
-
-                    // mailtrap transporter:
-                    // const transporter = nodemailer.createTransport({
-                    //     host: "sandbox.smtp.mailtrap.io",
-                    //     port: 2525,
-                    //     auth: {
-                    //         user: process.env.MAILTRAP_USER,
-                    //         pass: process.env.MAILTRAP_PASS,
-                    //     },
-                    // });
+                    sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
                     const confirmURL: string = `${process.env.BACKEND_API}/auth/confirmation/${user.email}/${token}`;
-                    transporter.sendMail(
-                        {
-                            from: "nits.laszlo@jedlik.eu", // verified sender email
-                            to: user.email, // recipient email
-                            subject: "Confirm your e-mail address", // Subject line
-                            text: `Dear ${user.name}! Copy and paste this link your browser to confirm your email address: 
-                            ${confirmURL}`, // plain text body
-                            html: `<h3>Dear ${user.name}!</h3><p>Click on the following link to confirm your email address: 
-                            <a href="${confirmURL}">CONFIRM!</a></p>`, // html body
-                        },
-                        function (error, info) {
-                            if (error) {
-                                console.log(error);
-                            } else {
-                                console.log("Email sent: " + info.response);
-                            }
-                        },
-                    );
+
+                    const msg = {
+                        to: user.email, // Change to your recipient
+                        from: "nits.laszlo@cspk.hu", // Change to your verified sender
+                        subject: "Confirm your e-mail address",
+                        text: `Dear ${user.name}! Click on the following link to confirm your email address:  ${confirmURL}`,
+                        // eslint-disable-next-line max-len
+                        html: `<h3>Dear ${user.name}!</h3><p>Click on the following link to confirm your email address: <a href="${confirmURL}">CONFIRM!</a></p>`,
+                    };
+
+                    sgMail
+                        .send(msg)
+                        .then(response => {
+                            next(
+                                new HttpException(
+                                    response[0].statusCode,
+                                    `A verification e-mail has been sent to ${user.email}, It will be expire after one day.`,
+                                ),
+                            );
+                        })
+                        .catch(error => {
+                            console.error(error);
+                            next(new HttpException(400, error));
+                        });
                 }
             });
         } catch (error) {

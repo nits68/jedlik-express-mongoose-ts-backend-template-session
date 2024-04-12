@@ -35,7 +35,6 @@
         "google-auth-library": "^9.6.0",
         "mongoose": "^8.1.2",
         "morgan": "^1.10.0",
-        "nodemailer": "^6.9.10",
         "reflect-metadata": "^0.2.1",
         "serve-favicon": "^2.5.0",
         "serverless-http": "^3.2.0",
@@ -44,7 +43,6 @@
         "tslib": "^2.6.2"
     },
     "devDependencies": {
-        "@types/nodemailer": "^6.4.14",
         "@types/bcrypt": "^5.0.2",
         "@types/cookie-parser": "^1.4.6",
         "@types/cors": "^2.8.17",

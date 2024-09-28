@@ -5,7 +5,7 @@ import serverless from "serverless-http";
 // const router = Router();
 // router.get("/hello", (req, res) => res.send("Hello World!"));
 // api.use("/api/", router);
-// export const handler = serverless(api);
+// export const handler = serverless(api); // api
 import App from "../../src/_app";
 import AuthenticationController from "../../src/authentication/_authentication.controller";
 import AuthorController from "../../src/authentication/_authentication.controller";

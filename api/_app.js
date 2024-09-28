@@ -9,11 +9,11 @@ const express_1 = tslib_1.__importDefault(require("express"));
 const express_session_1 = tslib_1.__importDefault(require("express-session"));
 const mongoose_1 = tslib_1.__importDefault(require("mongoose"));
 const morgan_1 = tslib_1.__importDefault(require("morgan"));
-const path_1 = tslib_1.__importDefault(require("path"));
-const serve_favicon_1 = tslib_1.__importDefault(require("serve-favicon"));
+// import path from "path";
+// import favicon from "serve-favicon";
 const swagger_ui_express_1 = tslib_1.__importDefault(require("swagger-ui-express"));
-const _error_middleware_1 = tslib_1.__importDefault(require("./middleware/_error.middleware"));
 const _swagger_1 = tslib_1.__importDefault(require("./_swagger"));
+const _error_middleware_1 = tslib_1.__importDefault(require("./middleware/_error.middleware"));
 class App {
     app;
     controllers;
@@ -21,12 +21,11 @@ class App {
         // create express application:
         this.app = (0, express_1.default)();
         // Serve favicon.ico:
-        try {
-            this.app.use((0, serve_favicon_1.default)(path_1.default.join(__dirname, "../favicon.ico")));
-        }
-        catch (error) {
-            console.log(error.message);
-        }
+        // try {
+        //     this.app.use(favicon(path.join(__dirname, "favicon.ico")));
+        // } catch (error) {
+        //     console.log(error.message);
+        // }
         this.controllers = controllers;
     }
     // public listen(port: string): void {

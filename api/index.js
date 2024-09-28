@@ -15,5 +15,5 @@ app.connectToTheDatabase()
     .catch(err => {
     console.log(err);
 });
-exports.default = app;
+exports.default = app.getServer();
 //# sourceMappingURL=index.js.map

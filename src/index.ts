@@ -15,4 +15,4 @@ app.connectToTheDatabase()
         console.log(err);
     });
 
-export default app;
+export default app.getServer();

@@ -9,10 +9,10 @@
         "url": "https://github.com/nitslaszlo/jedlik-express-mongoose-ts-backend-template"
     },
     "scripts": {
-        "start": "node ./dist/server.js",
+        "start": "node ./api/server.js",
         "compile": "tsc",
         "compile:watch": "tsc --watch",
-        "postinstall": "tsc & copyfiles -u 1 src/**/*.yml dist/",
+        "postinstall": "tsc & copyfiles -u 1 src/**/*.yml api/",
         "dev": "nodemon",
         "format": "prettier --write ./src",
         "lint": "eslint ./src --ext .vue,.js,.ts",

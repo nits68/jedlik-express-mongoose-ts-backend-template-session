@@ -2,7 +2,7 @@
     "name": "jedlik-express-mongoose-ts-backend-template",
     "version": "1.0.0",
     "description": "Jedlik project template for backend programming.",
-    "main": "src/index.ts",
+    "main": "api/index.js",
     "repository": {
         "private": false,
         "type": "git",

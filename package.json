@@ -2,14 +2,14 @@
     "name": "jedlik-express-mongoose-ts-backend-template",
     "version": "1.0.0",
     "description": "Jedlik project template for backend programming.",
-    "main": "src/server.ts",
+    "main": "src/index.ts",
     "repository": {
         "private": false,
         "type": "git",
-        "url": "https://github.com/nitslaszlo/jedlik-express-mongoose-ts-backend-template"
+        "url": "https://github.com/nits68/jedlik-express-mongoose-ts-backend-template"
     },
     "scripts": {
-        "start": "node ./api/server.js",
+        "start": "node ./api/index.js",
         "compile": "tsc",
         "compile:watch": "tsc --watch",
         "postinstall": "tsc & copyfiles -u 1 src/**/*.yml api/",
@@ -30,7 +30,7 @@
         "cookie-parser": "^1.4.6",
         "cors": "^2.8.5",
         "dotenv": "^16.4.1",
-        "express": "^4.18.2",
+        "express": "^4.21.0",
         "express-session": "^1.18.0",
         "google-auth-library": "^9.6.0",
         "mongoose": "^8.1.2",

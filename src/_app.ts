@@ -6,8 +6,8 @@ import express from "express";
 import session from "express-session";
 import mongoose from "mongoose";
 import morgan from "morgan";
-import path from "path";
-import favicon from "serve-favicon";
+// import path from "path";
+// import favicon from "serve-favicon";
 import swaggerUi, { SwaggerUiOptions } from "swagger-ui-express";
 
 import swaggerDocument from "./_swagger";
@@ -23,11 +23,11 @@ export default class App {
         this.app = express();
 
         // Serve favicon.ico:
-        try {
-            this.app.use(favicon(path.join(__dirname, "favicon.ico")));
-        } catch (error) {
-            console.log(error.message);
-        }
+        // try {
+        //     this.app.use(favicon(path.join(__dirname, "favicon.ico")));
+        // } catch (error) {
+        //     console.log(error.message);
+        // }
 
         this.controllers = controllers;
     }

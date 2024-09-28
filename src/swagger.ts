@@ -17,7 +17,7 @@ const options: swaggerJsdoc.Options = {
             },
         ],
     },
-    apis: [`${__dirname}/**/*.{dto,controller,model,exception}.{ts,js,yml}`],
+    apis: [`${__dirname}/**/*.{mod,cont,dto,controller,model,exception}.{ts,js,yml}`],
 };
 
 export default swaggerJsdoc(options);

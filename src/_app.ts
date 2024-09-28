@@ -10,9 +10,9 @@ import path from "path";
 import favicon from "serve-favicon";
 import swaggerUi, { SwaggerUiOptions } from "swagger-ui-express";
 
+import swaggerDocument from "./_swagger";
 import IController from "./interfaces/_controller.interface";
 import errorMiddleware from "./middleware/_error.middleware";
-import swaggerDocument from "./_swagger";
 
 export default class App {
     public app: express.Application;

@@ -1,6 +1,7 @@
 node_modules
 coverage
 dist
+api
 package-lock.json
 .env
 .vercel

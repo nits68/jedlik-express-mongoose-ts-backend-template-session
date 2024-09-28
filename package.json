@@ -17,8 +17,7 @@
         "format": "prettier --write ./src",
         "lint": "eslint ./src --ext .vue,.js,.ts",
         "lint-fix": "eslint --fix ./src --ext .vue,.js,.ts",
-        "test": "jest || ECHO.",
-        "vercel-build": "echo hello"
+        "test": "jest || ECHO."
     },
     "author": "Nits László",
     "license": "MIT",

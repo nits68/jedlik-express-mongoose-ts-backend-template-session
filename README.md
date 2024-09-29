@@ -3,8 +3,11 @@
 This template made on the basis of [Express Typescript tutorial](https://wanago.io/courses/typescript-express-tutorial/).
 NODE.JS version: v16.17.0
 # Links (technologies, software)
-## Cyclic link:
-https://jedliksession.cyclic.app/
+## Koyeb link
+https://scornful-joceline-nits-153ec584.koyeb.app
+
+## Swagger
+https://scornful-joceline-nits-153ec584.koyeb.app/docs
 
 ## Express
 [Express](https://expressjs.com/) is a minimal and flexible Node.js web application framework that provides a robust set of features for web and mobile applications.

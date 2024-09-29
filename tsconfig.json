@@ -3,7 +3,7 @@
     "sourceMap": true,
     "target": "esnext",
     "module": "CommonJS",
-    "outDir": "./api",
+    "outDir": "./dist",
     "baseUrl": "./src",
     "alwaysStrict": true,
     "noImplicitAny": true,

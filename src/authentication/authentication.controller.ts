@@ -32,7 +32,7 @@ export default class AuthenticationController implements IController {
     private initializeRoutes() {
         this.router.get("/", (req: Request, res: Response) => {
             res.send(
-                "Jedlik-Express-Mongoose-TS-Session-Backend API - Swagger: <a href='https://jedliksession.cyclic.app/docs'>https://jedliksession.cyclic.app/docs</a>",
+                "Jedlik-Express-Mongoose-TS-Session-Backend API - Swagger: <a href='https://scornful-joceline-nits-153ec584.koyeb.app//docs'>https://scornful-joceline-nits-153ec584.koyeb.app/docs</a>",
             );
         });
         this.router.post(`${this.path}/register`, validationMiddleware(CreateUserDto), this.registration);

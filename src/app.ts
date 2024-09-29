@@ -138,6 +138,7 @@ export default class App {
                 this.initializeControllers(this.controllers);
                 this.initializeErrorHandling();
                 // this.listen();
+                if (!PORT) port = "8000";
                 if (!port) port = PORT;
                 this.app.listen(port, () => {
                     console.log(`App listening on the port ${port}`);

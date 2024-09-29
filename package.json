@@ -10,7 +10,7 @@
     },
     "scripts": {
         "start": "node ./dist/server.js",
-        "compile": "tsc",
+        "compile": "tsc & copyfiles -u 1 src/**/*.yml dist/",
         "compile:watch": "tsc --watch",
         "postinstall": "tsc & copyfiles -u 1 src/**/*.yml dist/",
         "dev": "nodemon",
